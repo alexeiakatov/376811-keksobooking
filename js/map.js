@@ -114,7 +114,7 @@ var createDOMElementForAnnouncement = function (announcement, domTemplate) {
   // address
   announcementCard.querySelector('p > small').textContent = announcement.offer.address;
   // price
-  announcementCard.querySelector('.popup__price').textContent = announcement.offer.price + '&#x20bd;/ночь';
+  announcementCard.querySelector('.popup__price').innerHTML = announcement.offer.price + '&#x20bd;/ночь';
   // housing type
   announcementCard.querySelector('h4').textContent = getHousingTypeInRussian(announcement.offer.type);
   // rooms and guests
