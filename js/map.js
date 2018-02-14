@@ -1,44 +1,8 @@
 'use strict';
 
-var USERS_AVATARS_LOCATION = 'img/avatars/';
-var CURRENT_AVATAR_COUNT = 0;
-var HOUSING_TYPES = ['flat', 'house', 'bungalo', 'palace'];
-var TITLES = {
-  flat: ['Большая уютная квартира', 'Маленькая неуютная квартира'],
-  house: ['Красивый гостевой домик', 'Некрасивый негостеприимный домик'],
-  bungalo: ['Уютное бунгало далеко от моря', 'Неуютное бунгало по колено в воде'],
-  palace: ['Огромный прекрасный дворец', 'Маленький ужасный дворец']
-};
-var DESCRIPTION = '';
-var LOCATION_X_MIN = 300;
-var LOCATION_X_MAX = 900;
-var LOCATION_Y_MIN = 150;
-var LOCATION_Y_MAX = 500;
-
-var MIN_PRICE = 1000;
-var MAX_PRICE = 1000000;
-
-var MIN_ROOMS_COUNT = 1;
-var MAX_ROOMS_COUNT = 5;
-
-var MIN_GUESTS_COUNT = 1;
-var MAX_GUESTS_COUNT = 10;
-
-var CHECKIN_VARIANTS = ['12:00', '13:00', '14:00'];
-var CHECKOUT_VARIANTS = ['12:00', '13:00', '14:00'];
-
-var FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
-var PHOTOS = [
-  'http://o0.github.io/assets/images/tokyo/hotel1.jpg',
-  'http://o0.github.io/assets/images/tokyo/hotel2.jpg',
-  'http://o0.github.io/assets/images/tokyo/hotel3.jpg'
-];
-
 var ANNOUNCEMENTS_COUNT = 8;
-
 var PIN_BUTTON_WIDTH = 40;
 var PIN_BUTTON_HEIGHT = 40;
-
 var ANNOUNCEMENT_CARD_TEMPLATE = document.querySelector('template');
 
 // ФУНКЦИЯ: Возвращает значение для свойства 'announcement.offer.type'.
@@ -90,32 +54,30 @@ var getPhotosArray = function (basicPhotosArray) {
 };
 
 // ФУНКЦИЯ: Собирает объект announcement.
-var createAnnouncement = function (usersAvatarsLocation, currentAvatarCount, housingTypes, titles, xMin, xMax, yMin, yMax,
-    minPrice, maxPrice, minRooms, maxRooms, minGuests, maxGuests, checkinVariants, checkoutVariants, basicFeaturesArray,
-    description, basicPhotosArray) {
+var createAnnouncement = function (dataObject) {
   var announcement = {
     'author': {
-      'avatar': usersAvatarsLocation + 'user0' + currentAvatarCount + '.png'
+      'avatar': dataObject.USERS_AVATARS_LOCATION + 'user0' + dataObject.currentAvatarCount + '.png'
     },
     'location': {
-      'x': window.utils.getRandomValue(xMin, xMax, 0),
-      'y': window.utils.getRandomValue(yMin, yMax, 0)
+      'x': window.utils.getRandomValue(dataObject.LOCATION_X_MIN, dataObject.LOCATION_X_MAX, 0),
+      'y': window.utils.getRandomValue(dataObject.LOCATION_Y_MIN, dataObject.LOCATION_Y_MAX, 0)
     },
     'offer': {
-      'type': getHousingType(housingTypes),
+      'type': getHousingType(dataObject.HOUSING_TYPES),
       'title': null,
       'address': null,
-      'price': window.utils.getRandomValue(minPrice, maxPrice, 0),
-      'rooms': window.utils.getRandomValue(minRooms, maxRooms, 0),
-      'guests': window.utils.getRandomValue(minGuests, maxGuests, 0),
-      'checkin': checkinVariants[window.utils.getRandomValue(0, checkinVariants.length - 1, 0)],
-      'checkout': checkoutVariants[window.utils.getRandomValue(0, checkoutVariants.length - 1, 0)],
-      'features': getFeaturesArray(basicFeaturesArray),
-      'description': description,
-      'photos': getPhotosArray(basicPhotosArray)
+      'price': window.utils.getRandomValue(dataObject.MIN_PRICE, dataObject.MAX_PRICE, 0),
+      'rooms': window.utils.getRandomValue(dataObject.MIN_ROOMS_COUNT, dataObject.MAX_ROOMS_COUNT, 0),
+      'guests': window.utils.getRandomValue(dataObject.MIN_GUESTS_COUNT, dataObject.MAX_GUESTS_COUNT, 0),
+      'checkin': dataObject.CHECKIN_VARIANTS[window.utils.getRandomValue(0, dataObject.CHECKIN_VARIANTS.length - 1, 0)],
+      'checkout': dataObject.CHECKOUT_VARIANTS[window.utils.getRandomValue(0, dataObject.CHECKOUT_VARIANTS.length - 1, 0)],
+      'features': getFeaturesArray(dataObject.FEATURES),
+      'description': dataObject.DESCRIPTION,
+      'photos': getPhotosArray(dataObject.PHOTOS)
     }
   };
-  announcement.offer.title = getTitle(announcement.offer.type, titles);
+  announcement.offer.title = getTitle(announcement.offer.type, dataObject.TITLES);
   announcement.offer.address = announcement.location.x + ' ' + announcement.location.y;
 
   return announcement;
@@ -215,17 +177,8 @@ var main = function () {
   // создание массива js-объектов объявлений
   var announcements = [];
   for (var i = 0; i < ANNOUNCEMENTS_COUNT; i++) {
-    announcements.push(createAnnouncement(USERS_AVATARS_LOCATION,
-        ++CURRENT_AVATAR_COUNT,
-        HOUSING_TYPES,
-        TITLES,
-        LOCATION_X_MIN, LOCATION_X_MAX,
-        LOCATION_Y_MIN, LOCATION_Y_MAX,
-        MIN_PRICE, MAX_PRICE,
-        MIN_ROOMS_COUNT, MAX_ROOMS_COUNT,
-        MIN_GUESTS_COUNT, MAX_GUESTS_COUNT,
-        CHECKIN_VARIANTS, CHECKOUT_VARIANTS,
-        FEATURES, DESCRIPTION, PHOTOS));
+    ++window.myDataObjectMock.currentAvatarCount;
+    announcements.push(createAnnouncement(window.myDataObjectMock));
   }
 
   // сделать карту доступной для работы с ней
