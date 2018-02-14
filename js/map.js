@@ -55,18 +55,22 @@ var getPhotosArray = function (basicPhotosArray) {
 
 // ФУНКЦИЯ: Собирает объект announcement.
 var createAnnouncement = function (dataObject) {
-  var announcement = {
+  var offerType = getHousingType((dataObject.HOUSING_TYPES));
+  var locationX = window.utils.getRandomValue(dataObject.LOCATION_X_MIN, dataObject.LOCATION_X_MAX, 0);
+  var locationY = window.utils.getRandomValue(dataObject.LOCATION_Y_MIN, dataObject.LOCATION_Y_MAX, 0);
+
+  return {
     'author': {
       'avatar': dataObject.USERS_AVATARS_LOCATION + 'user0' + dataObject.currentAvatarCount + '.png'
     },
     'location': {
-      'x': window.utils.getRandomValue(dataObject.LOCATION_X_MIN, dataObject.LOCATION_X_MAX, 0),
-      'y': window.utils.getRandomValue(dataObject.LOCATION_Y_MIN, dataObject.LOCATION_Y_MAX, 0)
+      'x': locationX,
+      'y': locationY
     },
     'offer': {
-      'type': getHousingType(dataObject.HOUSING_TYPES),
-      'title': null,
-      'address': null,
+      'type': offerType,
+      'title': getTitle(offerType, dataObject.TITLES),
+      'address': locationX + ' ' + locationY,
       'price': window.utils.getRandomValue(dataObject.MIN_PRICE, dataObject.MAX_PRICE, 0),
       'rooms': window.utils.getRandomValue(dataObject.MIN_ROOMS_COUNT, dataObject.MAX_ROOMS_COUNT, 0),
       'guests': window.utils.getRandomValue(dataObject.MIN_GUESTS_COUNT, dataObject.MAX_GUESTS_COUNT, 0),
@@ -77,10 +81,6 @@ var createAnnouncement = function (dataObject) {
       'photos': getPhotosArray(dataObject.PHOTOS)
     }
   };
-  announcement.offer.title = getTitle(announcement.offer.type, dataObject.TITLES);
-  announcement.offer.address = announcement.location.x + ' ' + announcement.location.y;
-
-  return announcement;
 };
 
 // ФУНКЦИЯ: Создает DOM-элемент метки.
@@ -116,8 +116,59 @@ var createDOMElementForAnnouncement = function (announcement, domTemplate) {
   // price
   announcementCard.querySelector('.popup__price').textContent = announcement.offer.price + '&#x20bd;/ночь';
   // housing type
+  announcementCard.querySelector('h4').textContent = getHousingTypeInRussian(announcement.offer.type);
+  // rooms and guests
+  announcementCard.querySelector('p:nth-child(7)').textContent = announcement.offer.rooms + ' комнаты для ' + announcement.offer.guests + ' гостей';
+  // checkIn, checkOut
+  announcementCard.querySelector('p:nth-child(8)').textContent = 'Заезд после ' + announcement.offer.checkin + ', выезд до ' + announcement.offer.checkout;
+  // features
+  setActualFeatures(announcementCard, announcement.offer.features);
+  // description
+  announcementCard.querySelector('p:nth-child(10)').textContent = announcement.offer.description;
+  // pictures
+  setPictures(announcementCard, announcement.offer.photos);
+  // avatar
+  announcementCard.querySelector('.popup__avatar').src = announcement.author.avatar;
+
+  return announcementCard;
+};
+
+// ФУНКЦИЯ: в DOM-шаблоне объявления устанавливает фактические фичи в соответствии с данными в js-объекте объявления
+var setActualFeatures = function (announcementCard, featuresInAnnouncement) {
+  var featurecContainer = announcementCard.querySelector('.popup__features');
+  var featuresInDOMArray = featurecContainer.children;
+  var identifier;
+
+  for (var i = featuresInDOMArray.length - 1; i > -1; i--) {
+    identifier = featuresInDOMArray[i].className.split('--')[1];
+    if (!featuresInAnnouncement.includes(identifier)) {
+      featuresInDOMArray[i].parentNode.removeChild(featuresInDOMArray[i]);
+    }
+  }
+};
+
+// ФУНКЦИЯ: устанавливает изображения в DOM-шаблон объявления, которые берет из js-объекта объявления
+var setPictures = function (announcementCard, photosInAnnouncement) {
+  var picturesCount = photosInAnnouncement.length;
+  var fragment = document.createDocumentFragment();
+  var listItemTemplate = announcementCard.querySelector('.popup__pictures > li');
+  var newListItem;
+  var nestedImage;
+  for (var i = 0; i < picturesCount; i++) {
+    newListItem = listItemTemplate.cloneNode(true);
+    nestedImage = newListItem.querySelector('img');
+    nestedImage.src = photosInAnnouncement[i];
+    nestedImage.width = 100;
+    nestedImage.height = 100;
+    fragment.appendChild(newListItem);
+  }
+  listItemTemplate.parentNode.removeChild(listItemTemplate);
+  announcementCard.querySelector('.popup__pictures').appendChild(fragment);
+};
+
+var getHousingTypeInRussian = function (type) {
   var housingTypeInRussian;
-  switch (announcement.offer.type) {
+  switch (type) {
     case 'flat':
       housingTypeInRussian = 'Квартира'; break;
     case 'house':
@@ -126,51 +177,12 @@ var createDOMElementForAnnouncement = function (announcement, domTemplate) {
       housingTypeInRussian = 'Бунгало'; break;
     case 'palace':
       housingTypeInRussian = 'Дворец'; break;
+    default :
+      housingTypeInRussian = type;
+      break;
   }
-  announcementCard.querySelector('h4').textContent = housingTypeInRussian;
-  // rooms and guests
-  announcementCard.querySelector('p:nth-child(7)').textContent = announcement.offer.rooms + ' комнаты для ' + announcement.offer.guests + ' гостей';
-  // checkIn, checkOut
-  announcementCard.querySelector('p:nth-child(8)').textContent = 'Заезд после ' + announcement.offer.checkin + ', выезд до ' + announcement.offer.checkout;
-  // features
-  var featurecContainer = announcementCard.querySelector('.popup__features');
-  var featuresInDOMArray = featurecContainer.children;
-  var isItemToDelete;
-  for (var i = featuresInDOMArray.length - 1; i > -1; i--) {
-    var identifier = featuresInDOMArray[i].className.split('--')[1];
-    isItemToDelete = true;
-    for (var j = 0; j < announcement.offer.features.length; j++) {
-      if (identifier === announcement.offer.features[j]) {
-        isItemToDelete = false;
-        break;
-      }
-    }
-    if (isItemToDelete) {
-      featuresInDOMArray[i].parentNode.removeChild(featuresInDOMArray[i]);
-    }
-  }
-  // description
-  announcementCard.querySelector('p:nth-child(10)').textContent = announcement.offer.description;
-  // pictures
-  var picturesCount = announcement.offer.photos.length;
-  var fragment = document.createDocumentFragment();
-  var listItemTemplate = announcementCard.querySelector('.popup__pictures > li');
-  var newListItem;
-  var nestedImage;
-  for (i = 0; i < picturesCount; i++) {
-    newListItem = listItemTemplate.cloneNode(true);
-    nestedImage = newListItem.querySelector('img');
-    nestedImage.src = announcement.offer.photos[i];
-    nestedImage.width = 100;
-    nestedImage.height = 100;
-    fragment.appendChild(newListItem);
-  }
-  listItemTemplate.parentNode.removeChild(listItemTemplate);
-  announcementCard.querySelector('.popup__pictures').appendChild(fragment);
-  // avatar
-  announcementCard.querySelector('.popup__avatar').src = announcement.author.avatar;
-  return announcementCard;
 
+  return housingTypeInRussian;
 };
 
 var main = function () {
@@ -197,17 +209,11 @@ var main = function () {
   var pinsContainer = document.querySelector('.map__pins');
   pinsContainer.appendChild(fragmentForPins);
 
-  // создание и заполнение DOM-элементов объявлений
-  var fragment = document.createDocumentFragment();
-  var domElementForAnnouncement;
-
-  for (i = 0; i < announcements.length; i++) {
-    domElementForAnnouncement = createDOMElementForAnnouncement(announcements[i], ANNOUNCEMENT_CARD_TEMPLATE);
-    fragment.appendChild(domElementForAnnouncement);
-  }
+  // создание и заполнение DOM-элемента объявления
+  var domAnnouncement = createDOMElementForAnnouncement(announcements[0], ANNOUNCEMENT_CARD_TEMPLATE);
 
   var container = document.querySelector('.map');
-  container.insertBefore(fragment, container.querySelector('.map__filters-container'));
+  container.insertBefore(domAnnouncement, container.querySelector('.map__filters-container'));
 
 };
 
