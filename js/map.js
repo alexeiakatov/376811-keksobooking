@@ -54,11 +54,11 @@ var getTitle = function (currentHousingType, titles) {
 };
 
 // ФУНКЦИЯ: Возвращает значение свойства 'announcememnt.offer.features'
-var getFeaturesArray = function (basicFeaturesArray){
+var getFeaturesArray = function (basicFeaturesArray) {
   var resultFeaturesArray = [];
 
-  for (var i = 0; i < basicFeaturesArray.length; i++){
-    if(window.utils.getRandomValue(0, 1, 0)){
+  for (var i = 0; i < basicFeaturesArray.length; i++) {
+    if (window.utils.getRandomValue(0, 1, 0)) {
       resultFeaturesArray.push(basicFeaturesArray[i]);
     }
   }
@@ -67,19 +67,19 @@ var getFeaturesArray = function (basicFeaturesArray){
 };
 
 // ФУНКЦИЯ: Возвращает значение свойства 'announcement.offer.photos'.
-var getPhotosArray = function (basicPhotosArray){
+var getPhotosArray = function (basicPhotosArray) {
   var resultArray = [];
 
   // копирвоание переданного массива
-  for(var i = 0; i < basicPhotosArray.length; i++){
+  for (var i = 0; i < basicPhotosArray.length; i++) {
     resultArray.push(basicPhotosArray[i]);
   }
 
   // создание случайного порядка фотографий в массиве
   var randomIndex;
-  for(var i = 0; i < resultArray.length; i++){
+  for (i = 0; i < resultArray.length; i++) {
     randomIndex = window.utils.getRandomValue(0, resultArray.length - 1, 0);
-    if(randomIndex !== i){
+    if (randomIndex !== i) {
       var temp = resultArray[i];
       resultArray[i] = resultArray[randomIndex];
       resultArray[randomIndex] = temp;
@@ -90,9 +90,9 @@ var getPhotosArray = function (basicPhotosArray){
 };
 
 // ФУНКЦИЯ: Собирает объект announcement.
-var createAnnouncement = function(usersAvatarsLocation, currentAvatarCount, housingTypes, titles, xMin, xMax, yMin, yMax,
-                                  minPrice, maxPrice, minRooms, maxRooms, minGuests, maxGuests, checkinVariants, checkoutVariants,
-                                  basicFeaturesArray, description, basicPhotosArray){
+var createAnnouncement = function (usersAvatarsLocation, currentAvatarCount, housingTypes, titles, xMin, xMax, yMin, yMax,
+    minPrice, maxPrice, minRooms, maxRooms, minGuests, maxGuests, checkinVariants, checkoutVariants, basicFeaturesArray,
+    description, basicPhotosArray) {
   var announcement = {
     'author': {
       'avatar': usersAvatarsLocation + 'user0' + currentAvatarCount + '.png'
@@ -124,11 +124,11 @@ var createAnnouncement = function(usersAvatarsLocation, currentAvatarCount, hous
 // ФУНКЦИЯ: Создает DOM-элемент метки.
 // возвращает настроенный и готовый для вставки DOM-элемент метки для карты
 var createDOMPinForAnnouncement = function (announcement, pinButtonWidth, pinButtonHeight) {
-  var actualXPosition = announcement.location.x - pinButtonWidth/2;
+  var actualXPosition = announcement.location.x - pinButtonWidth / 2;
   var actualYPosition = announcement.location.y - pinButtonHeight;
 
   var button = document.createElement('button');
-  var buttonStyleString = 'left:' + actualXPosition +'px; top:' + actualYPosition + 'px;';
+  var buttonStyleString = 'left:' + actualXPosition + 'px; top:' + actualYPosition + 'px;';
   button.setAttribute('style', buttonStyleString);
   button.classList.add('map__pin');
 
@@ -145,7 +145,7 @@ var createDOMPinForAnnouncement = function (announcement, pinButtonWidth, pinBut
 
 // ФУНКЦИЯ: Возвращает DOM-элемент объявления, созданный на основании шаблона <template> (который в конце index.html) и
 // заполненный данными из объекта announcement.
-var createDOMElementForAnnouncement = function(announcement, domTemplate){
+var createDOMElementForAnnouncement = function (announcement, domTemplate) {
   var announcementCard = domTemplate.content.cloneNode(true);
   // title
   announcementCard.querySelector('h3').textContent = announcement.offer.title;
@@ -174,16 +174,16 @@ var createDOMElementForAnnouncement = function(announcement, domTemplate){
   var featurecContainer = announcementCard.querySelector('.popup__features');
   var featuresInDOMArray = featurecContainer.children;
   var isItemToDelete;
-  for(var i = featuresInDOMArray.length - 1; i > -1; i--){
+  for (var i = featuresInDOMArray.length - 1; i > -1; i--) {
     var identifier = featuresInDOMArray[i].className.split('--')[1];
-     isItemToDelete = true;
-    for(var j = 0; j < announcement.offer.features.length; j++){
-      if(identifier === announcement.offer.features[j]){
+    isItemToDelete = true;
+    for (var j = 0; j < announcement.offer.features.length; j++) {
+      if (identifier === announcement.offer.features[j]) {
         isItemToDelete = false;
         break;
       }
     }
-    if(isItemToDelete){
+    if (isItemToDelete) {
       featuresInDOMArray[i].parentNode.removeChild(featuresInDOMArray[i]);
     }
   }
@@ -195,12 +195,12 @@ var createDOMElementForAnnouncement = function(announcement, domTemplate){
   var listItemTemplate = announcementCard.querySelector('.popup__pictures > li');
   var newListItem;
   var nestedImage;
-  for(var i = 0; i < picturesCount; i++){
+  for (i = 0; i < picturesCount; i++) {
     newListItem = listItemTemplate.cloneNode(true);
     nestedImage = newListItem.querySelector('img');
     nestedImage.src = announcement.offer.photos[i];
-    nestedImage.width = '50px';
-    nestedImage.height = '50px';
+    nestedImage.width = 100;
+    nestedImage.height = 100;
     fragment.appendChild(newListItem);
   }
   listItemTemplate.parentNode.removeChild(listItemTemplate);
@@ -211,24 +211,21 @@ var createDOMElementForAnnouncement = function(announcement, domTemplate){
 
 };
 
-
-
-
-var main = function(){
+var main = function () {
   // создание массива js-объектов объявлений
   var announcements = [];
-  for(var i = 0; i < ANNOUNCEMENTS_COUNT ; i++){
+  for (var i = 0; i < ANNOUNCEMENTS_COUNT; i++) {
     announcements.push(createAnnouncement(USERS_AVATARS_LOCATION,
-      ++CURRENT_AVATAR_COUNT,
-      HOUSING_TYPES,
-      TITLES,
-      LOCATION_X_MIN, LOCATION_X_MAX,
-      LOCATION_Y_MIN, LOCATION_Y_MAX,
-      MIN_PRICE, MAX_PRICE,
-      MIN_ROOMS_COUNT, MAX_ROOMS_COUNT,
-      MIN_GUESTS_COUNT, MAX_GUESTS_COUNT,
-      CHECKIN_VARIANTS,CHECKOUT_VARIANTS,
-      FEATURES, DESCRIPTION , PHOTOS));
+        ++CURRENT_AVATAR_COUNT,
+        HOUSING_TYPES,
+        TITLES,
+        LOCATION_X_MIN, LOCATION_X_MAX,
+        LOCATION_Y_MIN, LOCATION_Y_MAX,
+        MIN_PRICE, MAX_PRICE,
+        MIN_ROOMS_COUNT, MAX_ROOMS_COUNT,
+        MIN_GUESTS_COUNT, MAX_GUESTS_COUNT,
+        CHECKIN_VARIANTS, CHECKOUT_VARIANTS,
+        FEATURES, DESCRIPTION, PHOTOS));
   }
 
   // сделать карту доступной для работы с ней
@@ -236,28 +233,29 @@ var main = function(){
   map.classList.remove('map--faded');
 
   // создание documentFragment содержащий все метки-пины для карты
-  var fragment = document.createDocumentFragment();
+  var fragmentForPins = document.createDocumentFragment();
   var newPin;
   for (i = 0; i < announcements.length; i++) {
     newPin = createDOMPinForAnnouncement(announcements[i], PIN_BUTTON_WIDTH, PIN_BUTTON_HEIGHT);
-    fragment.appendChild(newPin);
+    fragmentForPins.appendChild(newPin);
   }
 
   // вставка меток-пинов на карту
   var pinsContainer = document.querySelector('.map__pins');
-  pinsContainer.appendChild(fragment);
+  pinsContainer.appendChild(fragmentForPins);
 
   // создание и заполнение DOM-элементов объявлений
   var fragment = document.createDocumentFragment();
   var domElementForAnnouncement;
 
-  for (i = 0; i < announcements.length; i++){
+  for (i = 0; i < announcements.length; i++) {
     domElementForAnnouncement = createDOMElementForAnnouncement(announcements[i], ANNOUNCEMENT_CARD_TEMPLATE);
     fragment.appendChild(domElementForAnnouncement);
-    console.log('created dom elements: ' + i);
   }
 
   var container = document.querySelector('.map');
   container.insertBefore(fragment, container.querySelector('.map__filters-container'));
 
 };
+
+main();
