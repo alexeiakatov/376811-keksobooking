@@ -223,7 +223,7 @@ var main = function () {
   container.insertBefore(ANNOUNCEMENT_DOM_ELEMENT, container.querySelector('.map__filters-container'));
 
   setDataInDomAnnouncement(announcements[0], ANNOUNCEMENT_DOM_ELEMENT);
-
+//
 };
 
 main();
