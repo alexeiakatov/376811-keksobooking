@@ -108,50 +108,51 @@ var createDOMPinForAnnouncement = function (announcement, pinButtonWidth, pinBut
 
 // ФУНКЦИЯ: Возвращает DOM-элемент объявления, созданный на основании шаблона <template> (который в конце index.html) и
 // заполненный данными из объекта announcement.
-var setDataInDomAnnouncement = function (jsAnnouncement, domAnnouncement) {
+var setDataInDomAnnouncement = function (offerData, domAnnouncement) {
   // title
-  domAnnouncement.querySelector('h3').textContent = jsAnnouncement.offer.title;
+  domAnnouncement.querySelector('h3').textContent = offerData.offer.title;
 
   // address
-  domAnnouncement.querySelector('p > small').textContent = jsAnnouncement.offer.address;
+  domAnnouncement.querySelector('p > small').textContent = offerData.offer.address;
 
   // price
-  domAnnouncement.querySelector('.popup__price').innerHTML = jsAnnouncement.offer.price + ' &#x20bd;/ночь';
+  domAnnouncement.querySelector('.popup__price').innerHTML = offerData.offer.price + ' &#x20bd;/ночь';
 
   // housing type
-  domAnnouncement.querySelector('h4').textContent = getHousingTypeInRussian(jsAnnouncement.offer.type);
+  domAnnouncement.querySelector('h4').textContent = getHousingTypeInRussian(offerData.offer.type);
 
   // rooms and guests
-  domAnnouncement.querySelector('p:nth-child(7)').textContent = jsAnnouncement.offer.rooms + ' комнаты для ' + jsAnnouncement.offer.guests + ' гостей';
+  domAnnouncement.querySelector('p:nth-child(7)').textContent = offerData.offer.rooms + ' комнаты для ' + offerData.offer.guests + ' гостей';
 
   // checkIn, checkOut
-  domAnnouncement.querySelector('p:nth-child(8)').textContent = 'Заезд после ' + jsAnnouncement.offer.checkin + ', выезд до ' + jsAnnouncement.offer.checkout;
+  domAnnouncement.querySelector('p:nth-child(8)').textContent = 'Заезд после ' + offerData.offer.checkin + ', выезд до ' + offerData.offer.checkout;
 
   // features
-  setActualFeatures(domAnnouncement, jsAnnouncement.offer.features);
+  setActualFeatures(domAnnouncement, offerData.offer.features);
 
   // description
-  domAnnouncement.querySelector('p:nth-child(10)').textContent = jsAnnouncement.offer.description;
+  domAnnouncement.querySelector('p:nth-child(10)').textContent = offerData.offer.description;
 
   // pictures
-  setPictures(domAnnouncement, jsAnnouncement.offer.photos);
+  setPictures(domAnnouncement, offerData.offer.photos);
 
   // avatar
-  domAnnouncement.querySelector('.popup__avatar').src = jsAnnouncement.author.avatar;
+  domAnnouncement.querySelector('.popup__avatar').src = offerData.author.avatar;
 };
 
 // ФУНКЦИЯ: в DOM-шаблоне объявления устанавливает фактические фичи в соответствии с данными в js-объекте объявления
 var setActualFeatures = function (domAnnouncement, featuresInAnnouncement) {
   var featurecContainer = domAnnouncement.querySelector('.popup__features');
-  var featuresInDOMArray = featurecContainer.children;
+  var featuresInDom = featurecContainer.children;
   var identifier;
 
-  for (var i = featuresInDOMArray.length - 1; i > -1; i--) {
-    identifier = featuresInDOMArray[i].className.split('--')[1];
+  for (var i = 0; i < featuresInDom.length; i++) {
+    identifier = featuresInDom[i].classList[1].split('--')[1];
+    // showArrayState(featuresInDom);
     if (featuresInAnnouncement.includes(identifier)) {
-      featuresInDOMArray[i].removeAttribute('style');
+      featuresInDom[i].classList.toggle('hidden', false);
     } else {
-      featuresInDOMArray[i].setAttribute('style', 'display: none;');
+      featuresInDom[i].classList.toggle('hidden', true);
     }
   }
 };
@@ -195,27 +196,6 @@ var getHousingTypeInRussian = function (type) {
   return housingTypeInRussian;
 };
 
-// ФУНКЦИЯ:
-var getAnnouncementDomElement = function () {
-  var result;
-  if (ANNOUNCEMENT_DOM_ELEMENT) {
-    result = ANNOUNCEMENT_DOM_ELEMENT;
-
-  } else {
-    var template = document.querySelector('template').content.cloneNode(true);
-    ANNOUNCEMENT_DOM_ELEMENT = document.createElement('div');
-    ANNOUNCEMENT_DOM_ELEMENT.className += ' announcementCard';
-    ANNOUNCEMENT_DOM_ELEMENT.appendChild(template);
-
-    var container = document.querySelector('.map');
-    container.insertBefore(ANNOUNCEMENT_DOM_ELEMENT, container.querySelector('.map__filters-container'));
-    result = ANNOUNCEMENT_DOM_ELEMENT;
-  }
-
-  return result;
-};
-
-
 var main = function () {
   // создание массива js-объектов объявлений
   var announcements = [];
@@ -240,9 +220,16 @@ var main = function () {
   var pinsContainer = document.querySelector('.map__pins');
   pinsContainer.appendChild(fragmentForPins);
 
-  // создание/обновление DOM-элемента объявления
-  var domAnnouncement = getAnnouncementDomElement();
-  setDataInDomAnnouncement(announcements[0], domAnnouncement);
+  // создание DOM-элемента объявления
+  var template = document.querySelector('template').content.cloneNode(true);
+  ANNOUNCEMENT_DOM_ELEMENT = document.createElement('div');
+  ANNOUNCEMENT_DOM_ELEMENT.classList.add('announcementCard');
+  ANNOUNCEMENT_DOM_ELEMENT.appendChild(template);
+
+  var container = document.querySelector('.map');
+  container.insertBefore(ANNOUNCEMENT_DOM_ELEMENT, container.querySelector('.map__filters-container'));
+
+  setDataInDomAnnouncement(announcements[0], ANNOUNCEMENT_DOM_ELEMENT);
 
 };
 
