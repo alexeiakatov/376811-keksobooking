@@ -96,11 +96,6 @@ textarea:focus
     box-shadow: 0 0 4px 1px #ff6547;
 }
 
-.hidden
-{
-    display: none;
-}
-
 .visuallyhidden
 {
     position: absolute;
@@ -853,4 +848,9 @@ textarea:focus
 .footer-social-item-vk
 {
     background-position: -10px -10px;
+}
+
+.hidden
+{
+  display: none;
 }

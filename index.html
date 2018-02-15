@@ -14,9 +14,14 @@
 
 <main>
   <section class="map map--faded">
+
+    <!--КОНТЕЙНЕР, СОДЕРЖАЩИЙ ВСЕ ИГОЛКИ-УКАЗАТЕЛИ-->
     <div class="map__pins">
+
+      <!--Блок с пропадающим приветствием-->
       <div class="map__pinsoverlay"><h2>И снова Токио!</h2></div>
 
+      <!--ИГОЛКА-УКАЗАТЕЛЬ НА КАРТЕ-->
       <button class="map__pin map__pin--main">
         <img src="img/main-pin-image.png" width="40" height="44" draggable="false">
         <svg viewBox="0 0 70 70">
@@ -28,7 +33,10 @@
           <text><textPath xlink:href="#tophalf" startOffset="0">Поставь меня куда-нибудь</textPath></text>
         </svg>
       </button>
+
     </div>
+
+    <!--СЮДА НУЖНО ВСТАВИТЬ СОЗДАННЫЕ DOM-ЭЛЕМЕНТЫ-КАРТОЧКИ ОБЪЯВЛЕНИЙ-->
 
     <div class="map__filters-container">
       <form action="#" class="map__filters" autocomplete="off">
@@ -245,5 +253,8 @@
   <button style="left: 200px; top: 400px;" class="map__pin"><img src="img/avatars/user07.png" width="40" height="40" draggable="false"></button>
 </template>
 
+<script src="js/myDataObjectMock.js"></script>
+<script src="js/utils.js"></script>
+<script src="js/map.js"></script>
 </body>
 </html>
