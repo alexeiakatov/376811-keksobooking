@@ -21,13 +21,11 @@ var getTitle = function (currentHousingType, titles) {
 // ФУНКЦИЯ: Возвращает значение свойства 'announcememnt.offer.features'
 var getFeaturesArray = function (basicFeaturesArray) {
   var resultFeaturesArray = [];
-
   for (var i = 0; i < basicFeaturesArray.length; i++) {
     if (window.utils.getRandomValue(0, 1, 0)) {
       resultFeaturesArray.push(basicFeaturesArray[i]);
     }
   }
-
   return resultFeaturesArray;
 };
 
@@ -148,12 +146,7 @@ var setActualFeatures = function (domAnnouncement, featuresInAnnouncement) {
 
   for (var i = 0; i < featuresInDom.length; i++) {
     identifier = featuresInDom[i].classList[1].split('--')[1];
-    // showArrayState(featuresInDom);
-    if (featuresInAnnouncement.includes(identifier)) {
-      featuresInDom[i].classList.toggle('hidden', false);
-    } else {
-      featuresInDom[i].classList.toggle('hidden', true);
-    }
+    featuresInDom[i].classList.toggle('hidden', !featuresInAnnouncement.includes(identifier));
   }
 };
 
