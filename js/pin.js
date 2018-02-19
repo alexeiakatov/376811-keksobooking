@@ -1,6 +1,6 @@
 'use strict';
-// требует window.getAnnouncementData для получения js-данных объявлений.
-// создает dom-элементы пинов и вставляет их на страницу.
+// требует window.getAllOfferDataObjects() для получения массива js-объектов объявлений.
+// создает dom-элементы пинов, вставляет их на страницу, добавляет на контейнер пинов обработчик клика на пине.
 // экспортирует функцию window.createAllPins.
 
 (function () {
@@ -34,17 +34,29 @@
   // public ФУНКЦИЯ: создание documentFragment содержащий все метки-пины для карты и вставка их на страницу.
   var createAllPins = function () {
     var fragmentForPins = document.createDocumentFragment();
-    var announcements = window.getAllAnnouncements();
+    var offerDataObjects = window.getAllOfferDataObjects();
     var newPin;
 
-    for (var i = 0; i < announcements.length; i++) {
-      newPin = createDomPinForAnnouncement(announcements[i], PIN_BUTTON_WIDTH, PIN_BUTTON_HEIGHT);
+    for (var i = 0; i < offerDataObjects.length; i++) {
+      newPin = createDomPinForAnnouncement(offerDataObjects[i], PIN_BUTTON_WIDTH, PIN_BUTTON_HEIGHT);
       fragmentForPins.appendChild(newPin);
     }
 
     // вставка меток-пинов на карту
     var pinsContainer = document.querySelector('.map__pins');
     pinsContainer.appendChild(fragmentForPins);
+
+    // определение хендлера клика на любой пин
+    var pinClickHandler = function (evt) {
+      var currentId = evt.target.getAttribute('data-id');
+      if (currentId !== null) {
+        var dataObject = window.getOfferDataObjectById(currentId);
+        window.createDomOfferCard(dataObject);
+      }
+
+    };
+
+    pinsContainer.addEventListener('mousedown', pinClickHandler);
   };
 
   // экспорт функции createAllpins.

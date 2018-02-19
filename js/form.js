@@ -1,10 +1,7 @@
 'use strict';
 
 (function () {
-  var MAP = document.querySelector('.map');
-  var START_MARKER = document.body.querySelector('.map__pin--main');
   var NOTICE_FORM = document.body.querySelector('.notice__form');
-
   var AVATAR = document.getElementById('avatar');
   var TITLE = document.getElementById('title');
   var ADDRESS = document.getElementById('address');
@@ -20,27 +17,14 @@
   var SUBMIT_BUTTON = NOTICE_FORM.querySelector('.form__submit');
 
 
-  // ФУНКЦИЯ: убрать атрибут 'disabled'
+  // private ФУНКЦИЯ: убрать атрибут 'disabled'
   var removeDisabledAttribute = function (element) {
     element.disabled = false;
   };
 
-  var setStartMarkerAddress = function () {
-    var actualX = Math.round(START_MARKER.offsetLeft + (START_MARKER.clientWidth / 2));
-    var actualY = Math.round(START_MARKER.offsetTop + (START_MARKER.clientHeight / 2));
-
-    ADDRESS.value = actualX + ' ' + actualY;
-  };
-
-  // ФУНКЦИЯ: сделать карту активной.
-  var activateMapAndFrom = function () {
-    if (MAP.classList.contains('map--faded')) {
-      MAP.classList.remove('map--faded');
-    }
-    if (NOTICE_FORM.classList.contains('notice__form--disabled')) {
-      NOTICE_FORM.classList.toggle('notice__form--disabled');
-    }
-
+  // public ФУНКЦИЯ: Убирает атрибут disabled у элементов формы - делает их доступными для ввода данных.
+  var activateForm = function () {
+    NOTICE_FORM.classList.remove('notice__form--disabled');
     // сделать доступным поле размещения картинки для пина
     removeDisabledAttribute(AVATAR);
 
@@ -79,19 +63,16 @@
 
     // сделать доступной кнопку отправки формы
     removeDisabledAttribute(SUBMIT_BUTTON);
-
   };
 
-
-  // ОБРАБОТЧИК: обработчик перемещения начальной метки.
-  var startMarkerDraggedHandler = function (evt) {
-    activateMapAndFrom();
-    setStartMarkerAddress();
-    window.createAllPins();
-
+  // public ФУНКЦИЯ: устанавливает значение в поле формы ADDRESS в соответствии с текущим положением начального маркера.
+  var setFormAddress = function (newAddress) {
+    ADDRESS.value = newAddress;
   };
 
-  // УСТАНОВКА ОБРАБОТЧИКА на событие перемещения начальной метки
-  START_MARKER.addEventListener('mouseup', startMarkerDraggedHandler);
+  // ЭКСПОРТ функции activateForm
+  window.activateForm = activateForm;
 
+  // ЭКСПОРТ функции setFormAddress
+  window.setFormAddress = setFormAddress;
 })();
