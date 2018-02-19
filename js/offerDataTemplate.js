@@ -1,9 +1,8 @@
 'use strict';
 
 (function () {
-  window.myDataObjectMock = {
+  window.offerDataTemplate = {
     USERS_AVATARS_LOCATION: 'img/avatars/',
-    currentAvatarCount: 0,
     HOUSING_TYPES: ['flat', 'house', 'bungalo', 'palace'],
     TITLES: {
       flat: ['Большая уютная квартира', 'Маленькая неуютная квартира'],
