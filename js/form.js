@@ -10,7 +10,8 @@
     // сделать доступным поле размещения картинки для пина
     var formChildren = NOTICE_FORM.children;
 
-    for (var i = 0; i < formChildren; i++) {
+    for (var i = 0; i < formChildren.length; i++) {
+      console.log(formChildren[i]);
       formChildren[i].disabled = false;
     }
   };
