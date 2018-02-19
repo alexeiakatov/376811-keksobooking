@@ -3,6 +3,9 @@
 // экспортирует в глобальную область функцию: createDomOfferCard
 
 (function () {
+  var ESC_KEY_CODE = 27;
+  var activeOfferCard = null;
+  var hasDocumentEscPressedListener = false;
 
   // private ФУНКЦИЯ: Возвращает строку-тип жилья на русском языке.
   var getHousingTypeInRussian = function (type) {
@@ -92,17 +95,56 @@
   // public ФУНКЦИЯ: создает dom-элемент объявления, заполняет его данными и вставляет на страницу.
   var createDomOfferCard = function (offerData) {
     var template = document.querySelector('template').content.cloneNode(true);
+
     var domOfferCard = document.createElement('div');
     domOfferCard.classList.add('offerCard');
     domOfferCard.appendChild(template);
+
     setDataInDomOfferCard(offerData, domOfferCard);
 
     var container = document.querySelector('.map');
+
     var previousOfferCard = container.querySelector('.offerCard');
     if (previousOfferCard !== null) {
       container.removeChild(previousOfferCard);
+      activeOfferCard = null;
     }
     container.insertBefore(domOfferCard, container.querySelector('.map__filters-container'));
+    activeOfferCard = domOfferCard;
+
+    var documentEscPressedHandler = function (evt) {
+      if (evt.keyCode === ESC_KEY_CODE) {
+        container.removeChild(activeOfferCard);
+        activeOfferCard = null;
+
+        window.currentActivePin.classList.remove('map__pin--active');
+        window.currentActivePin = null;
+        hasDocumentEscPressedListener = false;
+        document.removeEventListener('keydown', documentEscPressedHandler);
+      }
+    };
+
+    if (hasDocumentEscPressedListener === false) {
+      console.log('esc handler created');
+      document.addEventListener('keydown', documentEscPressedHandler);
+      hasDocumentEscPressedListener = true;
+    }
+
+    // добавить обработчик на крестик для закрытия попапа
+    var closeButton = domOfferCard.querySelector('.popup__close');
+
+    closeButton.addEventListener('click', function (evt) {
+      console.log('closed by cross');
+
+      var offerContatiner = container;
+      var currentOfferCard = domOfferCard;
+      offerContatiner.removeChild(currentOfferCard);
+      window.currentActivePin.classList.remove('map__pin--active');
+      window.currentActivePin = null;
+      document.removeEventListener('keydown', documentEscPressedHandler);
+      hasDocumentEscPressedListener = false;
+    });
+
   };
 
   // ЭКСПОРТ функции createDomOfferCard

@@ -92,7 +92,7 @@
     return resultArray;
   };
 
-  // private ФУНКЦИЯ: Собирает js-объект announcement из dataObjectTemplate
+  // private ФУНКЦИЯ: Собирает js-объект offerDataObject из dataObjectTemplate
   var createOfferDataObject = function (dataObjectTemplate) {
     var id = ++currentId;
     var offerType = getHousingType((dataObjectTemplate.HOUSING_TYPES));

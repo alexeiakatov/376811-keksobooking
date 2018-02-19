@@ -1,7 +1,7 @@
 'use strict';
 // требует window.getAllOfferDataObjects() для получения массива js-объектов объявлений.
 // создает dom-элементы пинов, вставляет их на страницу, добавляет на контейнер пинов обработчик клика на пине.
-// экспортирует функцию window.createAllPins.
+// экспортирует функцию window.createAllPins и переменную currentActivePin.
 
 (function () {
   var PIN_BUTTON_WIDTH = 40;
@@ -20,13 +20,25 @@
     button.classList.add('map__pin');
 
     var image = document.createElement('img');
-    image.setAttribute('data-id', offerData.id);
+    // image.setAttribute('data-id', offerData.id);
     image.src = offerData.author.avatar;
     image.width = pinButtonWidth;
     image.height = pinButtonHeight;
     image.setAttribute('draggable', 'false');
 
     button.appendChild(image);
+
+    button.addEventListener('click', function (evt) {
+      if (window.currentActivePin !== null) {
+        window.currentActivePin.classList.remove('map__pin--active');
+      }
+      window.currentActivePin = evt.currentTarget;
+      evt.currentTarget.classList.add('map__pin--active');
+
+      var id = offerData.id;
+      var dataObject = window.getOfferDataObjectById(id);
+      window.createDomOfferCard(dataObject);
+    });
 
     return button;
   };
@@ -45,21 +57,12 @@
     // вставка меток-пинов на карту
     var pinsContainer = document.querySelector('.map__pins');
     pinsContainer.appendChild(fragmentForPins);
-
-    // определение хендлера клика на любой пин
-    var pinClickHandler = function (evt) {
-      var currentId = evt.target.getAttribute('data-id');
-      if (currentId !== null) {
-        var dataObject = window.getOfferDataObjectById(currentId);
-        window.createDomOfferCard(dataObject);
-      }
-
-    };
-
-    pinsContainer.addEventListener('mousedown', pinClickHandler);
   };
 
   // экспорт функции createAllpins.
   window.createAllPins = createAllPins;
+
+  // экспорт переменной
+  window.currentActivePin = null;
 
 })();
