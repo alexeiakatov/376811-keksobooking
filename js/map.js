@@ -4,6 +4,7 @@ var ANNOUNCEMENTS_COUNT = 8;
 var PIN_BUTTON_WIDTH = 40;
 var PIN_BUTTON_HEIGHT = 40;
 var ANNOUNCEMENT_DOM_ELEMENT;
+var announcements = [];
 
 
 // ФУНКЦИЯ: Возвращает значение для свойства 'announcement.offer.type'.
@@ -84,7 +85,7 @@ var createAnnouncement = function (dataObject) {
 
 // ФУНКЦИЯ: Создает DOM-элемент метки.
 // возвращает настроенный и готовый для вставки DOM-элемент метки для карты
-var createDOMPinForAnnouncement = function (announcement, pinButtonWidth, pinButtonHeight) {
+var createDomPinForAnnouncement = function (announcement, pinButtonWidth, pinButtonHeight) {
   var actualXPosition = announcement.location.x - pinButtonWidth / 2;
   var actualYPosition = announcement.location.y - pinButtonHeight;
 
@@ -105,7 +106,7 @@ var createDOMPinForAnnouncement = function (announcement, pinButtonWidth, pinBut
 };
 
 // ФУНКЦИЯ: Возвращает DOM-элемент объявления, созданный на основании шаблона <template> (который в конце index.html) и
-// заполненный данными из объекта announcement.
+// заполненный данными из объекта announcement. т.е. DOM-элемент, готовый для вставки на страницу.
 var setDataInDomAnnouncement = function (offerData, domAnnouncement) {
   // title
   domAnnouncement.querySelector('h3').textContent = offerData.offer.title;
@@ -189,41 +190,88 @@ var getHousingTypeInRussian = function (type) {
   return housingTypeInRussian;
 };
 
-var main = function () {
-  // создание массива js-объектов объявлений
-  var announcements = [];
+// ФУНКЦИЯ: Создает моки пинов (экспортирована в глобальную обл. видимости)
+var createMockPins = function () {
+  // наполнение массива js-объектов объявлений
   for (var i = 0; i < ANNOUNCEMENTS_COUNT; i++) {
     ++window.myDataObjectMock.currentAvatarCount;
     announcements.push(createAnnouncement(window.myDataObjectMock));
   }
 
-  // сделать карту доступной для работы с ней
-  var map = document.querySelector('.map--faded');
-  map.classList.remove('map--faded');
-
   // создание documentFragment содержащий все метки-пины для карты
   var fragmentForPins = document.createDocumentFragment();
   var newPin;
   for (i = 0; i < announcements.length; i++) {
-    newPin = createDOMPinForAnnouncement(announcements[i], PIN_BUTTON_WIDTH, PIN_BUTTON_HEIGHT);
+    newPin = createDomPinForAnnouncement(announcements[i], PIN_BUTTON_WIDTH, PIN_BUTTON_HEIGHT);
+    newPin.setAttribute('data-id', announcements[i].currentAvatarCount);
     fragmentForPins.appendChild(newPin);
   }
 
   // вставка меток-пинов на карту
   var pinsContainer = document.querySelector('.map__pins');
   pinsContainer.appendChild(fragmentForPins);
+};
 
-  // создание DOM-элемента объявления
+var createNewAnnouncementCard = function (offerData) {
   var template = document.querySelector('template').content.cloneNode(true);
   ANNOUNCEMENT_DOM_ELEMENT = document.createElement('div');
   ANNOUNCEMENT_DOM_ELEMENT.classList.add('announcementCard');
   ANNOUNCEMENT_DOM_ELEMENT.appendChild(template);
+  setDataInDomAnnouncement(offerData, ANNOUNCEMENT_DOM_ELEMENT);
 
   var container = document.querySelector('.map');
+  var previousAnnouncementCard = container.querySelector('.announcementCard');
+  if (previousAnnouncementCard !== null) {
+    container.removeChild(previousAnnouncementCard);
+  }
   container.insertBefore(ANNOUNCEMENT_DOM_ELEMENT, container.querySelector('.map__filters-container'));
+};
 
-  setDataInDomAnnouncement(announcements[0], ANNOUNCEMENT_DOM_ELEMENT);
+
+
+// ЭКСПОРТ функции createMockPins
+window.createMockPins = createMockPins;
+
+// ЭКСПОРТ функции createNewAnnouncementCard
+window.createNewAnnouncementCard = createNewAnnouncementCard;
+
+// ЭКСПОРТ массива announcements[]
+// window.announcements = announcements;
+
+
+var main = function () {
+  // создание массива js-объектов объявлений
+  // var announcements = [];
+  // for (var i = 0; i < ANNOUNCEMENTS_COUNT; i++) {
+  //   ++window.myDataObjectMock.currentAvatarCount;
+  //   announcements.push(createAnnouncement(window.myDataObjectMock));
+  // }
+
+
+  // создание documentFragment содержащий все метки-пины для карты
+  // var fragmentForPins = document.createDocumentFragment();
+  // var newPin;
+  // for (i = 0; i < announcements.length; i++) {
+  //   newPin = createDOMPinForAnnouncement(announcements[i], PIN_BUTTON_WIDTH, PIN_BUTTON_HEIGHT);
+  //   fragmentForPins.appendChild(newPin);
+  // }
+
+  // вставка меток-пинов на карту
+  // var pinsContainer = document.querySelector('.map__pins');
+  // pinsContainer.appendChild(fragmentForPins);
+
+  // создание DOM-элемента объявления
+  // var template = document.querySelector('template').content.cloneNode(true);
+  // ANNOUNCEMENT_DOM_ELEMENT = document.createElement('div');
+  // ANNOUNCEMENT_DOM_ELEMENT.classList.add('announcementCard');
+  // ANNOUNCEMENT_DOM_ELEMENT.appendChild(template);
+  // setDataInDomAnnouncement(announcements[0], ANNOUNCEMENT_DOM_ELEMENT);
+  //
+  // var container = document.querySelector('.map');
+  // container.insertBefore(ANNOUNCEMENT_DOM_ELEMENT, container.querySelector('.map__filters-container'));
+
+
 //
 };
 
-main();
+// main();
