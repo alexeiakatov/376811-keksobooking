@@ -11,8 +11,15 @@
     var formChildren = NOTICE_FORM.children;
 
     for (var i = 0; i < formChildren.length; i++) {
-      console.log(formChildren[i]);
       formChildren[i].disabled = false;
+    }
+  };
+
+  var deactivateFrom = function () {
+    var formChildren = NOTICE_FORM.children;
+
+    for (var i = 0; i < formChildren.length; i++) {
+      formChildren[i].disabled = true;
     }
   };
 
@@ -27,4 +34,7 @@
 
   // ЭКСПОРТ функции setFormAddress
   window.setFormAddress = setFormAddress;
+
+  // ЭКСПОРТ функции deactivateForm
+  window.deactivateForm = deactivateFrom;
 })();
