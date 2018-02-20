@@ -5,7 +5,7 @@
 (function () {
   var ESC_KEY_CODE = 27;
   var activeOfferCard = null;
-  var hasDocumentEscPressedListener = false;
+  var documentEscPressedHandler = null;
 
   // private ФУНКЦИЯ: Возвращает строку-тип жилья на русском языке.
   var getHousingTypeInRussian = function (type) {
@@ -104,47 +104,53 @@
 
     var container = document.querySelector('.map');
 
-    var previousOfferCard = container.querySelector('.offerCard');
-    if (previousOfferCard !== null) {
-      container.removeChild(previousOfferCard);
-      activeOfferCard = null;
+    // получить ссылку на отображаемы в даный момент dom-элемент карточки объявления
+    if (activeOfferCard !== null) {
+      container.removeChild(activeOfferCard);
     }
     container.insertBefore(domOfferCard, container.querySelector('.map__filters-container'));
     activeOfferCard = domOfferCard;
-
-    var documentEscPressedHandler = function (evt) {
-      if (evt.keyCode === ESC_KEY_CODE) {
-        container.removeChild(activeOfferCard);
-        activeOfferCard = null;
-
-        window.currentActivePin.classList.remove('map__pin--active');
-        window.currentActivePin = null;
-        hasDocumentEscPressedListener = false;
-        document.removeEventListener('keydown', documentEscPressedHandler);
-      }
-    };
-
-    if (hasDocumentEscPressedListener === false) {
-      console.log('esc handler created');
-      document.addEventListener('keydown', documentEscPressedHandler);
-      hasDocumentEscPressedListener = true;
-    }
 
     // добавить обработчик на крестик для закрытия попапа
     var closeButton = domOfferCard.querySelector('.popup__close');
 
     closeButton.addEventListener('click', function (evt) {
-      console.log('closed by cross');
-
-      var offerContatiner = container;
-      var currentOfferCard = domOfferCard;
-      offerContatiner.removeChild(currentOfferCard);
+      container.removeChild(domOfferCard);
       window.currentActivePin.classList.remove('map__pin--active');
       window.currentActivePin = null;
-      document.removeEventListener('keydown', documentEscPressedHandler);
-      hasDocumentEscPressedListener = false;
+      activeOfferCard = null;
+      removeDocumentEscListener();
     });
 
+    // если нет установленного обработчика нажатия Esc на document - устанавливает его
+    // это нужно для того, чтоб если было сделано переключение на следующий пин без предварительного закрытия
+    // карты предложения
+    if (documentEscPressedHandler === null) {
+      setDocumentEscListener();
+    }
+  };
+
+  // установить на document обработчик нажатия Esc.
+  var setDocumentEscListener = function () {
+    documentEscPressedHandler = function (evt) {
+      if (evt.keyCode === ESC_KEY_CODE && activeOfferCard !== null) {
+        document.querySelector('.map').removeChild(activeOfferCard);
+        window.currentActivePin.classList.remove('map__pin--active');
+        window.currentActivePin = null;
+        activeOfferCard = null;
+        removeDocumentEscListener();
+      } else {
+        console.log('document Esc handler invoked!');
+      }
+    };
+
+    document.addEventListener('keydown', documentEscPressedHandler);
+  };
+
+  // удалить у document обработчик нажатия Esc
+  var removeDocumentEscListener = function () {
+    document.removeEventListener('keydown', documentEscPressedHandler);
+    documentEscPressedHandler = null;
   };
 
   // ЭКСПОРТ функции createDomOfferCard

@@ -6,6 +6,7 @@
 (function () {
   var PIN_BUTTON_WIDTH = 40;
   var PIN_BUTTON_HEIGHT = 40;
+  var currentActivePin = null;
 
   // private ФУНКЦИЯ: Создает DOM-элемент метки.
   // возвращает настроенный и готовый для вставки DOM-элемент метки для карты
@@ -35,13 +36,13 @@
       window.currentActivePin = evt.currentTarget;
       evt.currentTarget.classList.add('map__pin--active');
 
-      var id = offerData.id;
-      var dataObject = window.getOfferDataObjectById(id);
+      var dataObject = window.getOfferDataObjectById(offerData.id);
       window.createDomOfferCard(dataObject);
     });
 
     return button;
   };
+
 
   // public ФУНКЦИЯ: создание documentFragment содержащий все метки-пины для карты и вставка их на страницу.
   var createAllPins = function () {
