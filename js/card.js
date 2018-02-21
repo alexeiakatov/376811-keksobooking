@@ -20,9 +20,9 @@
   var offerCardCloseButton;
 
   // private ФУНКЦИЯ: Возвращает строку-тип жилья на русском языке.
-  var getHousingTypeInRussian = function (type) {
+  var getHousingTypeInRussian = function (offerTypeInEnglish) {
     var housingTypeInRussian;
-    switch (type) {
+    switch (offerTypeInEnglish) {
       case 'flat':
         housingTypeInRussian = 'Квартира'; break;
       case 'house':
@@ -32,7 +32,7 @@
       case 'palace':
         housingTypeInRussian = 'Дворец'; break;
       default :
-        housingTypeInRussian = type;
+        housingTypeInRussian = offerTypeInEnglish;
         break;
     }
 
@@ -141,7 +141,7 @@
     findElementsInOfferCard();
 
     // установить для dom-элемента offerCard обработчик события на клик по крестику
-    offerCardCloseButton.addEventListener('click', function (evt) {
+    offerCardCloseButton.addEventListener('click', function () {
       activeOfferCard.classList.add('hidden');
       window.removeActivePin();
       removeDocumentEscListener();
