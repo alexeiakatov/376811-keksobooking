@@ -5,7 +5,7 @@
 
 (function () {
   var currentActivePin = null;
-  var pinTemplate = document.querySelector('template').content.querySelector('.map__pin');
+  var PIN_TEMPLATE = document.querySelector('template').content.querySelector('.map__pin');
   var PIN_BUTTON_WIDTH = 50;
   var PIN_BUTTON_HEIGHT = 70;
 
@@ -15,7 +15,7 @@
     var actualXPosition = offerData.location.x - pinButtonWidth / 2;
     var actualYPosition = offerData.location.y - pinButtonHeight;
 
-    var button = pinTemplate.cloneNode(true);
+    var button = PIN_TEMPLATE.cloneNode(true);
     var buttonStyleString = 'left:' + actualXPosition + 'px; top:' + actualYPosition + 'px;';
     button.setAttribute('style', buttonStyleString);
 
