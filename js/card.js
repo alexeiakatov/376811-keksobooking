@@ -129,15 +129,14 @@
     }
   };
 
-  // public ФУНКЦИЯ: создает (если его еще нет) dom-элемент объявления, заполняет его данными и вставляет на страницу.
+  // public ФУНКЦИЯ: создает dom-элемент объявления, добавляет ему обработчик закрытия по клику на крестик и вставляет
+  // на страницу.
   var createDomOfferCard = function () {
     // создать из <template> dom-элемент для карточки предложения и добавить ему классы offerCard и hidden.
-    var template = document.querySelector('template').content.cloneNode(true);
-    activeOfferCard = document.createElement('div');
-    activeOfferCard.classList.add('offerCard');
+    var templateContent = document.querySelector('template').content;
+    activeOfferCard = templateContent.querySelector('.map__card').cloneNode(true);
     activeOfferCard.classList.add('hidden');
-    activeOfferCard.appendChild(template);
-    // создать ссылки на все необходимые dom-элементы внутри offerCard
+    // создать ссылки на все необходимые dom-элементы внутри activeOfferCard
     findElementsInOfferCard();
 
     // установить для dom-элемента offerCard обработчик события на клик по крестику

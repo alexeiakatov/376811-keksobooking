@@ -1,33 +1,28 @@
 'use strict';
 // требует window.getAllOfferDataObjects() для получения массива js-объектов объявлений.
-// создает dom-элементы пинов, вставляет их на страницу, добавляет на контейнер пинов обработчик клика на пине.
-// экспортирует функцию window.createAllPins и переменную currentActivePin.
+// создает dom-элементы пинов, добавляет им обработчики клика и вставляет их на страницу.
+// экспортирует функции: window.createAllPins, removeActivePin.
 
 (function () {
   var PIN_BUTTON_WIDTH = 40;
   var PIN_BUTTON_HEIGHT = 40;
   var currentActivePin = null;
+  var pinTemplate = document.querySelector('template').content.querySelector('.map__pin');
 
-  // private ФУНКЦИЯ: Создает DOM-элемент метки.
-  // возвращает настроенный и готовый для вставки DOM-элемент метки для карты
+  // private ФУНКЦИЯ: Создает DOM-элемент метки и добавляет ему обработчик клика.
+  // возвращает настроенный и готовый для вставки на карту DOM-элемент метки.
   var createDomPinForAnnouncement = function (offerData, pinButtonWidth, pinButtonHeight) {
     var actualXPosition = offerData.location.x - pinButtonWidth / 2;
     var actualYPosition = offerData.location.y - pinButtonHeight;
 
-    var button = document.createElement('button');
-
+    var button = pinTemplate.cloneNode(true);
     var buttonStyleString = 'left:' + actualXPosition + 'px; top:' + actualYPosition + 'px;';
     button.setAttribute('style', buttonStyleString);
-    button.classList.add('map__pin');
 
-    var image = document.createElement('img');
-    // image.setAttribute('data-id', offerData.id);
+    var image = button.querySelector('img');
     image.src = offerData.author.avatar;
     image.width = pinButtonWidth;
     image.height = pinButtonHeight;
-    image.setAttribute('draggable', 'false');
-
-    button.appendChild(image);
 
     button.addEventListener('click', function (evt) {
       removeActivePin();
