@@ -131,20 +131,6 @@
     }
   };
 
-  // public функция для получения данных конкретного объявления
-  var getOfferDataObjectById = function (id) {
-    var receivedId = parseInt(id, 10);
-    var result;
-    for (var i = 0; i < OFFER_DATA_MOCKS.length; i++) {
-      if (OFFER_DATA_MOCKS[i].id === receivedId) {
-        result = OFFER_DATA_MOCKS[i];
-        break;
-      }
-    }
-
-    return result;
-  };
-
   // public ФУНКЦИЯ: Возвращает весь массив js-объектов объявлений.
   var getAllOfferDataObjects = function () {
     return OFFER_DATA_MOCKS;
@@ -152,9 +138,6 @@
 
   // создать массив js-объектов объявлений
   createOfferDataMocks();
-
-  // ЭКСПОРТ функции getAnnouncementData
-  window.getOfferDataObjectById = getOfferDataObjectById;
 
   // ЭКСПОРТ функции getAllAnnouncements
   window.getAllOfferDataObjects = getAllOfferDataObjects;

@@ -7,6 +7,18 @@
   var activeOfferCard = null;
   var documentEscPressedHandler = null;
 
+  var TITLE;
+  var ADDRESS;
+  var PRICE;
+  var TYPE;
+  var ROOMS_AND_GUESTS;
+  var CHECKIN_AND_CHECKOUT;
+  var FEATURES;
+  var DESCRIPTION;
+  var PHOTOS;
+  var AVATAR;
+  var OFFER_CARD_CLOSE_BUTTON;
+
   // private ФУНКЦИЯ: Возвращает строку-тип жилья на русском языке.
   var getHousingTypeInRussian = function (type) {
     var housingTypeInRussian;
@@ -28,9 +40,8 @@
   };
 
   // private ФУНКЦИЯ: в DOM-шаблоне объявления устанавливает фактические фичи в соответствии с данными в js-объекте объявления
-  var setActualFeatures = function (domOfferCard, featuresInDataObject) {
-    var featurecContainer = domOfferCard.querySelector('.popup__features');
-    var featuresInDom = featurecContainer.children;
+  var setActualFeatures = function (featuresInDataObject) {
+    var featuresInDom = FEATURES.children;
     var identifier;
 
     for (var i = 0; i < featuresInDom.length; i++) {
@@ -39,11 +50,11 @@
     }
   };
 
-  // private ФУНКЦИЯ: устанавливает изображения в DOM-шаблон объявления, которые берет из js-объекта объявления
-  var setPictures = function (domOfferCard, photosInDataObject) {
+  // private ФУНКЦИЯ: устанавливает изображения в DOM-элементе объявления, которые берет из js-объекта объявления
+  var setPictures = function (photosInDataObject) {
     var picturesCount = photosInDataObject.length;
     var fragment = document.createDocumentFragment();
-    var listItemTemplate = domOfferCard.querySelector('.popup__pictures > li');
+    var listItemTemplate = document.querySelector('template').content.querySelector('.popup__pictures > li');
     var newListItem;
     var nestedImage;
     for (var i = 0; i < picturesCount; i++) {
@@ -54,73 +65,87 @@
       nestedImage.height = 100;
       fragment.appendChild(newListItem);
     }
-    listItemTemplate.parentNode.removeChild(listItemTemplate);
-    domOfferCard.querySelector('.popup__pictures').appendChild(fragment);
+    PHOTOS.innerHTML = '';
+    PHOTOS.appendChild(fragment);
   };
 
   // private ФУНКЦИЯ: Возвращает DOM-элемент объявления, созданный на основании шаблона <template> (который в конце index.html) и
   // заполненный данными из объекта offerData. Возвращаемый элемент готов для вставки на страницу.
-  var setDataInDomOfferCard = function (offerData, domOfferCard) {
-    // title
-    domOfferCard.querySelector('h3').textContent = offerData.offer.title;
+  var setDataInDomOfferCard = function (offerData) {
+    // title *
+    TITLE.textContent = offerData.offer.title;
 
-    // address
-    domOfferCard.querySelector('p > small').textContent = offerData.offer.address;
+    // address *
+    ADDRESS.textContent = offerData.offer.address;
 
-    // price
-    domOfferCard.querySelector('.popup__price').innerHTML = offerData.offer.price + ' &#x20bd;/ночь';
+    // price *
+    PRICE.innerHTML = offerData.offer.price + ' &#x20bd;/ночь';
 
-    // housing type
-    domOfferCard.querySelector('h4').textContent = getHousingTypeInRussian(offerData.offer.type);
+    // housing type *
+    TYPE.textContent = getHousingTypeInRussian(offerData.offer.type);
 
-    // rooms and guests
-    domOfferCard.querySelector('p:nth-child(7)').textContent = offerData.offer.rooms + ' комнаты для ' + offerData.offer.guests + ' гостей';
+    // rooms and guests *
+    ROOMS_AND_GUESTS.textContent = offerData.offer.rooms + ' комнаты для ' + offerData.offer.guests + ' гостей';
 
-    // checkIn, checkOut
-    domOfferCard.querySelector('p:nth-child(8)').textContent = 'Заезд после ' + offerData.offer.checkin + ', выезд до ' + offerData.offer.checkout;
+    // checkIn, checkOut *
+    CHECKIN_AND_CHECKOUT.textContent = 'Заезд после ' + offerData.offer.checkin + ', выезд до ' + offerData.offer.checkout;
 
     // features
-    setActualFeatures(domOfferCard, offerData.offer.features);
+    setActualFeatures(offerData.offer.features);
 
     // description
-    domOfferCard.querySelector('p:nth-child(10)').textContent = offerData.offer.description;
+    DESCRIPTION.textContent = offerData.offer.description;
 
-    // pictures
-    setPictures(domOfferCard, offerData.offer.photos);
+    // photos of housing
+    setPictures(offerData.offer.photos);
 
     // avatar
-    domOfferCard.querySelector('.popup__avatar').src = offerData.author.avatar;
+    AVATAR.src = offerData.author.avatar;
   };
 
-  // public ФУНКЦИЯ: создает dom-элемент объявления, заполняет его данными и вставляет на страницу.
-  var createDomOfferCard = function (offerData) {
-    var template = document.querySelector('template').content.cloneNode(true);
-
-    var domOfferCard = document.createElement('div');
-    domOfferCard.classList.add('offerCard');
-    domOfferCard.appendChild(template);
-
-    setDataInDomOfferCard(offerData, domOfferCard);
-
-    var container = document.querySelector('.map');
-
-    // получить ссылку на отображаемы в даный момент dom-элемент карточки объявления
+  // вычислить все ссылки на dom-элементы
+  var findElementsInOfferCard = function () {
     if (activeOfferCard !== null) {
-      container.removeChild(activeOfferCard);
+      TITLE = activeOfferCard.querySelector('h3');
+      ADDRESS = activeOfferCard.querySelector('p > small');
+      PRICE = activeOfferCard.querySelector('.popup__price');
+      TYPE = activeOfferCard.querySelector('h4');
+      ROOMS_AND_GUESTS = activeOfferCard.querySelector('p:nth-child(7)');
+      CHECKIN_AND_CHECKOUT = activeOfferCard.querySelector('p:nth-child(8)');
+      FEATURES = activeOfferCard.querySelector('.popup__features');
+      DESCRIPTION = activeOfferCard.querySelector('p:nth-child(10)');
+      PHOTOS = activeOfferCard.querySelector('.popup__pictures');
+      AVATAR = activeOfferCard.querySelector('.popup__avatar');
+      OFFER_CARD_CLOSE_BUTTON = activeOfferCard.querySelector('.popup__close');
     }
-    container.insertBefore(domOfferCard, container.querySelector('.map__filters-container'));
-    activeOfferCard = domOfferCard;
+  };
 
-    // добавить обработчик на крестик для закрытия попапа
-    var closeButton = domOfferCard.querySelector('.popup__close');
+  // public ФУНКЦИЯ: создает (если его еще нет) dom-элемент объявления, заполняет его данными и вставляет на страницу.
+  var createDomOfferCard = function (offerData) {
+    if (activeOfferCard === null) {
+      // создать из <template> dom-элемент для карточки предложения и добавить ему классы offerCard и hidden.
+      var template = document.querySelector('template').content.cloneNode(true);
+      activeOfferCard = document.createElement('div');
+      activeOfferCard.classList.add('offerCard');
+      activeOfferCard.classList.add('hidden');
+      activeOfferCard.appendChild(template);
+      // создать ссылки на все необходимые dom-элементы внутри offerCard
+      findElementsInOfferCard();
 
-    closeButton.addEventListener('click', function (evt) {
-      container.removeChild(domOfferCard);
-      window.currentActivePin.classList.remove('map__pin--active');
-      window.currentActivePin = null;
-      activeOfferCard = null;
-      removeDocumentEscListener();
-    });
+      // установить для dom-элемента offerCard обработчик события на клик по крестику
+      OFFER_CARD_CLOSE_BUTTON.addEventListener('click', function (evt) {
+        activeOfferCard.classList.add('hidden');
+        window.removeActivePin();
+        removeDocumentEscListener();
+      });
+
+      // вставить созданный dom-элемент offerCard на страницу
+      var container = document.querySelector('.map');
+      container.insertBefore(activeOfferCard, container.querySelector('.map__filters-container'));
+    }
+
+    setDataInDomOfferCard(offerData);
+    activeOfferCard.classList.remove('hidden');
 
     // если нет установленного обработчика нажатия Esc на document - устанавливает его
     // это нужно для того, чтоб если было сделано переключение на следующий пин без предварительного закрытия
@@ -133,14 +158,10 @@
   // установить на document обработчик нажатия Esc.
   var setDocumentEscListener = function () {
     documentEscPressedHandler = function (evt) {
-      if (evt.keyCode === ESC_KEY_CODE && activeOfferCard !== null) {
-        document.querySelector('.map').removeChild(activeOfferCard);
-        window.currentActivePin.classList.remove('map__pin--active');
-        window.currentActivePin = null;
-        activeOfferCard = null;
+      if (evt.keyCode === ESC_KEY_CODE) {
+        window.removeActivePin();
+        activeOfferCard.classList.add('hidden');
         removeDocumentEscListener();
-      } else {
-        console.log('document Esc handler invoked!');
       }
     };
 

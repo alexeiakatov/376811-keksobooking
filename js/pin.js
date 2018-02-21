@@ -30,19 +30,23 @@
     button.appendChild(image);
 
     button.addEventListener('click', function (evt) {
-      if (window.currentActivePin !== null) {
-        window.currentActivePin.classList.remove('map__pin--active');
-      }
-      window.currentActivePin = evt.currentTarget;
+      removeActivePin();
+      currentActivePin = evt.currentTarget;
       evt.currentTarget.classList.add('map__pin--active');
 
-      var dataObject = window.getOfferDataObjectById(offerData.id);
-      window.createDomOfferCard(dataObject);
+      window.createDomOfferCard(offerData);
     });
 
     return button;
   };
 
+  // public ФУНКЦИЯ: Удаляет у активного пина класс 'map__pin--active' и удаляет ссылку на него из переменной currentActivePin.
+  var removeActivePin = function () {
+    if (currentActivePin !== null) {
+      currentActivePin.classList.remove('map__pin--active');
+      currentActivePin = null;
+    }
+  };
 
   // public ФУНКЦИЯ: создание documentFragment содержащий все метки-пины для карты и вставка их на страницу.
   var createAllPins = function () {
@@ -64,6 +68,6 @@
   window.createAllPins = createAllPins;
 
   // экспорт переменной
-  window.currentActivePin = null;
+  window.removeActivePin = removeActivePin;
 
 })();
