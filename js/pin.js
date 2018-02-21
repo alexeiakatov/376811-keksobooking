@@ -34,7 +34,7 @@
       currentActivePin = evt.currentTarget;
       evt.currentTarget.classList.add('map__pin--active');
 
-      window.createDomOfferCard(offerData);
+      window.setDataInDomOfferCard(offerData);
     });
 
     return button;
