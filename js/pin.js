@@ -6,8 +6,8 @@
 (function () {
   var currentActivePin = null;
   var pinTemplate = document.querySelector('template').content.querySelector('.map__pin');
-  var PIN_BUTTON_WIDTH = pinTemplate.getAttribute('width');
-  var PIN_BUTTON_HEIGHT = pinTemplate.getAttribute('height');
+  var PIN_BUTTON_WIDTH = 50;
+  var PIN_BUTTON_HEIGHT = 70;
 
   // private ФУНКЦИЯ: Создает DOM-элемент метки и добавляет ему обработчик клика.
   // возвращает настроенный и готовый для вставки на карту DOM-элемент метки.
