@@ -265,8 +265,8 @@ textarea:focus
 }
 
 .map__pin:not(.map__pin--main):hover::after,
-.map__pin:not(.map__pin--main):active::after
-
+.map__pin:not(.map__pin--main):active::after,
+.map__pin--active:not(.map__pin--main)::after
 {
     background-position: 0 -88px;
 }
