@@ -39,29 +39,10 @@
       toggleErrorOutline(title, !title.validity.valid);
     });
 
-    title.addEventListener('invalid', function (){
+    title.addEventListener('invalid', function () {
       toggleErrorOutline(title, true);
     });
 
-
-    // title.addEventListener('input', function () {
-    //   if (title.validity.valueMissing) {
-    //     title.setCustomValidity('Нужно указать заголовок.');
-    //     toggleErrorOutline(title, true);
-    //
-    //   } else if (title.validity.tooShort) {
-    //     title.setCustomValidity('Длина заголовка должна быть не менее 30 символов.');
-    //     toggleErrorOutline(title, true);
-    //
-    //   } else if (title.validity.tooLong) {
-    //     title.setCustomValidity('Длина заголовка не должна быть более 100 символов.');
-    //     toggleErrorOutline(title, true);
-    //
-    //   } else {
-    //     title.setCustomValidity('');
-    //     toggleErrorOutline(title, false);
-    //   }
-    // });
   };
 
   // ФУНКЦИЯ: возвращает минимальное значение предназначенное для поля price в зависимости от типа жилья
