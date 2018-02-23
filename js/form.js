@@ -35,7 +35,6 @@
     title.setCustomValidity('Нужно указать заголовок.');
 
     title.addEventListener('input', function () {
-      console.log('input evt');
       title.setCustomValidity(getInvalidTitleMessage(title.validity));
       toggleErrorOutline(title, !title.validity.valid);
     });
