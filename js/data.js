@@ -1,15 +1,49 @@
 'use strict';
-// требует window.offerDataTemplate в качестве заготовки данных для создаваемых объявлений
-// создает массив js-объектов, содержащих данные объявлений
+// создает и содержит в себе массив js-объектов, содержащих данные объявлений
 // экспортирует в глобальную область функции:
-//    1.getAnnouncementData которая возвращает js-данные конкретного объявления по его id;
-//    2.getAllAnnouncements которая возвращает сразу весь массив js-объектов объявлений.
+//    1.getOfferDataObjectById которая возвращает сразу весь массив js-объектов объявлений.
 
 (function () {
-  var ANNOUNCEMENTS_COUNT = 8;
-  var ANNOUNCEMENTS = [];
-  var currentId = 0;
 
+  // private переменная - ЗАГОТОВКА ДАННЫХ для создания моков js-объектов объявлений
+  var offerDataTemplate = {
+    USERS_AVATARS_LOCATION: 'img/avatars/',
+    HOUSING_TYPES: ['flat', 'house', 'bungalo', 'palace'],
+    TITLES: {
+      flat: ['Большая уютная квартира', 'Маленькая неуютная квартира'],
+      house: ['Красивый гостевой домик', 'Некрасивый негостеприимный домик'],
+      bungalo: ['Уютное бунгало далеко от моря', 'Неуютное бунгало по колено в воде'],
+      palace: ['Огромный прекрасный дворец', 'Маленький ужасный дворец']
+    },
+    DESCRIPTION: '',
+    LOCATION_X_MIN: 300,
+    LOCATION_X_MAX: 900,
+    LOCATION_Y_MIN: 150,
+    LOCATION_Y_MAX: 500,
+
+    MIN_PRICE: 1000,
+    MAX_PRICE: 1000000,
+
+    MIN_ROOMS_COUNT: 1,
+    MAX_ROOMS_COUNT: 5,
+
+    MIN_GUESTS_COUNT: 1,
+    MAX_GUESTS_COUNT: 10,
+
+    CHECKIN_VARIANTS: ['12:00', '13:00', '14:00'],
+    CHECKOUT_VARIANTS: ['12:00', '13:00', '14:00'],
+
+    FEATURES: ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'],
+    PHOTOS: [
+      'http://o0.github.io/assets/images/tokyo/hotel1.jpg',
+      'http://o0.github.io/assets/images/tokyo/hotel2.jpg',
+      'http://o0.github.io/assets/images/tokyo/hotel3.jpg'
+    ]
+  };
+
+  var ANNOUNCEMENTS_COUNT = 8;
+  var OFFER_DATA_MOCKS = [];
+  var currentId = 0;
 
   // private ФУНКЦИЯ: Возвращает значение для свойства 'announcement.offer.type'.
   var getHousingType = function (housingTypes) {
@@ -57,8 +91,8 @@
     return resultArray;
   };
 
-  // private ФУНКЦИЯ: Собирает js-объект announcement из dataObjectTemplate
-  var createAnnouncement = function (dataObjectTemplate) {
+  // private ФУНКЦИЯ: Собирает js-объект offerDataObject из dataObjectTemplate
+  var createOfferDataObject = function (dataObjectTemplate) {
     var id = ++currentId;
     var offerType = getHousingType((dataObjectTemplate.HOUSING_TYPES));
     var locationX = window.utils.getRandomValue(dataObjectTemplate.LOCATION_X_MIN, dataObjectTemplate.LOCATION_X_MAX, 0);
@@ -90,38 +124,21 @@
   };
 
   // private ФУНКЦИЯ: Создает массив js-бъектов, содержащих данные объявлений
-  var createAnnouncementsMocks = function () {
+  var createOfferDataMocks = function () {
     for (var i = 0; i < ANNOUNCEMENTS_COUNT; i++) {
-      ANNOUNCEMENTS.push(createAnnouncement(window.offerDataTemplate));
+      OFFER_DATA_MOCKS.push(createOfferDataObject(offerDataTemplate));
     }
-  };
-
-  // public функция для получения данных конкретного объявления
-  var getAnnouncementDataById = function (id) {
-    var receivedId = parseInt(id, 10);
-    var result;
-    for (var i = 0; i < ANNOUNCEMENTS.length; i++) {
-      if (ANNOUNCEMENTS[i].id === receivedId) {
-        result = ANNOUNCEMENTS[i];
-        break;
-      }
-    }
-
-    return result;
   };
 
   // public ФУНКЦИЯ: Возвращает весь массив js-объектов объявлений.
-  var getAllAnnouncements = function () {
-    return ANNOUNCEMENTS;
+  var getAllOfferDataObjects = function () {
+    return OFFER_DATA_MOCKS;
   };
 
   // создать массив js-объектов объявлений
-  createAnnouncementsMocks();
-
-  // ЭКСПОРТ функции getAnnouncementData
-  window.getAnnouncementDataById = getAnnouncementDataById;
+  createOfferDataMocks();
 
   // ЭКСПОРТ функции getAllAnnouncements
-  window.getAllAnnouncements = getAllAnnouncements;
+  window.getAllOfferDataObjects = getAllOfferDataObjects;
 
 })();
