@@ -4,8 +4,8 @@
   var NOTICE_FORM = document.body.querySelector('.notice__form');
   var ADDRESS = document.getElementById('address');
 
-  var toggleErrorOutline = function (element, isOutline) {
-    if (isOutline) {
+  var toggleErrorOutline = function (element, isInvalid) {
+    if (isInvalid) {
       element.style.outline = '3px solid red';
       element.style.outlineOffset = '1px';
     } else {
@@ -34,12 +34,10 @@
 
       } else if (title.validity.tooLong) {
         title.setCustomValidity('Длина заголовка не должна быть более 100 символов.');
-        title.style.outline = '2px solid red';
         toggleErrorOutline(title, true);
 
       } else {
         title.setCustomValidity('');
-        title.style.outline = 'none';
         toggleErrorOutline(title, false);
       }
     });
@@ -72,14 +70,30 @@
   // ФУНКЦИЯ: устанавливает правила валидации цены
   var setPriceValidity = function () {
     var price = document.getElementById('price');
+    var type = document.getElementById('type');
     price.required = true;
     price.max = 1000000;
-    price.min = getMinPrice(document.getElementById('type').querySelector('option:checked').value);
-
+    price.min = getMinPrice(type.querySelector('option:checked').value);
     // при событии 'change' на элементе type происходит обновление значения price.min
-    var type = document.getElementById('type');
+
     type.addEventListener('change', function () {
       price.min = getMinPrice(type.value);
+      var currentPriceValue = (price.value.length === 0) ? 0 : parseInt(price.value, 10);
+      if (currentPriceValue < price.min) {
+        toggleErrorOutline(price, true);
+      } else {
+        toggleErrorOutline(price, false);
+      }
+    });
+
+    price.addEventListener('input', function () {
+      var currentPriceValue = (price.value.length === 0) ? 0 : parseInt(price.value, 10);
+      if (currentPriceValue >= price.min) {
+        toggleErrorOutline(price, false);
+      } else {
+        toggleErrorOutline(price, true);
+      }
+
     });
 
   };
