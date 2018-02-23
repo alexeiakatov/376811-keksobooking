@@ -4,6 +4,16 @@
   var NOTICE_FORM = document.body.querySelector('.notice__form');
   var ADDRESS = document.getElementById('address');
 
+  var toggleErrorOutline = function (element, isOutline) {
+    if (isOutline) {
+      element.style.outline = '3px solid red';
+      element.style.outlineOffset = '1px';
+    } else {
+      element.style.outline = 'none';
+    }
+  };
+
+
   // ФУНКЦИЯ: устанавливает правила валидации заголовка
   var setTitleValidity = function () {
     var title = document.getElementById('title');
@@ -16,12 +26,21 @@
     title.addEventListener('input', function () {
       if (title.validity.valueMissing) {
         title.setCustomValidity('Нужно указать заголовок.');
+        toggleErrorOutline(title, true);
+
       } else if (title.validity.tooShort) {
         title.setCustomValidity('Длина заголовка должна быть не менее 30 символов.');
+        toggleErrorOutline(title, true);
+
       } else if (title.validity.tooLong) {
         title.setCustomValidity('Длина заголовка не должна быть более 100 символов.');
+        title.style.outline = '2px solid red';
+        toggleErrorOutline(title, true);
+
       } else {
         title.setCustomValidity('');
+        title.style.outline = 'none';
+        toggleErrorOutline(title, false);
       }
     });
   };
