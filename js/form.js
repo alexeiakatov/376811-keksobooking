@@ -13,6 +13,17 @@
     }
   };
 
+  var getInvalidTitleMessage = function (validity) {
+    var errorMessage = '';
+
+    if (validity.valueMissing) {
+      errorMessage = 'Нужно указать заголовок.';
+    } else if (validity.tooShort) {
+      errorMessage = 'Длина заголовка должна быть не менее 30 символов.';
+    }
+
+    return errorMessage;
+  };
 
   // ФУНКЦИЯ: устанавливает правила валидации заголовка
   var setTitleValidity = function () {
@@ -24,23 +35,34 @@
     title.setCustomValidity('Нужно указать заголовок.');
 
     title.addEventListener('input', function () {
-      if (title.validity.valueMissing) {
-        title.setCustomValidity('Нужно указать заголовок.');
-        toggleErrorOutline(title, true);
-
-      } else if (title.validity.tooShort) {
-        title.setCustomValidity('Длина заголовка должна быть не менее 30 символов.');
-        toggleErrorOutline(title, true);
-
-      } else if (title.validity.tooLong) {
-        title.setCustomValidity('Длина заголовка не должна быть более 100 символов.');
-        toggleErrorOutline(title, true);
-
-      } else {
-        title.setCustomValidity('');
-        toggleErrorOutline(title, false);
-      }
+      console.log('input evt');
+      title.setCustomValidity(getInvalidTitleMessage(title.validity));
+      toggleErrorOutline(title, !title.validity.valid);
     });
+
+    title.addEventListener('invalid', function (){
+      toggleErrorOutline(title, true);
+    });
+
+
+    // title.addEventListener('input', function () {
+    //   if (title.validity.valueMissing) {
+    //     title.setCustomValidity('Нужно указать заголовок.');
+    //     toggleErrorOutline(title, true);
+    //
+    //   } else if (title.validity.tooShort) {
+    //     title.setCustomValidity('Длина заголовка должна быть не менее 30 символов.');
+    //     toggleErrorOutline(title, true);
+    //
+    //   } else if (title.validity.tooLong) {
+    //     title.setCustomValidity('Длина заголовка не должна быть более 100 символов.');
+    //     toggleErrorOutline(title, true);
+    //
+    //   } else {
+    //     title.setCustomValidity('');
+    //     toggleErrorOutline(title, false);
+    //   }
+    // });
   };
 
   // ФУНКЦИЯ: возвращает минимальное значение предназначенное для поля price в зависимости от типа жилья
@@ -79,21 +101,12 @@
     type.addEventListener('change', function () {
       price.min = getMinPrice(type.value);
       var currentPriceValue = (price.value.length === 0) ? 0 : parseInt(price.value, 10);
-      if (currentPriceValue < price.min) {
-        toggleErrorOutline(price, true);
-      } else {
-        toggleErrorOutline(price, false);
-      }
+      toggleErrorOutline(price, currentPriceValue < price.min);
     });
 
     price.addEventListener('input', function () {
       var currentPriceValue = (price.value.length === 0) ? 0 : parseInt(price.value, 10);
-      if (currentPriceValue >= price.min) {
-        toggleErrorOutline(price, false);
-      } else {
-        toggleErrorOutline(price, true);
-      }
-
+      toggleErrorOutline(price, currentPriceValue < price.min);
     });
 
   };
