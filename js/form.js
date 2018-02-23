@@ -7,7 +7,7 @@
   // ФУНКЦИЯ: устанавливает правила валидации заголовка
   var setTitleValidity = function () {
     var title = document.getElementById('title');
-    title.minLength = 4;
+    title.minLength = 30;
     title.maxLength = 100;
     title.required = true;
 
