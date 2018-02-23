@@ -112,7 +112,7 @@
     }
   };
 
-  // вычислить все ссылки на dom-элементы
+  // вычислить все ссылки на dom-элементы внутри карточки предложения
   var findElementsInOfferCard = function () {
     if (activeOfferCard !== null) {
       title = activeOfferCard.querySelector('h3');

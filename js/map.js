@@ -27,7 +27,7 @@
       activateMap();
       window.activateForm();
     }
-    window.setFormAddress(getStartMarkerAddress());
+    window.setAddressInForm(getStartMarkerAddress());
     window.createAllPins();
   };
 
