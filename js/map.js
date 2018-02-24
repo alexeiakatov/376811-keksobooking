@@ -3,16 +3,23 @@
 (function () {
   var MAP = document.querySelector('.map');
   var START_MARKER = document.body.querySelector('.map__pin--main');
-  var isMapAndFormActivated = false;
+  var isFormActivated = false;
+  var isMapActivated = false;
+  var pinsContainer = document.querySelector('.map__pins');
+  var filtersContainer = document.querySelector('.map__filters-container');
 
-  window.deactivateForm();
-
-  var getStartMarkerAddress = function () {
-    var actualX = Math.round(START_MARKER.offsetLeft + (START_MARKER.clientWidth / 2));
-    var actualY = Math.round(START_MARKER.offsetTop + (START_MARKER.clientHeight / 2));
-
-    return actualX + ' ' + actualY;
+  var dragStatus = {
+    MIN_X: 0,
+    MIN_Y: 100,
+    maxX: pinsContainer.clientWidth,
+    maxY: pinsContainer.clientHeight - filtersContainer.clientHeight,
+    currentMouseX: null,
+    currentMouseY: null,
+    markerXdisplacement: null,
+    markerYdisplacement: null
   };
+
+  window.form.deactivateForm();
 
   // ФУНКЦИЯ: сделать карту активной.
   var activateMap = function () {
@@ -21,17 +28,66 @@
     }
   };
 
-  // ОБРАБОТЧИК: обработчик перемещения начальной метки.
-  var startMarkerDraggedHandler = function () {
-    if (!isMapAndFormActivated) {
-      activateMap();
-      window.activateForm();
+  // ФУНКЦИЯ: перерисовывает положение начального маркера на карте в соответствии с перетаскиванием мышью.
+  var redrawStartMarker = function (evtX, evtY) {
+
+    var deltaX = evtX - dragStatus.currentMouseX;
+    var deltaY = evtY - dragStatus.currentMouseY;
+
+    var newXposition = dragStatus.markerXdisplacement + deltaX;
+    if (newXposition >= dragStatus.MIN_X && newXposition <= dragStatus.maxX) {
+      dragStatus.markerXdisplacement = newXposition;
+      START_MARKER.style.left = dragStatus.markerXdisplacement + 'px';
+      dragStatus.currentMouseX = evtX;
     }
-    window.setAddressInForm(getStartMarkerAddress());
-    window.createAllPins();
+
+    var newYposition = dragStatus.markerYdisplacement + deltaY;
+    if (newYposition >= dragStatus.MIN_Y && newYposition <= dragStatus.maxY) {
+      dragStatus.markerYdisplacement = newYposition;
+      START_MARKER.style.top = dragStatus.markerYdisplacement + 'px';
+      dragStatus.currentMouseY = evtY;
+    }
   };
 
-  // УСТАНОВКА ОБРАБОТЧИКА на событие перемещения начальной метки
-  START_MARKER.addEventListener('mouseup', startMarkerDraggedHandler);
+  // ОБРАБОТЧИК: на событие MOUSE_MOVE в рамках элемента map__pins
+  var documentMouseMoveHandler = function (evt) {
+    redrawStartMarker(evt.clientX, evt.clientY);
+  };
+
+  // ФУНКЦИЯ: сброс и начальная подготовка данных в объекте dragStatus
+  var resetDragStatusObject = function (evtX, evtY) {
+    dragStatus.markerXdisplacement = START_MARKER.offsetLeft;
+    dragStatus.markerYdisplacement = START_MARKER.offsetTop;
+
+    dragStatus.currentMouseX = evtX;
+    dragStatus.currentMouseY = evtY;
+  };
+
+  // ОБРАБОТЧИК: на событие MOUSE_UP на элементе document
+  var documentMouseUpHandler = function () {
+    document.removeEventListener('mousemove', documentMouseMoveHandler);
+    document.removeEventListener('mouseup', documentMouseUpHandler);
+
+    if (!isFormActivated) {
+      window.form.activateForm();
+    }
+    window.form.setAddressInForm(dragStatus.markerXdisplacement + ' ' + dragStatus.markerYdisplacement);
+    window.pin.createAllPins();
+
+  };
+
+  // ОБРАБОТЧИК: на событие MOUSE_DOWN на начальном маркере
+  var startMarkerMouseDownHandler = function (evt) {
+    resetDragStatusObject(evt.clientX, evt.clientY);
+    if (!isMapActivated) {
+      activateMap();
+    }
+
+    document.addEventListener('mousemove', documentMouseMoveHandler);
+    document.addEventListener('mouseup', documentMouseUpHandler);
+  };
+
+  // УСТАНОВКА ОБРАБОТЧИКА события mousedown на начальный маркер
+  START_MARKER.addEventListener('mousedown', startMarkerMouseDownHandler);
 
 })();

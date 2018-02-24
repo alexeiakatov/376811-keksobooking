@@ -27,7 +27,7 @@
       currentActivePin = evt.currentTarget;
       evt.currentTarget.classList.add('map__pin--active');
 
-      window.setDataInDomOfferCard(offerData);
+      window.card.setDataInDomOfferCard(offerData);
     });
 
     return button;
@@ -44,7 +44,7 @@
   // public ФУНКЦИЯ: создание documentFragment содержащий все метки-пины для карты и вставка их на страницу.
   var createAllPins = function () {
     var fragmentForPins = document.createDocumentFragment();
-    var offerDataObjects = window.getAllOfferDataObjects();
+    var offerDataObjects = window.data.getAllOfferDataObjects();
     var newPin;
 
     for (var i = 0; i < offerDataObjects.length; i++) {
@@ -57,10 +57,12 @@
     pinsContainer.appendChild(fragmentForPins);
   };
 
+  // Экспорты:
+  window.pin = {};
   // экспорт функции createAllpins.
-  window.createAllPins = createAllPins;
+  window.pin.createAllPins = createAllPins;
 
   // экспорт переменной
-  window.removeActivePin = removeActivePin;
+  window.pin.removeActivePin = removeActivePin;
 
 })();

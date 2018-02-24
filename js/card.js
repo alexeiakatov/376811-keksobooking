@@ -142,7 +142,7 @@
     // установить для dom-элемента offerCard обработчик события на клик по крестику
     offerCardCloseButton.addEventListener('click', function () {
       activeOfferCard.classList.add('hidden');
-      window.removeActivePin();
+      window.pin.removeActivePin();
       removeDocumentEscListener();
     });
 
@@ -155,7 +155,7 @@
   var setDocumentEscListener = function () {
     documentEscPressedHandler = function (evt) {
       if (evt.keyCode === ESC_KEY_CODE) {
-        window.removeActivePin();
+        window.pin.removeActivePin();
         activeOfferCard.classList.add('hidden');
         removeDocumentEscListener();
       }
@@ -170,8 +170,11 @@
     documentEscPressedHandler = null;
   };
 
+  // Экспорты:
+  window.card = {};
+
   // ЭКСПОРТ функции createDomOfferCard
-  window.setDataInDomOfferCard = setDataInDomOfferCard;
+  window.card.setDataInDomOfferCard = setDataInDomOfferCard;
 
   createDomOfferCard();
 
