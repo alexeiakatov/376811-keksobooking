@@ -21,9 +21,9 @@
     return Math.round(Math.max.apply(null, array));
   };
 
-  // экспорт namespace utils в глобальную область видимости
-  window.utils = {
-    getRandomValue: getRandomValue,
-    getMaxValueInArray: getMaxValueInArray
-  };
+  // Экспорты:
+  window.utils = {};
+
+  window.utils.getRandomValue = getRandomValue;
+  window.utils.getMaxValueInArray = getMaxValueInArray;
 })();

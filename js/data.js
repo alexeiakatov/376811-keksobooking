@@ -138,7 +138,10 @@
   // создать массив js-объектов объявлений
   createOfferDataMocks();
 
+  // Экспорты
+  window.data = {};
+
   // ЭКСПОРТ функции getAllAnnouncements
-  window.getAllOfferDataObjects = getAllOfferDataObjects;
+  window.data.getAllOfferDataObjects = getAllOfferDataObjects;
 
 })();

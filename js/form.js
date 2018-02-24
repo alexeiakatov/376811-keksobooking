@@ -195,12 +195,15 @@
     ADDRESS.value = newAddress;
   };
 
+  // Экспорты:
+  window.form = {};
+
   // ЭКСПОРТ функции activateForm
-  window.activateForm = activateForm;
+  window.form.activateForm = activateForm;
 
   // ЭКСПОРТ функции setFormAddress
-  window.setAddressInForm = setFormAddress;
+  window.form.setAddressInForm = setFormAddress;
 
   // ЭКСПОРТ функции deactivateForm
-  window.deactivateForm = deactivateFrom;
+  window.form.deactivateForm = deactivateFrom;
 })();

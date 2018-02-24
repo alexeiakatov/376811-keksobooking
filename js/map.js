@@ -5,26 +5,21 @@
   var START_MARKER = document.body.querySelector('.map__pin--main');
   var isFormActivated = false;
   var isMapActivated = false;
+  var pinsContainer = document.querySelector('.map__pins');
+  var filtersContainer = document.querySelector('.map__filters-container');
 
-  var startMarkerDragStatus = {
+  var dragStatus = {
     MIN_X: 0,
     MIN_Y: 100,
-    maxX: 1200,
-    maxY: 650,
+    maxX: pinsContainer.clientWidth,
+    maxY: pinsContainer.clientHeight - filtersContainer.clientHeight,
     currentMouseX: null,
     currentMouseY: null,
     markerXdisplacement: null,
     markerYdisplacement: null
   };
 
-  window.deactivateForm();
-
-  var getStartMarkerAddress = function () {
-    var actualX = Math.round(START_MARKER.offsetLeft + (START_MARKER.clientWidth / 2));
-    var actualY = Math.round(START_MARKER.offsetTop + (START_MARKER.clientHeight / 2));
-
-    return actualX + ' ' + actualY;
-  };
+  window.form.deactivateForm();
 
   // ФУНКЦИЯ: сделать карту активной.
   var activateMap = function () {
@@ -36,21 +31,21 @@
   // ФУНКЦИЯ: перерисовывает положение начального маркера на карте в соответствии с перетаскиванием мышью.
   var redrawStartMarker = function (evtX, evtY) {
 
-    var deltaX = evtX - startMarkerDragStatus.currentMouseX;
-    var deltaY = evtY - startMarkerDragStatus.currentMouseY;
+    var deltaX = evtX - dragStatus.currentMouseX;
+    var deltaY = evtY - dragStatus.currentMouseY;
 
-    var newXposition = startMarkerDragStatus.markerXdisplacement + deltaX;
-    if (newXposition >= startMarkerDragStatus.MIN_X && newXposition <= startMarkerDragStatus.maxX) {
-      startMarkerDragStatus.markerXdisplacement = newXposition;
-      START_MARKER.style.left = startMarkerDragStatus.markerXdisplacement + 'px';
-      startMarkerDragStatus.currentMouseX = evtX;
+    var newXposition = dragStatus.markerXdisplacement + deltaX;
+    if (newXposition >= dragStatus.MIN_X && newXposition <= dragStatus.maxX) {
+      dragStatus.markerXdisplacement = newXposition;
+      START_MARKER.style.left = dragStatus.markerXdisplacement + 'px';
+      dragStatus.currentMouseX = evtX;
     }
 
-    var newYposition = startMarkerDragStatus.markerYdisplacement + deltaY;
-    if (newYposition >= startMarkerDragStatus.MIN_Y && newYposition <= startMarkerDragStatus.maxY) {
-      startMarkerDragStatus.markerYdisplacement = newYposition;
-      START_MARKER.style.top = startMarkerDragStatus.markerYdisplacement + 'px';
-      startMarkerDragStatus.currentMouseY = evtY;
+    var newYposition = dragStatus.markerYdisplacement + deltaY;
+    if (newYposition >= dragStatus.MIN_Y && newYposition <= dragStatus.maxY) {
+      dragStatus.markerYdisplacement = newYposition;
+      START_MARKER.style.top = dragStatus.markerYdisplacement + 'px';
+      dragStatus.currentMouseY = evtY;
     }
   };
 
@@ -59,16 +54,13 @@
     redrawStartMarker(evt.clientX, evt.clientY);
   };
 
-  // ФУНКЦИЯ: сброс и начальная подготовка данных в объекте startMarkerDragStatus
+  // ФУНКЦИЯ: сброс и начальная подготовка данных в объекте dragStatus
   var resetDragStatusObject = function (evtX, evtY) {
-    startMarkerDragStatus.currentMouseX = null;
-    startMarkerDragStatus.currentMouseY = null;
+    dragStatus.markerXdisplacement = START_MARKER.offsetLeft;
+    dragStatus.markerYdisplacement = START_MARKER.offsetTop;
 
-    startMarkerDragStatus.markerXdisplacement = START_MARKER.offsetLeft;
-    startMarkerDragStatus.markerYdisplacement = START_MARKER.offsetTop;
-
-    startMarkerDragStatus.currentMouseX = evtX;
-    startMarkerDragStatus.currentMouseY = evtY;
+    dragStatus.currentMouseX = evtX;
+    dragStatus.currentMouseY = evtY;
   };
 
   // ОБРАБОТЧИК: на событие MOUSE_UP на элементе document
@@ -77,10 +69,11 @@
     document.removeEventListener('mouseup', documentMouseUpHandler);
 
     if (!isFormActivated) {
-      window.activateForm();
+      window.form.activateForm();
     }
-    window.setAddressInForm(getStartMarkerAddress());
-    window.createAllPins();
+    window.form.setAddressInForm(dragStatus.markerXdisplacement + ' ' + dragStatus.markerYdisplacement);
+    window.pin.createAllPins();
+
   };
 
   // ОБРАБОТЧИК: на событие MOUSE_DOWN на начальном маркере
