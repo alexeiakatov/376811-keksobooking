@@ -63,7 +63,7 @@
   var resetDragStatusObject = function (evtX, evtY) {
     startMarkerDragStatus.currentMouseX = null;
     startMarkerDragStatus.currentMouseY = null;
-    
+
     startMarkerDragStatus.markerXdisplacement = START_MARKER.offsetLeft;
     startMarkerDragStatus.markerYdisplacement = START_MARKER.offsetTop;
 
