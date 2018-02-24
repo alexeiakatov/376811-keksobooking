@@ -11,8 +11,8 @@
     MIN_Y: 100,
     maxX: 1200,
     maxY: 650,
-    _currentMouseX: null,
-    _currentMouseY: null,
+    currentMouseX: null,
+    currentMouseY: null,
     markerXdisplacement: null,
     markerYdisplacement: null
   };
@@ -36,21 +36,21 @@
   // ФУНКЦИЯ: перерисовывает положение начального маркера на карте в соответствии с перетаскиванием мышью.
   var redrawStartMarker = function (evtX, evtY) {
 
-    var deltaX = evtX - startMarkerDragStatus._currentMouseX;
-    var deltaY = evtY - startMarkerDragStatus._currentMouseY;
+    var deltaX = evtX - startMarkerDragStatus.currentMouseX;
+    var deltaY = evtY - startMarkerDragStatus.currentMouseY;
 
     var newXposition = startMarkerDragStatus.markerXdisplacement + deltaX;
     if (newXposition >= startMarkerDragStatus.MIN_X && newXposition <= startMarkerDragStatus.maxX) {
       startMarkerDragStatus.markerXdisplacement = newXposition;
       START_MARKER.style.left = startMarkerDragStatus.markerXdisplacement + 'px';
-      startMarkerDragStatus._currentMouseX = evtX;
+      startMarkerDragStatus.currentMouseX = evtX;
     }
 
     var newYposition = startMarkerDragStatus.markerYdisplacement + deltaY;
     if (newYposition >= startMarkerDragStatus.MIN_Y && newYposition <= startMarkerDragStatus.maxY) {
       startMarkerDragStatus.markerYdisplacement = newYposition;
       START_MARKER.style.top = startMarkerDragStatus.markerYdisplacement + 'px';
-      startMarkerDragStatus._currentMouseY = evtY;
+      startMarkerDragStatus.currentMouseY = evtY;
     }
   };
 
@@ -61,16 +61,14 @@
 
   // ФУНКЦИЯ: сброс и начальная подготовка данных в объекте startMarkerDragStatus
   var resetDragStatusObject = function (evtX, evtY) {
-    for (var key in startMarkerDragStatus) {
-      if (key.charAt(0) === '_') {
-        startMarkerDragStatus[key] = null;
-      }
-    }
+    startMarkerDragStatus.currentMouseX = null;
+    startMarkerDragStatus.currentMouseY = null;
+    
     startMarkerDragStatus.markerXdisplacement = START_MARKER.offsetLeft;
     startMarkerDragStatus.markerYdisplacement = START_MARKER.offsetTop;
 
-    startMarkerDragStatus._currentMouseX = evtX;
-    startMarkerDragStatus._currentMouseY = evtY;
+    startMarkerDragStatus.currentMouseX = evtX;
+    startMarkerDragStatus.currentMouseY = evtY;
   };
 
   // ОБРАБОТЧИК: на событие MOUSE_UP на элементе document
