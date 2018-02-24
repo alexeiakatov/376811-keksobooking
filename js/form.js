@@ -1,4 +1,9 @@
 'use strict';
+// МОДУЛЬ: содержит методы управляющие формой подачи объявления
+// экспортирует функции:
+// activateForm();
+// setAddressInForm();
+// deactivateForm();
 
 (function () {
   var NOTICE_FORM = document.body.querySelector('.notice__form');
