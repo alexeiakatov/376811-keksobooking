@@ -7,8 +7,8 @@
   var isMapActivated = false;
 
   var startMarkerDragStatus = {
-    minX: 0,
-    minY: 100,
+    MIN_X: 0,
+    MIN_Y: 100,
     maxX: 1200,
     maxY: 650,
     _currentMouseX: null,
@@ -40,14 +40,14 @@
     var deltaY = evtY - startMarkerDragStatus._currentMouseY;
 
     var newXposition = startMarkerDragStatus.markerXdisplacement + deltaX;
-    if (newXposition >= startMarkerDragStatus.minX && newXposition <= startMarkerDragStatus.maxX) {
+    if (newXposition >= startMarkerDragStatus.MIN_X && newXposition <= startMarkerDragStatus.maxX) {
       startMarkerDragStatus.markerXdisplacement = newXposition;
       START_MARKER.style.left = startMarkerDragStatus.markerXdisplacement + 'px';
       startMarkerDragStatus._currentMouseX = evtX;
     }
 
     var newYposition = startMarkerDragStatus.markerYdisplacement + deltaY;
-    if (newYposition >= startMarkerDragStatus.minY && newYposition <= startMarkerDragStatus.maxY) {
+    if (newYposition >= startMarkerDragStatus.MIN_Y && newYposition <= startMarkerDragStatus.maxY) {
       startMarkerDragStatus.markerYdisplacement = newYposition;
       START_MARKER.style.top = startMarkerDragStatus.markerYdisplacement + 'px';
       startMarkerDragStatus._currentMouseY = evtY;
