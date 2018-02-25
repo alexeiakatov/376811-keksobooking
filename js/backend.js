@@ -27,6 +27,7 @@
     };
 
     var xhrErrorHandler = function () {
+      onError('Ошибка отправки данных.');
       xhr.removeEventListener(xhrErrorHandler());
       xhr.removeEventListener(xhrLoadHandler());
     };
@@ -39,7 +40,7 @@
 
     xhr.open('GET', 'https://js.dump.academy/keksobooking/data', true);
     xhr.send(null);
-   };
+    };
 
   // ФУНКЦИЯ: отправляет данные на сервер.
   // { Object } data, тип (FormData) - содержит данные, которые будут отправлены на сервер.
@@ -47,7 +48,26 @@
   // { function } onError - колбэк, которая вызывается при неуспешном выполнении отправки данных.
   // { String } errorMessage - параметр функции onError в котором передается сообщение об ошибке.
   var sendData = function (data, onLoad, onError) {
+    var xhrLoadHandler = function () {
+      if (xhr.status === 201 || xhr.status === 200) {
+        onLoad();
+      }
+      xhr.removeEventListener('load', xhrLoadHandler);
+      xhr.removeEventListener('error', xhrErrorHandler);
+    };
 
+    var xhrErrorHandler = function () {
+      onError('Ошибка отправки данных.');
+      xhr.removeEventListener(xhrErrorHandler());
+      xhr.removeEventListener(xhrLoadHandler());
+    };
+
+    xhr.addEventListener('load', xhrLoadHandler);
+    xhr.addEventListener('error', xhrErrorHandler);
+
+    xhr.open('POST', 'https://js.dump.academy/keksobooking', true);
+    xhr.setRequestHeader('content-type', 'multipart/form-data');
+    xhr.send(data);
   };
 
 

@@ -162,6 +162,28 @@
     rooms.addEventListener('change', setCapacityRestrictions);
 
   };
+  var onLoadCallback = function () {
+    NOTICE_FORM.reset();
+  };
+
+  // private ФУНКЦИЯ: действия при НЕуспешной отправке данных объявления на сервер.
+  var onErrorCallback = function (errorMessage) {
+    var errorContainer = document.createElement('div');
+    errorContainer.setAttribute('style', 'margin:0; padding:0; box-sizing: border-box; position: absolute; border: 1px solid red;');
+
+    var errorMessageElement = document.createElement('p');
+    errorMessageElement.setAttribute('style', 'margin:0; padding:10px; box-sizing: border-box; background-color: ' +
+      'rgba(255, 86, 53, 0.6); text-align: center; font-size: 25px; font-weight: 700;');
+    errorMessageElement.innerText = errorMessage;
+
+    errorContainer.appendChild(errorMessageElement);
+    var submitFieldset = document.querySelector('.form__element--submit');
+    submitFieldset.appendChild(errorContainer);
+
+    window.setTimeout(function () {
+      submitFieldset.removeChild(errorContainer);
+    }, 3000);
+  };
 
   // public ФУНКЦИЯ: Убирает атрибут disabled у элементов формы, вызывает методы, устанавливающие правила валидации.
   var activateForm = function () {
@@ -178,6 +200,16 @@
       formChildren[i].disabled = false;
     }
     ADDRESS.disabled = true;
+
+    var submit = document.querySelector('.form__submit');
+    submit.addEventListener('click', function (evt) {
+
+      if (NOTICE_FORM.checkValidity()) {
+        evt.preventDefault();
+        var formData = new FormData(NOTICE_FORM);
+        window.backend.sendData(formData, onLoadCallback(), onErrorCallback);
+      }
+    });
   };
 
   // public ФУНКЦИЯ: Деактивирует форму - устанавливает атрибут disabled на все fieldset в форме.
