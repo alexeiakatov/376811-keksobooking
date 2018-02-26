@@ -857,8 +857,6 @@ textarea:focus
     box-sizing: border-box;
     position: absolute;
     border: 1px solid red;'
-    top: 0;
-    left: 0;
 }
 
 .errorMessage

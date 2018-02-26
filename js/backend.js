@@ -28,8 +28,8 @@
 
     var xhrErrorHandler = function () {
       onError('Ошибка отправки данных.');
-      xhr.removeEventListener(xhrErrorHandler());
-      xhr.removeEventListener(xhrLoadHandler());
+      xhr.removeEventListener('error', xhrErrorHandler);
+      xhr.removeEventListener('load', xhrLoadHandler);
     };
 
     // добавления на xhr обработчика события LOAD
@@ -58,8 +58,8 @@
 
     var xhrErrorHandler = function () {
       onError('Ошибка отправки данных.');
-      xhr.removeEventListener(xhrErrorHandler());
-      xhr.removeEventListener(xhrLoadHandler());
+      xhr.removeEventListener('error', xhrErrorHandler);
+      xhr.removeEventListener('load', xhrLoadHandler);
     };
 
     xhr.addEventListener('load', xhrLoadHandler);
