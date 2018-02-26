@@ -169,11 +169,10 @@
   // private ФУНКЦИЯ: действия при НЕуспешной отправке данных объявления на сервер.
   var onErrorCallback = function (errorMessage) {
     var errorContainer = document.createElement('div');
-    errorContainer.setAttribute('style', 'margin:0; padding:0; box-sizing: border-box; position: absolute; border: 1px solid red;');
+    errorContainer.classList.add('errorContainer');
 
     var errorMessageElement = document.createElement('p');
-    errorMessageElement.setAttribute('style', 'margin:0; padding:10px; box-sizing: border-box; background-color: ' +
-      'rgba(255, 86, 53, 0.6); text-align: center; font-size: 25px; font-weight: 700;');
+    errorMessageElement.classList.add('errorMessage');
     errorMessageElement.innerText = errorMessage;
 
     errorContainer.appendChild(errorMessageElement);

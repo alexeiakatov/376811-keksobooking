@@ -24,6 +24,7 @@
     var image = button.querySelector('img');
     image.src = offerData.author.avatar;
 
+    // добавить пину обработчик события click
     button.addEventListener('click', function (evt) {
       removeActivePin();
       currentActivePin = evt.currentTarget;
@@ -61,11 +62,9 @@
   // private ФУНКЦИЯ: действия при НЕуспешном получении данных объявлений с сервера.
   var onErrorCallback = function (errorMessage) {
     var errorContainer = document.createElement('div');
-    errorContainer.setAttribute('style', 'margin:0; padding:0; box-sizing: border-box; position: absolute; border: 1px solid red;');
+    errorContainer.classList.add('errorContainer');
 
     var errorMessageElement = document.createElement('p');
-    errorMessageElement.setAttribute('style', 'margin:0; padding:10px; box-sizing: border-box; background-color: ' +
-      'rgba(255, 86, 53, 0.6); text-align: center; font-size: 25px; font-weight: 700;');
     errorMessageElement.innerText = errorMessage;
 
     errorContainer.appendChild(errorMessageElement);
