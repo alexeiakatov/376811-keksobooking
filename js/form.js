@@ -164,6 +164,8 @@
   };
   var onLoadCallback = function () {
     NOTICE_FORM.reset();
+    deactivateFrom();
+    window.map.deactivateMap();
   };
 
   // private ФУНКЦИЯ: действия при НЕуспешной отправке данных объявления на сервер.
@@ -205,8 +207,10 @@
 
       if (NOTICE_FORM.checkValidity()) {
         evt.preventDefault();
+        ADDRESS.disabled = false;
         var formData = new FormData(NOTICE_FORM);
-        window.backend.sendData(formData, onLoadCallback(), onErrorCallback);
+        ADDRESS.disabled = true;
+        window.backend.sendData(formData, onLoadCallback, onErrorCallback);
       }
     });
   };
@@ -218,6 +222,7 @@
     for (var i = 0; i < formChildren.length; i++) {
       formChildren[i].disabled = true;
     }
+    NOTICE_FORM.classList.add('notice__form--disabled');
   };
 
   // public ФУНКЦИЯ: устанавливает значение в поле формы ADDRESS в соответствии с текущим положением начального маркера.

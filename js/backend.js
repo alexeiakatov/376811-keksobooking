@@ -76,9 +76,9 @@
     xhr.addEventListener('load', xhrLoadHandler);
     xhr.addEventListener('error', xhrErrorHandler);
 
-    var Headers = {
-      'content-type': 'multipart/form-data'
-    };
+    // var Headers = {
+    //   'content-type': 'multipart/form-data'
+    // };
 
     try {
       doRequest('POST', 'https://js.dump.academy/keksobooking', true, data, Headers);
@@ -98,7 +98,6 @@
         xhr.setRequestHeader(header, Headers.header);
       }
     }
-
     xhr.send(!data ? null : data);
   };
 
