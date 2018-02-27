@@ -2,9 +2,14 @@
 
 (function () {
   var MAP = document.querySelector('.map');
+
   var START_MARKER = document.body.querySelector('.map__pin--main');
+  var startMarkerInitialX = START_MARKER.offsetLeft;
+  var startMarkerInitialY = START_MARKER.offsetTop;
+
   var isFormActivated = false;
   var isMapActivated = false;
+
   var pinsContainer = document.querySelector('.map__pins');
   var filtersContainer = document.querySelector('.map__filters-container');
 
@@ -20,12 +25,28 @@
   };
 
   window.form.deactivateForm();
+  window.form.setAddressInForm(startMarkerInitialX + ' ' + startMarkerInitialY);
 
   // ФУНКЦИЯ: сделать карту активной.
   var activateMap = function () {
     if (MAP.classList.contains('map--faded')) {
       MAP.classList.remove('map--faded');
     }
+  };
+
+  // ФУНКЦИЯ: сделать карту неактивной.
+  var deactivateMap = function () {
+    START_MARKER.style.left = startMarkerInitialX + 'px';
+    START_MARKER.style.top = startMarkerInitialY + 'px';
+    window.form.setAddressInForm(startMarkerInitialX + ' ' + startMarkerInitialY);
+    MAP.classList.add('map--faded');
+    isMapActivated = false;
+    isFormActivated = false;
+
+    var allPins = pinsContainer.querySelectorAll('.map__pin:not(.map__pin--main)');
+    allPins.forEach(function (pin, index, array) {
+      pin.parentNode.removeChild(pin);
+    });
   };
 
   // ФУНКЦИЯ: перерисовывает положение начального маркера на карте в соответствии с перетаскиванием мышью.
@@ -89,5 +110,9 @@
 
   // УСТАНОВКА ОБРАБОТЧИКА события mousedown на начальный маркер
   START_MARKER.addEventListener('mousedown', startMarkerMouseDownHandler);
+
+  // Экспорты
+  window.map = {};
+  window.map.deactivateMap = deactivateMap;
 
 })();

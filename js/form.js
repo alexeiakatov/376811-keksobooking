@@ -162,6 +162,30 @@
     rooms.addEventListener('change', setCapacityRestrictions);
 
   };
+  var onLoadCallback = function () {
+    NOTICE_FORM.reset();
+    deactivateFrom();
+    window.map.deactivateMap();
+    window.card.hideOfferCard();
+  };
+
+  // private ФУНКЦИЯ: действия при НЕуспешной отправке данных объявления на сервер.
+  var onErrorCallback = function (errorMessage) {
+    var errorContainer = document.createElement('div');
+    errorContainer.classList.add('errorContainer');
+
+    var errorMessageElement = document.createElement('p');
+    errorMessageElement.classList.add('errorMessage');
+    errorMessageElement.innerText = errorMessage;
+
+    errorContainer.appendChild(errorMessageElement);
+    var submitFieldset = document.querySelector('.form__element--submit');
+    submitFieldset.appendChild(errorContainer);
+
+    window.setTimeout(function () {
+      submitFieldset.removeChild(errorContainer);
+    }, 3000);
+  };
 
   // public ФУНКЦИЯ: Убирает атрибут disabled у элементов формы, вызывает методы, устанавливающие правила валидации.
   var activateForm = function () {
@@ -177,7 +201,17 @@
     for (var i = 0; i < formChildren.length; i++) {
       formChildren[i].disabled = false;
     }
-    ADDRESS.disabled = true;
+    ADDRESS.readonly = true;
+
+    var submit = document.querySelector('.form__submit');
+    submit.addEventListener('click', function (evt) {
+
+      if (NOTICE_FORM.checkValidity()) {
+        evt.preventDefault();
+        var formData = new FormData(NOTICE_FORM);
+        window.backend.sendData(formData, onLoadCallback, onErrorCallback);
+      }
+    });
   };
 
   // public ФУНКЦИЯ: Деактивирует форму - устанавливает атрибут disabled на все fieldset в форме.
@@ -187,6 +221,7 @@
     for (var i = 0; i < formChildren.length; i++) {
       formChildren[i].disabled = true;
     }
+    NOTICE_FORM.classList.add('notice__form--disabled');
   };
 
   // public ФУНКЦИЯ: устанавливает значение в поле формы ADDRESS в соответствии с текущим положением начального маркера.
