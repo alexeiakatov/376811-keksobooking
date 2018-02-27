@@ -113,7 +113,6 @@
 
   // Экспорты
   window.map = {};
-
   window.map.deactivateMap = deactivateMap;
 
 })();

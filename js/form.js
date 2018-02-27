@@ -166,6 +166,7 @@
     NOTICE_FORM.reset();
     deactivateFrom();
     window.map.deactivateMap();
+    window.card.hideOfferCard();
   };
 
   // private ФУНКЦИЯ: действия при НЕуспешной отправке данных объявления на сервер.
@@ -200,16 +201,14 @@
     for (var i = 0; i < formChildren.length; i++) {
       formChildren[i].disabled = false;
     }
-    ADDRESS.disabled = true;
+    ADDRESS.readonly = true;
 
     var submit = document.querySelector('.form__submit');
     submit.addEventListener('click', function (evt) {
 
       if (NOTICE_FORM.checkValidity()) {
         evt.preventDefault();
-        ADDRESS.disabled = false;
         var formData = new FormData(NOTICE_FORM);
-        ADDRESS.disabled = true;
         window.backend.sendData(formData, onLoadCallback, onErrorCallback);
       }
     });
