@@ -42,7 +42,11 @@
     // добавление на xhr обработчика события ERROR
     xhr.addEventListener('error', xhrErrorHandler);
 
-    doRequest('GET', 'https://js.dump.academy/keksobooking/data', true);
+    try {
+      doRequest('GET', 'https://js.dump.academy/keksobooking/data', true);
+    } catch (error) {
+      onError(error.message);
+    }
   };
 
   // ФУНКЦИЯ: отправляет данные на сервер.
@@ -76,7 +80,11 @@
       'content-type': 'multipart/form-data'
     };
 
-    doRequest('POST', 'https://js.dump.academy/keksobooking', true, data, Headers);
+    try {
+      doRequest('POST', 'https://js.dump.academy/keksobooking', true, data, Headers);
+    } catch (error) {
+      onError(error.message);
+    }
   };
 
   var doRequest = function (method, url, isAsync, data, Headers) {

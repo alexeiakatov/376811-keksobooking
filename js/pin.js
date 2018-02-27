@@ -65,6 +65,7 @@
     errorContainer.classList.add('errorContainer');
 
     var errorMessageElement = document.createElement('p');
+    errorMessageElement.classList.add('errorMessage');
     errorMessageElement.innerText = errorMessage;
 
     errorContainer.appendChild(errorMessageElement);
