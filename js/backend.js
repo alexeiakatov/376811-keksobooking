@@ -1,14 +1,15 @@
 'use strict';
 
 (function () {
-  var xhr = new XMLHttpRequest();
-
   // ФУНКЦИЯ: получает данные с сервера.
   // { function } onLoad(receivedData) - колбыэк, который вызывается при успешном получении данных с сервера.
   // { Object } receivedData - параметр функции onLoad в котором передаются данные, полученные с сервера.
   // { function } onError(errorMessage) - колбэк, который вызывается при неуспешном выполнении запроса.
   // { String } errorMessage - параметр функции onError в котором передается сообщение об ошибке.
   var getData = function (onLoad, onError) {
+    var xhr = new XMLHttpRequest();
+
+    // ОБРАБОТЧИК события load при получении данных
     var xhrLoadHandler = function () {
       var statusCode = xhr.status;
       switch (statusCode) {
@@ -26,6 +27,7 @@
       xhr.removeEventListener('error', xhrErrorHandler);
     };
 
+    // ОБРАБОТЧИК события error при получении данных
     var xhrErrorHandler = function () {
       onError('Ошибка отправки данных.');
       xhr.removeEventListener('error', xhrErrorHandler);
@@ -40,7 +42,7 @@
 
     xhr.open('GET', 'https://js.dump.academy/keksobooking/data', true);
     xhr.send(null);
-    };
+  };
 
   // ФУНКЦИЯ: отправляет данные на сервер.
   // { Object } data, тип (FormData) - содержит данные, которые будут отправлены на сервер.
@@ -48,6 +50,9 @@
   // { function } onError - колбэк, которая вызывается при неуспешном выполнении отправки данных.
   // { String } errorMessage - параметр функции onError в котором передается сообщение об ошибке.
   var sendData = function (data, onLoad, onError) {
+    var xhr = new XMLHttpRequest();
+
+    // ОБРАБОТЧИК события load при отправке данных
     var xhrLoadHandler = function () {
       if (xhr.status === 201 || xhr.status === 200) {
         onLoad();
@@ -56,6 +61,7 @@
       xhr.removeEventListener('error', xhrErrorHandler);
     };
 
+    // ОБРАБОТЧИК события error при отправке данных
     var xhrErrorHandler = function () {
       onError('Ошибка отправки данных.');
       xhr.removeEventListener('error', xhrErrorHandler);
