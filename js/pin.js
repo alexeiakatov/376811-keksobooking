@@ -10,11 +10,8 @@
   var PIN_BUTTON_HEIGHT = 70;
   var pinsContainer = document.querySelector('.map__pins');
 
-  var pinClassToOfferData = {};
+  var pinToData = {};
   var mapElementCount = 0;
-
-  var filterState;
-
 
   // private ФУНКЦИЯ: Создает DOM-элемент метки и добавляет ему обработчик клика.
   // возвращает настроенный и готовый для вставки на карту DOM-элемент метки.
@@ -31,9 +28,9 @@
 
     // присвоение пину класса-идентификатора для сопоставления пин:объект_данных
     var pinIdentificator = 'pin_' + mapElementCount++;
-    button.classList.add(pinIdentificator);
+    button.className = pinIdentificator + ' ' + button.className;
 
-    pinClassToOfferData[pinIdentificator] = offerData;
+    pinToData[pinIdentificator] = offerData;
 
     // добавить пину обработчик события click
     button.addEventListener('click', function (evt) {
@@ -93,14 +90,122 @@
     window.backend.getData(onLoadCallback, onErrorCallback);
   };
 
-  // public ФУНКЦИЯ: перерисовка всех пинов при изменении фильтра
-  var redrawPinsWithFilter = function (filterState){
+  // private ФУНКЦИЯ: проверка соответствия фильтру типа жилья
+  var matchType = function (currentType, filterType) {
 
+    var isMatch = false;
+    if (filterType === 'any') {
+      isMatch = true;
+    } else if (currentType === filterType) {
+      isMatch = true;
+    }
+
+    console.log('[matchType] current: ', currentType,'; filter: ', filterType, '; result: ', isMatch);
+
+    return isMatch;
   };
 
-  // public ФУНКЦИЯ: установить начальное состояние фильтров
-  var setInitialFilterState = function (filterState) {
-    initialFilterState = filterState;
+  // private ФУНКЦИЯ: проверка соответствия фильтру цены
+  var matchPrice = function (currentPrice, filterPrice) {
+    var isMatch;
+    switch (filterPrice) {
+      case 'any' :
+        isMatch = true;
+        break;
+      case 'middle':
+        isMatch = (currentPrice >= 10000 && currentPrice <= 50000);
+        break;
+      case 'low':
+        isMatch = (currentPrice >= 0 && currentPrice < 10000);
+        break;
+      case 'high':
+        isMatch = (currentPrice > 50000);
+        break;
+    }
+    console.log('[matchPrice] current: ', currentPrice, '; filter: ', filterPrice, '; result: ', isMatch);
+    return isMatch;
+  };
+
+  // private ФУНКЦИЯ: проверка соответствия фильтру количества комнат
+  var matchRoomsNumber = function (currentRoomsNumber, filterRoomsNumber) {
+    var isMatch = false;
+
+    if (filterRoomsNumber === 'any') {
+      isMatch = true;
+    } else if (parseInt(filterRoomsNumber, 10) === currentRoomsNumber) {
+      isMatch = true;
+    }
+    console.log('[matchRoomsNumber] current: ', currentRoomsNumber,'; filter: ', filterRoomsNumber, '; result: ', isMatch);
+
+    return isMatch;
+  };
+
+  // private ФУНКЦИЯ: проверка соответствия фильтру количества гостей
+  var matchGuestsNumber = function (currentGuestsNumber, filterGuestsNumber) {
+    console.log('cur: ', typeof currentGuestsNumber, '; val: ', currentGuestsNumber);
+    console.log('cur: ', typeof filterGuestsNumber, '; val: ', filterGuestsNumber);
+
+    return currentGuestsNumber === filterGuestsNumber;
+  };
+
+  // private ФУНКЦИЯ: проверка соответствия фильтру фич
+  var matchFeatures = function (currentFeatures, filterFeatures) {
+    var isMatch = true;
+    for (var feature in filterFeatures) {
+      var featureIdentifier = feature.split('-')[1];
+      if (filterFeatures.feature && !currentFeatures.contains(featureIdentifier)) {
+        isMatch = false;
+        break;
+      }
+    }
+  };
+
+  // public ФУНКЦИЯ: перерисовка всех пинов при изменении фильтра
+  var redrawPinsWithFilter = function (filterState) {
+    var toShowPinsClasses = [];
+
+
+    for (var key in pinToData) {
+      if (!matchType(pinToData[key].offer.type, filterState['housing-type'])) {
+        continue;
+
+      } else if (!matchPrice(pinToData[key].offer.price, filterState['housing-price'])) {
+        continue;
+
+      } else if (!matchRoomsNumber(pinToData[key].offer.rooms, filterState['housing-rooms'])) {
+        continue;
+
+      } else if (!matchGuestsNumber(pinToData[key].offer.guests, filterState['housing-guests'])) {
+        continue;
+
+      } else if (!matchFeatures(pinToData[key].offer.features, filterState.features)) {
+        continue;
+      }
+
+      toShowPinsClasses.push('.' + key);
+      console.log(toShowPinsClasses);
+    }
+
+    // т.к. отрисовывать нужно только 5 пинов - обрежем до 5 длинну массива классов тех пинов, которые нужно отобразить
+    if (toShowPinsClasses.length > 5) {
+      toShowPinsClasses.length = 5;
+    }
+
+    var allPins = pinsContainer.querySelectorAll('.map__pin:not(.map__pin--main)');
+    var isShown;
+    var identifier;
+    allPins.forEach(function (pin, index, array) {
+      isShown = false;
+      identifier = pin.classList[0];
+      for (var i = 0; i < toShowPinsClasses.length; i++) {
+        if (toShowPinsClasses[i] === identifier) {
+          isShown = true;
+          break;
+        }
+      }
+      pin.classList.remove('.hidden', !isShown);
+    });
+
   };
 
   // Экспорты:
@@ -108,5 +213,4 @@
   window.pin.createAllPins = createAllPins;
   window.pin.removeActivePin = removeActivePin;
   window.pin.redrawPinsWithFilter = redrawPinsWithFilter;
-  window.pin.setInitialFilterState = setInitialFilterState;
 })();

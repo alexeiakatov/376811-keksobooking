@@ -25,17 +25,20 @@
     markerYdisplacement: null
   };
 
-  var typeFilter = document.getElementById('housing-type');
-  var priceFilter = document.getElementById('housing-price');
-  var roomsFilter = document.getElementById('housing-rooms');
-  var guestsFilter = document.getElementById('housing-guests');
-  var wifiFilter = document.getElementById('filter-wifi');
-  var dishwasherFilter = document.getElementById('filter-dishwasher');
-  var parkingFilter = document.getElementById('filter-parking');
-  var washerFilter = document.getElementById('filter-washer');
-  var elevatorFilter = document.getElementById('filter-elevator');
-  var conditionerFilter = document.getElementById('filter-conditioner');
-
+  var filterState = {
+    'housing-type': document.getElementById('housing-type').value,
+    'housing-price': document.getElementById('housing-price').value,
+    'housing-rooms': document.getElementById('housing-rooms').value,
+    'housing-guests': document.getElementById('housing-guests').value,
+    'features': {
+      'filter-wifi': document.getElementById('filter-wifi').checked,
+      'filter-dishwasher': document.getElementById('filter-dishwasher').checked,
+      'filter-washer': document.getElementById('filter-washer').checked,
+      'filter-parking': document.getElementById('filter-parking').checked,
+      'filter-elevator': document.getElementById('filter-elevator').checked,
+      'filter-conditioner': document.getElementById('filter-conditioner').checked
+    }
+  };
 
   window.form.deactivateForm();
   window.form.setAddressInForm(startMarkerInitialX + ' ' + startMarkerInitialY);
@@ -123,14 +126,25 @@
   // УСТАНОВКА ОБРАБОТЧИКА события mousedown на начальный маркер
   START_MARKER.addEventListener('mousedown', startMarkerMouseDownHandler);
 
-  // УСТАНОВКА ОБРАБОТЧИКА на форму с фильтрами
+  // ОБРАБОТЧИК на форму с фильтрами
   var filtersChangeHandler = function (evt) {
+    var targetId = evt.target.id;
 
-    console.log(evt.target.id, '; ', evt.target.value);
-
+    switch (targetId) {
+      case 'housing-type':
+      case 'housing-price':
+      case 'housing-rooms':
+      case 'housing-guests':
+        filterState[targetId] = evt.target.value;
+        break;
+      default :
+        filterState.features[targetId] = evt.target.checked;
+        break;
+    }
     window.pin.redrawPinsWithFilter(filterState);
   };
 
+  // УСТАНОВКА ОБРАБОТЧИКА на форму с фильтрами
   filtersContainer.addEventListener('change', filtersChangeHandler);
 
   // Экспорты
