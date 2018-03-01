@@ -165,8 +165,8 @@
   var onLoadCallback = function () {
     NOTICE_FORM.reset();
     deactivateFrom();
-    window.map.deactivateMap();
     window.card.hideOfferCard();
+    window.map.deactivateMap();
   };
 
   // private ФУНКЦИЯ: действия при НЕуспешной отправке данных объявления на сервер.

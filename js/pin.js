@@ -10,6 +10,11 @@
   var PIN_BUTTON_HEIGHT = 70;
   var pinsContainer = document.querySelector('.map__pins');
 
+  var pinClassToOfferData = {};
+  var mapElementCount = 0;
+
+  var filterState;
+
 
   // private ФУНКЦИЯ: Создает DOM-элемент метки и добавляет ему обработчик клика.
   // возвращает настроенный и готовый для вставки на карту DOM-элемент метки.
@@ -23,6 +28,12 @@
 
     var image = button.querySelector('img');
     image.src = offerData.author.avatar;
+
+    // присвоение пину класса-идентификатора для сопоставления пин:объект_данных
+    var pinIdentificator = 'pin_' + mapElementCount++;
+    button.classList.add(pinIdentificator);
+
+    pinClassToOfferData[pinIdentificator] = offerData;
 
     // добавить пину обработчик события click
     button.addEventListener('click', function (evt) {
@@ -82,12 +93,20 @@
     window.backend.getData(onLoadCallback, onErrorCallback);
   };
 
+  // public ФУНКЦИЯ: перерисовка всех пинов при изменении фильтра
+  var redrawPinsWithFilter = function (filterState){
+
+  };
+
+  // public ФУНКЦИЯ: установить начальное состояние фильтров
+  var setInitialFilterState = function (filterState) {
+    initialFilterState = filterState;
+  };
+
   // Экспорты:
   window.pin = {};
-  // экспорт функции createAllpins.
   window.pin.createAllPins = createAllPins;
-
-  // экспорт переменной
   window.pin.removeActivePin = removeActivePin;
-
+  window.pin.redrawPinsWithFilter = redrawPinsWithFilter;
+  window.pin.setInitialFilterState = setInitialFilterState;
 })();

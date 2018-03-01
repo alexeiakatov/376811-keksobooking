@@ -31,7 +31,7 @@
 
     // ОБРАБОТЧИК события error при получении данных
     var xhrErrorHandler = function () {
-      onError('Ошибка отправки данных.');
+      onError('Ошибка при отправке запроса.');
       xhr.removeEventListener('error', xhrErrorHandler);
       xhr.removeEventListener('load', xhrLoadHandler);
     };

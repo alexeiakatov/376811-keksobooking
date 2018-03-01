@@ -11,6 +11,7 @@
   var isMapActivated = false;
 
   var pinsContainer = document.querySelector('.map__pins');
+  var allPins = pinsContainer.querySelectorAll('.map__pin:not(.map__pin--main)');
   var filtersContainer = document.querySelector('.map__filters-container');
 
   var dragStatus = {
@@ -23,6 +24,18 @@
     markerXdisplacement: null,
     markerYdisplacement: null
   };
+
+  var typeFilter = document.getElementById('housing-type');
+  var priceFilter = document.getElementById('housing-price');
+  var roomsFilter = document.getElementById('housing-rooms');
+  var guestsFilter = document.getElementById('housing-guests');
+  var wifiFilter = document.getElementById('filter-wifi');
+  var dishwasherFilter = document.getElementById('filter-dishwasher');
+  var parkingFilter = document.getElementById('filter-parking');
+  var washerFilter = document.getElementById('filter-washer');
+  var elevatorFilter = document.getElementById('filter-elevator');
+  var conditionerFilter = document.getElementById('filter-conditioner');
+
 
   window.form.deactivateForm();
   window.form.setAddressInForm(startMarkerInitialX + ' ' + startMarkerInitialY);
@@ -43,7 +56,6 @@
     isMapActivated = false;
     isFormActivated = false;
 
-    var allPins = pinsContainer.querySelectorAll('.map__pin:not(.map__pin--main)');
     allPins.forEach(function (pin, index, array) {
       pin.parentNode.removeChild(pin);
     });
@@ -110,6 +122,16 @@
 
   // УСТАНОВКА ОБРАБОТЧИКА события mousedown на начальный маркер
   START_MARKER.addEventListener('mousedown', startMarkerMouseDownHandler);
+
+  // УСТАНОВКА ОБРАБОТЧИКА на форму с фильтрами
+  var filtersChangeHandler = function (evt) {
+
+    console.log(evt.target.id, '; ', evt.target.value);
+
+    window.pin.redrawPinsWithFilter(filterState);
+  };
+
+  filtersContainer.addEventListener('change', filtersChangeHandler);
 
   // Экспорты
   window.map = {};
