@@ -99,9 +99,6 @@
     } else if (currentType === filterType) {
       isMatch = true;
     }
-
-    console.log('[matchType] current: ', currentType,'; filter: ', filterType, '; result: ', isMatch);
-
     return isMatch;
   };
 
@@ -122,7 +119,6 @@
         isMatch = (currentPrice > 50000);
         break;
     }
-    console.log('[matchPrice] current: ', currentPrice, '; filter: ', filterPrice, '; result: ', isMatch);
     return isMatch;
   };
 
@@ -135,35 +131,57 @@
     } else if (parseInt(filterRoomsNumber, 10) === currentRoomsNumber) {
       isMatch = true;
     }
-    console.log('[matchRoomsNumber] current: ', currentRoomsNumber,'; filter: ', filterRoomsNumber, '; result: ', isMatch);
-
     return isMatch;
   };
 
   // private ФУНКЦИЯ: проверка соответствия фильтру количества гостей
   var matchGuestsNumber = function (currentGuestsNumber, filterGuestsNumber) {
-    console.log('cur: ', typeof currentGuestsNumber, '; val: ', currentGuestsNumber);
-    console.log('cur: ', typeof filterGuestsNumber, '; val: ', filterGuestsNumber);
+    if (filterGuestsNumber === 'any') {
+      return true;
+    }
+    var filterGuests = parseInt(filterGuestsNumber, 10);
 
-    return currentGuestsNumber === filterGuestsNumber;
+    return currentGuestsNumber === filterGuests;
+  };
+
+  // private ФУНКЦИЯ: проверка наличия в массиве вхождения с переданным значением
+  // { String } element - строка, наличие которой проверяем в массиве
+  var arrayContains = function (element, array) {
+    // console.log('[arrayContains] проверяю наличие элемента: ', element);
+    // console.log('на массиве: ', array);
+    var hasElement = false;
+
+    for (var i = 0; i < array.length; i++) {
+      if (array[i] === element) {
+        hasElement = true;
+        break;
+      }
+    }
+    console.log('[arrayContains] результат: ', hasElement);
+    console.log('============');
+    return hasElement;
   };
 
   // private ФУНКЦИЯ: проверка соответствия фильтру фич
   var matchFeatures = function (currentFeatures, filterFeatures) {
     var isMatch = true;
-    for (var feature in filterFeatures) {
-      var featureIdentifier = feature.split('-')[1];
-      if (filterFeatures.feature && !currentFeatures.contains(featureIdentifier)) {
-        isMatch = false;
-        break;
+
+    var identifier;
+    for (var element in filterFeatures) {
+      if (filterFeatures[element] === true) {
+        identifier = element.split('-')[1];
+        if (!arrayContains(identifier, currentFeatures)) {
+          isMatch = false;
+          break;
+        }
       }
     }
+    return isMatch;
   };
 
   // public ФУНКЦИЯ: перерисовка всех пинов при изменении фильтра
   var redrawPinsWithFilter = function (filterState) {
     var toShowPinsClasses = [];
-
 
     for (var key in pinToData) {
       if (!matchType(pinToData[key].offer.type, filterState['housing-type'])) {
@@ -183,29 +201,22 @@
       }
 
       toShowPinsClasses.push('.' + key);
-      console.log(toShowPinsClasses);
     }
 
-    // т.к. отрисовывать нужно только 5 пинов - обрежем до 5 длинну массива классов тех пинов, которые нужно отобразить
+    // т.к. отрисовывать нужно только 5 пинов - обрежем до 5 длинну массива классов тех пинов, которые можно отобразить в соответствии с фильтром
     if (toShowPinsClasses.length > 5) {
       toShowPinsClasses.length = 5;
     }
 
+    console.log('прошли все фильтры: ', toShowPinsClasses);
     var allPins = pinsContainer.querySelectorAll('.map__pin:not(.map__pin--main)');
     var isShown;
     var identifier;
-    allPins.forEach(function (pin, index, array) {
-      isShown = false;
-      identifier = pin.classList[0];
-      for (var i = 0; i < toShowPinsClasses.length; i++) {
-        if (toShowPinsClasses[i] === identifier) {
-          isShown = true;
-          break;
-        }
-      }
-      pin.classList.remove('.hidden', !isShown);
-    });
 
+    for(var i = allPins.length - 1; i >= 0; i--) {
+      identifier = '.' + allPins[i].classList[0];
+      allPins[i].classList.toggle('hidden', !arrayContains(identifier, toShowPinsClasses));
+    }
   };
 
   // Экспорты:
