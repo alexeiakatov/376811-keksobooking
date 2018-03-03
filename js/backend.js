@@ -4,10 +4,8 @@
   var xhr;
 
   // ФУНКЦИЯ: получает данные с сервера.
-  // { function } onLoad(receivedData) - колбыэк, который вызывается при успешном получении данных с сервера.
-  // { Object } receivedData - параметр который требует onLoad в котором передаются данные, полученные с сервера.
-  // { function } onError(errorMessage) - колбэк, который вызывается при неуспешном выполнении запроса.
-  // { String } errorMessage - параметр который требует onError в котором передается сообщение об ошибке.
+  // { function } onLoad - колбыэк, который вызывается при успешном получении данных с сервера.
+  // { function } onError - колбэк, который вызывается при неуспешном выполнении запроса.
   var getData = function (onLoad, onError) {
     xhr = new XMLHttpRequest();
 
@@ -53,7 +51,6 @@
   // { Object } data, тип (FormData) - содержит данные, которые будут отправлены на сервер.
   // { function } onLoad - колбэк, который вызывается при успешном выполнении отправки данных.
   // { function } onError - колбэк, которая вызывается при неуспешном выполнении отправки данных.
-  // { String } errorMessage - параметр который требует onError в котором передается сообщение об ошибке.
   var sendData = function (data, onLoad, onError) {
     xhr = new XMLHttpRequest();
 
