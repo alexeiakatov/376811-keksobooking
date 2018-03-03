@@ -157,8 +157,6 @@
         break;
       }
     }
-    console.log('[arrayContains] результат: ', hasElement);
-    console.log('============');
     return hasElement;
   };
 
@@ -208,7 +206,6 @@
       toShowPinsClasses.length = 5;
     }
 
-    console.log('прошли все фильтры: ', toShowPinsClasses);
     var allPins = pinsContainer.querySelectorAll('.map__pin:not(.map__pin--main)');
     var isShown;
     var identifier;

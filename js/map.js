@@ -40,6 +40,8 @@
     }
   };
 
+  var previousDebounceTimerId;
+
   window.form.deactivateForm();
   window.form.setAddressInForm(startMarkerInitialX + ' ' + startMarkerInitialY);
 
@@ -141,7 +143,19 @@
         filterState.features[targetId] = evt.target.checked;
         break;
     }
-    window.pin.redrawPinsWithFilter(filterState);
+
+
+    if (previousDebounceTimerId) {
+      window.clearTimeout(previousDebounceTimerId);
+      previousDebounceTimerId = window.setTimeout(function () {
+        window.pin.redrawPinsWithFilter(filterState);
+      }, 500);
+    } else {
+      previousDebounceTimerId = window.setTimeout(function () {
+        window.pin.redrawPinsWithFilter(filterState);
+      }, 500);
+    }
+    // window.pin.redrawPinsWithFilter(filterState);
   };
 
   // УСТАНОВКА ОБРАБОТЧИКА на форму с фильтрами
