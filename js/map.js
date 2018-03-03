@@ -144,9 +144,9 @@
         break;
     }
 
-    previousDebounceTimerId = window.utils.debounce(function () {
+    window.utils.debounce(function () {
       window.pin.redrawPinsWithFilter(filterState);
-    }, 500, previousDebounceTimerId);
+    }, 500);
   };
 
   // УСТАНОВКА ОБРАБОТЧИКА на форму с фильтрами

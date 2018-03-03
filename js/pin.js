@@ -121,7 +121,7 @@
 
     var allPins = pinsContainer.querySelectorAll('.map__pin:not(.map__pin--main)');
     var identifier;
-    for (var i = allPins.length - 1; i >= 0; i--) {
+    for (var i = 0; i < allPins.length; i++) {
       identifier = '.' + allPins[i].classList[0];
       allPins[i].classList.toggle('hidden', !window.utils.arrayContains(identifier, toShowPinsClasses));
     }

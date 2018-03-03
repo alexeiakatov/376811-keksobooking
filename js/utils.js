@@ -1,6 +1,9 @@
 'use strict';
 
 (function () {
+
+  var previousTimerId;
+
   // public ФУНКЦИЯ: Получить случайное число
   var getRandomValue = function (min, max, scale) {
 
@@ -37,15 +40,11 @@
   };
 
   // public ФУНКЦИЯ: debounce
-  var debounce = function (callBack, timeLimit, previousTimerId) {
-    var currentTimerId;
-
+  var debounce = function (callBack, timeLimit) {
     if (previousTimerId) {
-      window.clearTimeout(previousTimerId);
+      clearTimeout(previousTimerId);
     }
-    currentTimerId = window.setTimeout(callBack, timeLimit);
-
-    return currentTimerId;
+    previousTimerId = setTimeout(callBack, timeLimit);
   };
 
 

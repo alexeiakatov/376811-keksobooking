@@ -4,13 +4,7 @@
 
   // private ФУНКЦИЯ: проверка соответствия фильтру типа жилья
   var matchType = function (currentType, filterType) {
-    var isMatch = false;
-    if (filterType === 'any') {
-      isMatch = true;
-    } else if (currentType === filterType) {
-      isMatch = true;
-    }
-    return isMatch;
+    return (filterType === 'any') || (currentType === filterType);
   };
 
   // private ФУНКЦИЯ: проверка соответствия фильтру цены
@@ -35,14 +29,7 @@
 
   // private ФУНКЦИЯ: проверка соответствия фильтру количества комнат
   var matchRoomsNumber = function (currentRoomsNumber, filterRoomsNumber) {
-    var isMatch = false;
-
-    if (filterRoomsNumber === 'any') {
-      isMatch = true;
-    } else if (parseInt(filterRoomsNumber, 10) === currentRoomsNumber) {
-      isMatch = true;
-    }
-    return isMatch;
+    return (filterRoomsNumber === 'any') || (parseInt(filterRoomsNumber, 10) === currentRoomsNumber);
   };
 
   // private ФУНКЦИЯ: проверка соответствия фильтру количества гостей
@@ -62,7 +49,7 @@
 
     var identifier;
     for (var element in filterFeatures) {
-      if (filterFeatures[element] === true) {
+      if (filterFeatures[element]) {
         identifier = element.split('-')[1];
         if (!window.utils.arrayContains(identifier, currentFeatures)) {
           isMatch = false;
