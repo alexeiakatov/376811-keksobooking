@@ -90,111 +90,24 @@
     window.backend.getData(onLoadCallback, onErrorCallback);
   };
 
-  // private ФУНКЦИЯ: проверка соответствия фильтру типа жилья
-  var matchType = function (currentType, filterType) {
-
-    var isMatch = false;
-    if (filterType === 'any') {
-      isMatch = true;
-    } else if (currentType === filterType) {
-      isMatch = true;
-    }
-    return isMatch;
-  };
-
-  // private ФУНКЦИЯ: проверка соответствия фильтру цены
-  var matchPrice = function (currentPrice, filterPrice) {
-    var isMatch;
-    switch (filterPrice) {
-      case 'any' :
-        isMatch = true;
-        break;
-      case 'middle':
-        isMatch = (currentPrice >= 10000 && currentPrice <= 50000);
-        break;
-      case 'low':
-        isMatch = (currentPrice >= 0 && currentPrice < 10000);
-        break;
-      case 'high':
-        isMatch = (currentPrice > 50000);
-        break;
-    }
-    return isMatch;
-  };
-
-  // private ФУНКЦИЯ: проверка соответствия фильтру количества комнат
-  var matchRoomsNumber = function (currentRoomsNumber, filterRoomsNumber) {
-    var isMatch = false;
-
-    if (filterRoomsNumber === 'any') {
-      isMatch = true;
-    } else if (parseInt(filterRoomsNumber, 10) === currentRoomsNumber) {
-      isMatch = true;
-    }
-    return isMatch;
-  };
-
-  // private ФУНКЦИЯ: проверка соответствия фильтру количества гостей
-  var matchGuestsNumber = function (currentGuestsNumber, filterGuestsNumber) {
-    if (filterGuestsNumber === 'any') {
-      return true;
-    }
-    var filterGuests = parseInt(filterGuestsNumber, 10);
-
-    return currentGuestsNumber === filterGuests;
-  };
-
-  // private ФУНКЦИЯ: проверка наличия в массиве вхождения с переданным значением
-  // { String } element - строка, наличие которой проверяем в массиве
-  var arrayContains = function (element, array) {
-    // console.log('[arrayContains] проверяю наличие элемента: ', element);
-    // console.log('на массиве: ', array);
-    var hasElement = false;
-
-    for (var i = 0; i < array.length; i++) {
-      if (array[i] === element) {
-        hasElement = true;
-        break;
-      }
-    }
-    return hasElement;
-  };
-
-  // private ФУНКЦИЯ: проверка соответствия фильтру фич
-  var matchFeatures = function (currentFeatures, filterFeatures) {
-    var isMatch = true;
-
-    var identifier;
-    for (var element in filterFeatures) {
-      if (filterFeatures[element] === true) {
-        identifier = element.split('-')[1];
-        if (!arrayContains(identifier, currentFeatures)) {
-          isMatch = false;
-          break;
-        }
-      }
-    }
-    return isMatch;
-  };
-
   // public ФУНКЦИЯ: перерисовка всех пинов при изменении фильтра
   var redrawPinsWithFilter = function (filterState) {
     var toShowPinsClasses = [];
 
     for (var key in pinToData) {
-      if (!matchType(pinToData[key].offer.type, filterState['housing-type'])) {
+      if (!window.filters.matchType(pinToData[key].offer.type, filterState['housing-type'])) {
         continue;
 
-      } else if (!matchPrice(pinToData[key].offer.price, filterState['housing-price'])) {
+      } else if (!window.filters.matchPrice(pinToData[key].offer.price, filterState['housing-price'])) {
         continue;
 
-      } else if (!matchRoomsNumber(pinToData[key].offer.rooms, filterState['housing-rooms'])) {
+      } else if (!window.filters.matchRoomsNumber(pinToData[key].offer.rooms, filterState['housing-rooms'])) {
         continue;
 
-      } else if (!matchGuestsNumber(pinToData[key].offer.guests, filterState['housing-guests'])) {
+      } else if (!window.filters.matchGuestsNumber(pinToData[key].offer.guests, filterState['housing-guests'])) {
         continue;
 
-      } else if (!matchFeatures(pinToData[key].offer.features, filterState.features)) {
+      } else if (!window.filters.matchFeatures(pinToData[key].offer.features, filterState.features)) {
         continue;
       }
 
@@ -207,12 +120,10 @@
     }
 
     var allPins = pinsContainer.querySelectorAll('.map__pin:not(.map__pin--main)');
-    var isShown;
     var identifier;
-
-    for(var i = allPins.length - 1; i >= 0; i--) {
+    for (var i = allPins.length - 1; i >= 0; i--) {
       identifier = '.' + allPins[i].classList[0];
-      allPins[i].classList.toggle('hidden', !arrayContains(identifier, toShowPinsClasses));
+      allPins[i].classList.toggle('hidden', !window.utils.arrayContains(identifier, toShowPinsClasses));
     }
   };
 

@@ -144,18 +144,9 @@
         break;
     }
 
-
-    if (previousDebounceTimerId) {
-      window.clearTimeout(previousDebounceTimerId);
-      previousDebounceTimerId = window.setTimeout(function () {
-        window.pin.redrawPinsWithFilter(filterState);
-      }, 500);
-    } else {
-      previousDebounceTimerId = window.setTimeout(function () {
-        window.pin.redrawPinsWithFilter(filterState);
-      }, 500);
-    }
-    // window.pin.redrawPinsWithFilter(filterState);
+    previousDebounceTimerId = window.utils.debounce(function () {
+      window.pin.redrawPinsWithFilter(filterState);
+    }, 500, previousDebounceTimerId);
   };
 
   // УСТАНОВКА ОБРАБОТЧИКА на форму с фильтрами
