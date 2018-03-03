@@ -11,8 +11,8 @@
   var isMapActivated = false;
 
   var pinsContainer = document.querySelector('.map__pins');
-  var allPins = pinsContainer.querySelectorAll('.map__pin:not(.map__pin--main)');
   var filtersContainer = document.querySelector('.map__filters-container');
+  var filtersForm = filtersContainer.querySelector('form');
 
   var dragStatus = {
     MIN_X: 0,
@@ -40,10 +40,19 @@
     }
   };
 
-  var previousDebounceTimerId;
-
   window.form.deactivateForm();
   window.form.setAddressInForm(startMarkerInitialX + ' ' + startMarkerInitialY);
+
+
+  var toggleFilters = function (isEnabled) {
+    filtersForm.disabled = !isEnabled;
+    var formElements = filtersForm.children;
+    for (var i = 0; i < formElements.length; i++) {
+      formElements[i].disabled = !isEnabled;
+    }
+  };
+
+  toggleFilters(false);
 
   // ФУНКЦИЯ: сделать карту активной.
   var activateMap = function () {
@@ -61,9 +70,8 @@
     isMapActivated = false;
     isFormActivated = false;
 
-    allPins.forEach(function (pin, index, array) {
-      pin.parentNode.removeChild(pin);
-    });
+    toggleFilters(false);
+    window.pin.removeAllPins();
   };
 
   // ФУНКЦИЯ: перерисовывает положение начального маркера на карте в соответствии с перетаскиванием мышью.
@@ -132,6 +140,8 @@
   var filtersChangeHandler = function (evt) {
     var targetId = evt.target.id;
 
+    window.card.hideOfferCard();
+
     switch (targetId) {
       case 'housing-type':
       case 'housing-price':
@@ -150,10 +160,11 @@
   };
 
   // УСТАНОВКА ОБРАБОТЧИКА на форму с фильтрами
-  filtersContainer.addEventListener('change', filtersChangeHandler);
+  filtersContainer.querySelector('form').addEventListener('change', filtersChangeHandler);
 
   // Экспорты
   window.map = {};
   window.map.deactivateMap = deactivateMap;
+  window.map.toggleFilters = toggleFilters;
 
 })();

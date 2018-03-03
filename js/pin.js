@@ -10,8 +10,7 @@
   var PIN_BUTTON_HEIGHT = 70;
   var pinsContainer = document.querySelector('.map__pins');
 
-  var pinToData = {};
-  var mapElementCount = 0;
+  var dataObjects = [];
 
   // private ФУНКЦИЯ: Создает DOM-элемент метки и добавляет ему обработчик клика.
   // возвращает настроенный и готовый для вставки на карту DOM-элемент метки.
@@ -26,11 +25,7 @@
     var image = button.querySelector('img');
     image.src = offerData.author.avatar;
 
-    // присвоение пину класса-идентификатора для сопоставления пин:объект_данных
-    var pinIdentificator = 'pin_' + mapElementCount++;
-    button.className = pinIdentificator + ' ' + button.className;
-
-    pinToData[pinIdentificator] = offerData;
+    offerData.pin = button;
 
     // добавить пину обработчик события click
     button.addEventListener('click', function (evt) {
@@ -55,16 +50,21 @@
   // private ФУНКЦИЯ: Отрисовывает все пины на карте при успешном получении данных объявлений с сервера.
   // { Object } receivedData - данные, полученные от сервера
   var onLoadCallback = function (receivedData) {
+    dataObjects = receivedData;
     var fragmentForPins = document.createDocumentFragment();
     var newPin;
-    for (var i = 0; i < receivedData.length; i++) {
-      newPin = createDomPinForAnnouncement(receivedData[i], PIN_BUTTON_WIDTH, PIN_BUTTON_HEIGHT);
+    for (var i = 0; i < dataObjects.length; i++) {
+      newPin = createDomPinForAnnouncement(dataObjects[i], PIN_BUTTON_WIDTH, PIN_BUTTON_HEIGHT);
+      if (i > 4) {
+        newPin.classList.add('hidden');
+      }
       fragmentForPins.appendChild(newPin);
     }
 
     // вставка меток-пинов на карту
     pinsContainer = document.querySelector('.map__pins');
     pinsContainer.appendChild(fragmentForPins);
+    window.map.toggleFilters(true);
   };
 
   // private ФУНКЦИЯ: действия при НЕуспешном получении данных объявлений с сервера.
@@ -92,38 +92,48 @@
 
   // public ФУНКЦИЯ: перерисовка всех пинов при изменении фильтра
   var redrawPinsWithFilter = function (filterState) {
-    var toShowPinsClasses = [];
+    var filteredObjects;
 
-    for (var key in pinToData) {
-      if (!window.filters.matchType(pinToData[key].offer.type, filterState['housing-type'])) {
-        continue;
+    filteredObjects = dataObjects.filter(function (element, index) {
+      return window.filters.matchType(element.offer.type, filterState['housing-type']);
+    });
 
-      } else if (!window.filters.matchPrice(pinToData[key].offer.price, filterState['housing-price'])) {
-        continue;
+    filteredObjects = filteredObjects.filter(function (element, index) {
+      return window.filters.matchPrice(element.offer.price, filterState['housing-price']);
+    });
 
-      } else if (!window.filters.matchRoomsNumber(pinToData[key].offer.rooms, filterState['housing-rooms'])) {
-        continue;
+    filteredObjects = filteredObjects.filter(function (element, index) {
+      return window.filters.matchRoomsNumber(element.offer.rooms, filterState['housing-rooms']);
+    });
 
-      } else if (!window.filters.matchGuestsNumber(pinToData[key].offer.guests, filterState['housing-guests'])) {
-        continue;
+    filteredObjects = filteredObjects.filter(function (element, index) {
+      return window.filters.matchGuestsNumber(element.offer.guests, filterState['housing-guests']);
+    });
 
-      } else if (!window.filters.matchFeatures(pinToData[key].offer.features, filterState.features)) {
-        continue;
-      }
-
-      toShowPinsClasses.push('.' + key);
-    }
+    filteredObjects = filteredObjects.filter(function (element, index) {
+      return window.filters.matchFeatures(element.offer.features, filterState.features);
+    });
 
     // т.к. отрисовывать нужно только 5 пинов - обрежем до 5 длинну массива классов тех пинов, которые можно отобразить в соответствии с фильтром
-    if (toShowPinsClasses.length > 5) {
-      toShowPinsClasses.length = 5;
+    if (filteredObjects.length > 5) {
+      filteredObjects.length = 5;
     }
 
     var allPins = pinsContainer.querySelectorAll('.map__pin:not(.map__pin--main)');
-    var identifier;
     for (var i = 0; i < allPins.length; i++) {
-      identifier = '.' + allPins[i].classList[0];
-      allPins[i].classList.toggle('hidden', !window.utils.arrayContains(identifier, toShowPinsClasses));
+      allPins[i].classList.add('hidden');
+    }
+    for (i = 0; i < filteredObjects.length; i++) {
+      filteredObjects[i].pin.classList.remove('hidden');
+    }
+  };
+
+  // public ФУНКЦИЯ: удаляет из DOM все элементы пинов
+  var removeAllPins = function () {
+    var allPins = pinsContainer.querySelectorAll('.map__pin:not(.map__pin--main)');
+
+    for (var i = 0; i < allPins.length; i++) {
+      allPins[i].parentNode.removeChild(allPins[i]);
     }
   };
 
@@ -132,4 +142,5 @@
   window.pin.createAllPins = createAllPins;
   window.pin.removeActivePin = removeActivePin;
   window.pin.redrawPinsWithFilter = redrawPinsWithFilter;
+  window.pin.removeAllPins = removeAllPins;
 })();

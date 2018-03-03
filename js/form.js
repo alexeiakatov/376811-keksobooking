@@ -166,6 +166,7 @@
     NOTICE_FORM.reset();
     deactivateFrom();
     window.card.hideOfferCard();
+    window.pin.removeActivePin();
     window.map.deactivateMap();
   };
 
