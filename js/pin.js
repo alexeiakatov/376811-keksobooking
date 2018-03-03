@@ -95,17 +95,17 @@
 
     filteredObjects = dataObjects.filter(function (element, index) {
       return window.filters.matchType(element.offer.type, filterState['housing-type']);
-    }).
-        filter(function (element, index) {
+    })
+        .filter(function (element, index) {
           return window.filters.matchPrice(element.offer.price, filterState['housing-price']);
-        }).
-        filter(function (element, index) {
+        })
+        .filter(function (element, index) {
           return window.filters.matchRoomsNumber(element.offer.rooms, filterState['housing-rooms']);
-        }).
-        filter(function (element, index) {
+        })
+        .filter(function (element, index) {
           return window.filters.matchGuestsNumber(element.offer.guests, filterState['housing-guests']);
-        }).
-        filter(function (element, index) {
+        })
+        .filter(function (element, index) {
           return window.filters.matchFeatures(element.offer.features, filterState.features);
         });
 
