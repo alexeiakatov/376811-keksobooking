@@ -4,11 +4,10 @@
 
   var previousTimerId;
 
-  // public ФУНКЦИЯ: Получить случайное число
+  // public ФУНКЦИЯ: Возвращает случайное число случайное число
   var getRandomValue = function (min, max, scale) {
 
     if (typeof scale !== 'number' || typeof min !== 'number' || typeof max !== 'number') {
-      // console.log('Неправильный тип одного из аргументов (все д.б. number). Возвращено null.');
       return null;
     }
 
@@ -19,7 +18,7 @@
     return Number(result.toFixed(scale));
   };
 
-  // public ФУНКЦИЯ: Найти максимальное значение результата в массиве times
+  // public ФУНКЦИЯ: Находит максимальное значение в массиве
   var getMaxValueInArray = function (array) {
     return Math.round(Math.max.apply(null, array));
   };

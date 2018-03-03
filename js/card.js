@@ -1,6 +1,4 @@
 'use strict';
-// создает dom-элемент объявления, заполняет данными из полученного объекта offerData и отрисовывает на странице
-// экспортирует в глобальную область функцию: createDomOfferCard
 
 (function () {
   var ESC_KEY_CODE = 27;
@@ -39,7 +37,7 @@
     return housingTypeInRussian;
   };
 
-  // private ФУНКЦИЯ: в DOM-шаблоне объявления устанавливает фактические фичи в соответствии с данными в js-объекте объявления
+  // private ФУНКЦИЯ: устанавливает в DOM-шаблоне объявления  фактические фичи в соответствии с данными в js-объекте объявления
   var setActualFeatures = function (featuresInDataObject) {
     var featuresInDom = features.children;
     var identifier;
@@ -72,22 +70,22 @@
   // private ФУНКЦИЯ: Возвращает DOM-элемент объявления, созданный на основании шаблона <template> (который в конце index.html) и
   // заполненный данными из объекта offerData. Возвращаемый элемент готов для вставки на страницу.
   var setDataInDomOfferCard = function (offerData) {
-    // title *
+    // title
     title.textContent = offerData.offer.title;
 
-    // address *
+    // address
     address.textContent = offerData.offer.address;
 
-    // price *
+    // price
     price.innerHTML = offerData.offer.price + ' &#x20bd;/ночь';
 
-    // housing type *
+    // housing type
     type.textContent = getHousingTypeInRussian(offerData.offer.type);
 
-    // rooms and guests *
+    // rooms and guests
     roomsAndGuests.textContent = offerData.offer.rooms + ' комнаты для ' + offerData.offer.guests + ' гостей';
 
-    // checkIn, checkOut *
+    // checkIn, checkOut
     checkinAndcheckout.textContent = 'Заезд после ' + offerData.offer.checkin + ', выезд до ' + offerData.offer.checkout;
 
     // features
@@ -112,7 +110,7 @@
     }
   };
 
-  // вычислить все ссылки на dom-элементы внутри карточки предложения
+  // ФУНКЦИЯ: вычисяет все ссылки на dom-элементы внутри карточки предложения
   var findElementsInOfferCard = function () {
     if (activeOfferCard !== null) {
       title = activeOfferCard.querySelector('h3');
@@ -129,13 +127,14 @@
     }
   };
 
-  // public ФУНКЦИЯ: создает dom-элемент объявления, добавляет ему обработчик закрытия по клику на крестик и вставляет
+  // public ФУНКЦИЯ: создает dom-элемент объявления, добавляет ему обработчик закрытия по клику на крестик и вставляет этот элемент
   // на страницу.
   var createDomOfferCard = function () {
     // создать из <template> dom-элемент для карточки предложения и добавить ему классы offerCard и hidden.
     var templateContent = document.querySelector('template').content;
     activeOfferCard = templateContent.querySelector('.map__card').cloneNode(true);
     activeOfferCard.classList.add('hidden');
+
     // создать ссылки на все необходимые dom-элементы внутри activeOfferCard
     findElementsInOfferCard();
 
@@ -151,7 +150,7 @@
     container.insertBefore(activeOfferCard, container.querySelector('.map__filters-container'));
   };
 
-  // установить на document обработчик нажатия Esc.
+  // ФУНКЦИЯ: устанавливает на document обработчик нажатия Esc.
   var setDocumentEscListener = function () {
     documentEscPressedHandler = function (evt) {
       if (evt.keyCode === ESC_KEY_CODE) {
@@ -164,7 +163,7 @@
     document.addEventListener('keydown', documentEscPressedHandler);
   };
 
-  // удалить у document обработчик нажатия Esc
+  // ФУНКЦИЯ: удаляет у document обработчик нажатия Esc
   var removeDocumentEscListener = function () {
     document.removeEventListener('keydown', documentEscPressedHandler);
     documentEscPressedHandler = null;

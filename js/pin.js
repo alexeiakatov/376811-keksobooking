@@ -1,7 +1,4 @@
 'use strict';
-// требует window.getAllOfferDataObjects() для получения массива js-объектов объявлений.
-// создает dom-элементы пинов, добавляет им обработчики клика и вставляет их на страницу.
-// экспортирует функции: window.createAllPins, removeActivePin.
 
 (function () {
   var currentActivePin = null;
@@ -47,14 +44,16 @@
     }
   };
 
-  // private ФУНКЦИЯ: Отрисовывает все пины на карте при успешном получении данных объявлений с сервера.
-  // { Object } receivedData - данные, полученные от сервера
+  // ФУНКЦИЯ - колбэк: Отрисовывает все пины на карте при успешном получении данных объявлений с сервера.
+  // { [] } receivedData - данные, полученные от сервера
   var onLoadCallback = function (receivedData) {
     dataObjects = receivedData;
     var fragmentForPins = document.createDocumentFragment();
     var newPin;
     for (var i = 0; i < dataObjects.length; i++) {
       newPin = createDomPinForAnnouncement(dataObjects[i], PIN_BUTTON_WIDTH, PIN_BUTTON_HEIGHT);
+
+      // ограничение количества отображаемых пинов (по ТЗ - не больше 5)
       if (i > 4) {
         newPin.classList.add('hidden');
       }
@@ -66,7 +65,7 @@
     window.map.toggleFilters(true);
   };
 
-  // private ФУНКЦИЯ: действия при НЕуспешном получении данных объявлений с сервера.
+  // ФУНКЦИЯ - колбэк: действия при НЕуспешном получении данных объявлений с сервера.
   var onErrorCallback = function (errorMessage) {
     var errorContainer = document.createElement('div');
     errorContainer.classList.add('errorContainer');
@@ -85,7 +84,6 @@
 
   // public ФУНКЦИЯ: создание documentFragment содержащий все метки-пины для карты и вставка их на страницу.
   var createAllPins = function () {
-    // var offerDataObjects = window.data.getAllOfferDataObjects();
     window.backend.getData(onLoadCallback, onErrorCallback);
   };
 
@@ -93,23 +91,23 @@
   var redrawPinsWithFilter = function (filterState) {
     var filteredObjects;
 
-    filteredObjects = dataObjects.filter(function (element, index) {
+    filteredObjects = dataObjects.filter(function (element) {
       return window.filters.matchType(element.offer.type, filterState['housing-type']);
     })
-        .filter(function (element, index) {
+        .filter(function (element) {
           return window.filters.matchPrice(element.offer.price, filterState['housing-price']);
         })
-        .filter(function (element, index) {
+        .filter(function (element) {
           return window.filters.matchRoomsNumber(element.offer.rooms, filterState['housing-rooms']);
         })
-        .filter(function (element, index) {
+        .filter(function (element) {
           return window.filters.matchGuestsNumber(element.offer.guests, filterState['housing-guests']);
         })
-        .filter(function (element, index) {
+        .filter(function (element) {
           return window.filters.matchFeatures(element.offer.features, filterState.features);
         });
 
-    // т.к. отрисовывать нужно только 5 пинов - обрежем до 5 длинну массива классов тех пинов, которые можно отобразить в соответствии с фильтром
+    // т.к. отрисовывать нужно только 5 пинов - обрежем до 5 длинну массива отфильтрованных объектов
     if (filteredObjects.length > 5) {
       filteredObjects.length = 5;
     }

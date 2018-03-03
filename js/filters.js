@@ -2,12 +2,12 @@
 
 (function () {
 
-  // private ФУНКЦИЯ: проверка соответствия фильтру типа жилья
+  // ФУНКЦИЯ: проверка соответствия фильтру типа жилья
   var matchType = function (currentType, filterType) {
     return (filterType === 'any') || (currentType === filterType);
   };
 
-  // private ФУНКЦИЯ: проверка соответствия фильтру цены
+  // ФУНКЦИЯ: проверка соответствия фильтру цены жилья
   var matchPrice = function (currentPrice, filterPrice) {
     var isMatch;
     switch (filterPrice) {
@@ -27,12 +27,12 @@
     return isMatch;
   };
 
-  // private ФУНКЦИЯ: проверка соответствия фильтру количества комнат
+  // ФУНКЦИЯ: проверка соответствия фильтру количества комнат
   var matchRoomsNumber = function (currentRoomsNumber, filterRoomsNumber) {
     return (filterRoomsNumber === 'any') || (parseInt(filterRoomsNumber, 10) === currentRoomsNumber);
   };
 
-  // private ФУНКЦИЯ: проверка соответствия фильтру количества гостей
+  // ФУНКЦИЯ: проверка соответствия фильтру количества гостей
   var matchGuestsNumber = function (currentGuestsNumber, filterGuestsNumber) {
     if (filterGuestsNumber === 'any') {
       return true;
@@ -43,7 +43,7 @@
   };
 
 
-  // private ФУНКЦИЯ: проверка соответствия фильтру фич
+  // ФУНКЦИЯ: проверка соответствия фильтру фич
   var matchFeatures = function (currentFeatures, filterFeatures) {
     var isMatch = true;
 

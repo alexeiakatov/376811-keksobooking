@@ -1,7 +1,5 @@
 'use strict';
-// МОДУЛЬ: создает и содержит в себе массив js-объектов, содержащих данные объявлений.
-// экспортирует функцю:
-// getOfferDataObjectById().
+// МОДУЛЬ: создает и содержит в себе массив js-объектов, содержащих мок-данные объявлений.
 
 (function () {
 
@@ -45,19 +43,19 @@
   var OFFER_DATA_MOCKS = [];
   var currentId = 0;
 
-  // private ФУНКЦИЯ: Возвращает значение для свойства 'announcement.offer.type'.
+  // private ФУНКЦИЯ: Возвращает значение для свойства type.
   var getHousingType = function (housingTypes) {
     var randomIndex = window.utils.getRandomValue(0, housingTypes.length - 1, 0);
     return housingTypes[randomIndex];
   };
 
-  // private ФУНКЦИЯ: Возвращает значение для свойства 'announcement.offer.title'.
+  // private ФУНКЦИЯ: Возвращает значение для свойства title.
   var getTitle = function (currentHousingType, titles) {
     var randomIndex = window.utils.getRandomValue(0, titles[currentHousingType].length - 1, 0);
     return titles[currentHousingType][randomIndex];
   };
 
-  // private ФУНКЦИЯ: Возвращает значение свойства 'announcememnt.offer.features'
+  // private ФУНКЦИЯ: Возвращает значение для свойства features
   var getFeaturesArray = function (basicFeaturesArray) {
     var resultFeaturesArray = [];
     for (var i = 0; i < basicFeaturesArray.length; i++) {
@@ -68,7 +66,7 @@
     return resultFeaturesArray;
   };
 
-  // private ФУНКЦИЯ: Возвращает значение свойства 'announcement.offer.photos'.
+  // private ФУНКЦИЯ: Возвращает значение для свойства photos.
   var getPhotosArray = function (basicPhotosArray) {
     var resultArray = [];
 
@@ -91,7 +89,7 @@
     return resultArray;
   };
 
-  // private ФУНКЦИЯ: Собирает js-объект offerDataObject из dataObjectTemplate
+  // private ФУНКЦИЯ: Собирает js-объект с данными предложения на основе данных в offerDataTemplate
   var createOfferDataObject = function (dataObjectTemplate) {
     var id = ++currentId;
     var offerType = getHousingType((dataObjectTemplate.HOUSING_TYPES));
@@ -140,8 +138,5 @@
 
   // Экспорты
   window.data = {};
-
-  // ЭКСПОРТ функции getAllAnnouncements
   window.data.getAllOfferDataObjects = getAllOfferDataObjects;
-
 })();

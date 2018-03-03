@@ -43,7 +43,8 @@
   window.form.deactivateForm();
   window.form.setAddressInForm(startMarkerInitialX + ' ' + startMarkerInitialY);
 
-
+  // ФУНКЦИЯ: делает доступными/недоступными фильтры объявлений
+  // { boolean } isEnabled - true - делает фильтры доступными, false - недоступными
   var toggleFilters = function (isEnabled) {
     filtersForm.disabled = !isEnabled;
     var formElements = filtersForm.children;
@@ -54,14 +55,15 @@
 
   toggleFilters(false);
 
-  // ФУНКЦИЯ: сделать карту активной.
+  // ФУНКЦИЯ: делает карту активной.
   var activateMap = function () {
     if (MAP.classList.contains('map--faded')) {
       MAP.classList.remove('map--faded');
     }
   };
 
-  // ФУНКЦИЯ: сделать карту неактивной.
+  // ФУНКЦИЯ: делает карту неактивной. Устанавливает начальный маркер на начальную позицию, устанавливает соответствующий
+  // адрес в поле формы address, делает недоступными фильтры объявлений, вызывает удаление всех пинов объявлений.
   var deactivateMap = function () {
     START_MARKER.style.left = startMarkerInitialX + 'px';
     START_MARKER.style.top = startMarkerInitialY + 'px';
@@ -95,7 +97,7 @@
     }
   };
 
-  // ОБРАБОТЧИК: на событие MOUSE_MOVE в рамках элемента map__pins
+  // ОБРАБОТЧИК: на событие MOUSE_MOVE
   var documentMouseMoveHandler = function (evt) {
     redrawStartMarker(evt.clientX, evt.clientY);
   };
@@ -136,7 +138,7 @@
   // УСТАНОВКА ОБРАБОТЧИКА события mousedown на начальный маркер
   START_MARKER.addEventListener('mousedown', startMarkerMouseDownHandler);
 
-  // ОБРАБОТЧИК на форму с фильтрами
+  // ОБРАБОТЧИК на форму с фильтрами объявлений
   var filtersChangeHandler = function (evt) {
     var targetId = evt.target.id;
 

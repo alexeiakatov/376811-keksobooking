@@ -1,14 +1,10 @@
 'use strict';
-// МОДУЛЬ: содержит методы управляющие формой подачи объявления
-// экспортирует функции:
-// activateForm();
-// setAddressInForm();
-// deactivateForm();
 
 (function () {
   var NOTICE_FORM = document.body.querySelector('.notice__form');
   var ADDRESS = document.getElementById('address');
 
+  // ФУНКЦИЯ: отображает рамку вокруг поля с невалидными данными
   var toggleErrorOutline = function (element, isInvalid) {
     if (isInvalid) {
       element.style.outline = '3px solid red';
@@ -18,6 +14,7 @@
     }
   };
 
+  // ФУНКЦИЯ: возвращает содержимое кастомного сообщения, которое выводится при невалидных данных в поле ввода заголовка объявления
   var getInvalidTitleMessage = function (validity) {
     var errorMessage = '';
 
@@ -128,8 +125,8 @@
 
     var guestsSelectOptions = guests.children;
 
-    // функция: предназначена устанавливает нужное состояние у поля количество гостей в зависимости от установленного
-    // значения количества комнат. Используется так же в обработчике при изменении значения количества комнат.
+    // ФУНКЦИЯ: устанавливает нужное состояние у поля количество гостей в зависимости от установленного
+    // значения количества комнат.
     var setCapacityRestrictions = function () {
       var currentRooms = rooms.value;
       if (currentRooms === '100') {
@@ -162,6 +159,8 @@
     rooms.addEventListener('change', setCapacityRestrictions);
 
   };
+
+  // ФУНКЦИЯ - колбэк: вызывается при успешной отправке данных из формы подачи объявления.
   var onLoadCallback = function () {
     NOTICE_FORM.reset();
     deactivateFrom();
@@ -170,7 +169,7 @@
     window.map.deactivateMap();
   };
 
-  // private ФУНКЦИЯ: действия при НЕуспешной отправке данных объявления на сервер.
+  // ФУНКЦИЯ - колбэк: действия при НЕуспешной отправке данных объявления на сервер.
   var onErrorCallback = function (errorMessage) {
     var errorContainer = document.createElement('div');
     errorContainer.classList.add('errorContainer');
@@ -242,13 +241,7 @@
 
   // Экспорты:
   window.form = {};
-
-  // ЭКСПОРТ функции activateForm
   window.form.activateForm = activateForm;
-
-  // ЭКСПОРТ функции setFormAddress
   window.form.setAddressInForm = setFormAddress;
-
-  // ЭКСПОРТ функции deactivateForm
   window.form.deactivateForm = deactivateFrom;
 })();

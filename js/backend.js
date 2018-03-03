@@ -5,9 +5,9 @@
 
   // ФУНКЦИЯ: получает данные с сервера.
   // { function } onLoad(receivedData) - колбыэк, который вызывается при успешном получении данных с сервера.
-  // { Object } receivedData - параметр функции onLoad в котором передаются данные, полученные с сервера.
+  // { Object } receivedData - параметр который требует onLoad в котором передаются данные, полученные с сервера.
   // { function } onError(errorMessage) - колбэк, который вызывается при неуспешном выполнении запроса.
-  // { String } errorMessage - параметр функции onError в котором передается сообщение об ошибке.
+  // { String } errorMessage - параметр который требует onError в котором передается сообщение об ошибке.
   var getData = function (onLoad, onError) {
     xhr = new XMLHttpRequest();
 
@@ -53,7 +53,7 @@
   // { Object } data, тип (FormData) - содержит данные, которые будут отправлены на сервер.
   // { function } onLoad - колбэк, который вызывается при успешном выполнении отправки данных.
   // { function } onError - колбэк, которая вызывается при неуспешном выполнении отправки данных.
-  // { String } errorMessage - параметр функции onError в котором передается сообщение об ошибке.
+  // { String } errorMessage - параметр который требует onError в котором передается сообщение об ошибке.
   var sendData = function (data, onLoad, onError) {
     xhr = new XMLHttpRequest();
 
@@ -76,28 +76,18 @@
     xhr.addEventListener('load', xhrLoadHandler);
     xhr.addEventListener('error', xhrErrorHandler);
 
-    // var Headers = {
-    //   'content-type': 'multipart/form-data'
-    // };
-
     try {
-      doRequest('POST', 'https://js.dump.academy/keksobooking', true, data, Headers);
+      doRequest('POST', 'https://js.dump.academy/keksobooking', true, data);
     } catch (error) {
       onError(error.message);
     }
   };
 
-  var doRequest = function (method, url, isAsync, data, Headers) {
+  var doRequest = function (method, url, isAsync, data) {
     if (!method || !url) {
       throw new Error('Для выполнения запроса д.б. указан http-метод и URL-сервера.');
     }
     xhr.open(method, url, isAsync);
-
-    if (Headers) {
-      for (var header in Headers) {
-        xhr.setRequestHeader(header, Headers.header);
-      }
-    }
     xhr.send(!data ? null : data);
   };
 
