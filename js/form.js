@@ -231,6 +231,15 @@
     ADDRESS.value = newAddress;
   };
 
+  // УСТАНОВКА обработчика нажатия на кнопку reset в форме
+  NOTICE_FORM.querySelector('.form__reset').addEventListener('click', function () {
+    NOTICE_FORM.reset();
+    deactivateFrom();
+    window.card.hideOfferCard();
+    window.pin.removeActivePin();
+    window.map.deactivateMap();
+  });
+
   // Экспорты:
   window.form = {};
 
