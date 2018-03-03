@@ -62,7 +62,6 @@
     }
 
     // вставка меток-пинов на карту
-    pinsContainer = document.querySelector('.map__pins');
     pinsContainer.appendChild(fragmentForPins);
     window.map.toggleFilters(true);
   };
@@ -96,23 +95,19 @@
 
     filteredObjects = dataObjects.filter(function (element, index) {
       return window.filters.matchType(element.offer.type, filterState['housing-type']);
-    });
-
-    filteredObjects = filteredObjects.filter(function (element, index) {
-      return window.filters.matchPrice(element.offer.price, filterState['housing-price']);
-    });
-
-    filteredObjects = filteredObjects.filter(function (element, index) {
-      return window.filters.matchRoomsNumber(element.offer.rooms, filterState['housing-rooms']);
-    });
-
-    filteredObjects = filteredObjects.filter(function (element, index) {
-      return window.filters.matchGuestsNumber(element.offer.guests, filterState['housing-guests']);
-    });
-
-    filteredObjects = filteredObjects.filter(function (element, index) {
-      return window.filters.matchFeatures(element.offer.features, filterState.features);
-    });
+    }).
+        filter(function (element, index) {
+          return window.filters.matchPrice(element.offer.price, filterState['housing-price']);
+        }).
+        filter(function (element, index) {
+          return window.filters.matchRoomsNumber(element.offer.rooms, filterState['housing-rooms']);
+        }).
+        filter(function (element, index) {
+          return window.filters.matchGuestsNumber(element.offer.guests, filterState['housing-guests']);
+        }).
+        filter(function (element, index) {
+          return window.filters.matchFeatures(element.offer.features, filterState.features);
+        });
 
     // т.к. отрисовывать нужно только 5 пинов - обрежем до 5 длинну массива классов тех пинов, которые можно отобразить в соответствии с фильтром
     if (filteredObjects.length > 5) {
@@ -130,10 +125,9 @@
 
   // public ФУНКЦИЯ: удаляет из DOM все элементы пинов
   var removeAllPins = function () {
-    var allPins = pinsContainer.querySelectorAll('.map__pin:not(.map__pin--main)');
 
-    for (var i = 0; i < allPins.length; i++) {
-      allPins[i].parentNode.removeChild(allPins[i]);
+    for (var i = 0; i < dataObjects.length; i++) {
+      pinsContainer.removeChild(dataObjects[i].pin);
     }
   };
 
