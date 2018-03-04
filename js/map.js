@@ -5,6 +5,8 @@
 
   var startMarker = document.body.querySelector('.map__pin--main');
   var startMarkerWidth = startMarker.clientWidth;
+  var startMarkerHeight = startMarker.clientHeight;
+  
   var startMarkerInitialX = startMarker.offsetLeft;
   var startMarkerInitialY = startMarker.offsetTop;
 
