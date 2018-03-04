@@ -128,6 +128,7 @@
     for (var i = 0; i < dataObjects.length; i++) {
       pinsContainer.removeChild(dataObjects[i].pin);
     }
+    window.map.setPinsCreated(false);
   };
 
   // Экспорты:

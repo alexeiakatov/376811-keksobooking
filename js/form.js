@@ -195,13 +195,13 @@
     setRoomsAndCapacityValidity();
 
     NOTICE_FORM.classList.remove('notice__form--disabled');
-    // сделать доступным поле размещения картинки для пина
+
     var formChildren = NOTICE_FORM.children;
 
     for (var i = 0; i < formChildren.length; i++) {
       formChildren[i].disabled = false;
     }
-    ADDRESS.readonly = true;
+    ADDRESS.readOnly = true;
 
     var submit = document.querySelector('.form__submit');
     submit.addEventListener('click', function (evt) {
@@ -234,7 +234,6 @@
   NOTICE_FORM.querySelector('.form__reset').addEventListener('click', function () {
     NOTICE_FORM.reset();
     deactivateFrom();
-    window.card.hideOfferCard();
     window.pin.removeActivePin();
     window.map.deactivateMap();
   });

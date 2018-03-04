@@ -70,11 +70,14 @@
     START_MARKER.style.left = startMarkerInitialX + 'px';
     START_MARKER.style.top = startMarkerInitialY + 'px';
     window.form.setAddressInForm(startMarkerInitialX + ' ' + startMarkerInitialY);
+
     MAP.classList.add('map--faded');
+
     isMapActivated = false;
     isFormActivated = false;
 
     toggleFilters(false);
+    window.card.hideOfferCard();
     window.pin.removeAllPins();
   };
 
