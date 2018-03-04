@@ -170,16 +170,17 @@
   };
 
   // ФУНКЦИЯ: скрывает карту предложения, убирает обработчик нажатия Esc у document
-  var hideOfferCard = function () {
+  var hide = function () {
     window.pin.removeActivePin();
     activeOfferCard.classList.add('hidden');
     removeDocumentEscListener();
   };
 
   // Экспорты:
-  window.card = {};
-  window.card.setDataInDomOfferCard = setDataInDomOfferCard;
-  window.card.hideOfferCard = hideOfferCard;
+  window.card = {
+    setDataInDomOfferCard: setDataInDomOfferCard,
+    hide: hide
+  };
 
   createDomOfferCard();
 

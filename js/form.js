@@ -1,8 +1,8 @@
 'use strict';
 
 (function () {
-  var NOTICE_FORM = document.body.querySelector('.notice__form');
-  var ADDRESS = document.getElementById('address');
+  var noticeForm = document.body.querySelector('.notice__form');
+  var address = document.getElementById('address');
 
   // ФУНКЦИЯ: отображает рамку вокруг поля с невалидными данными
   var toggleErrorOutline = function (element, isInvalid) {
@@ -77,11 +77,18 @@
     var type = document.getElementById('type');
     price.required = true;
     price.max = 1000000;
-    price.min = getMinPrice(type.querySelector('option:checked').value);
+
+    var minPrice = getMinPrice(type.value);
+    price.min = minPrice;
+    price.placeholder = minPrice;
+
     // при событии 'change' на элементе type происходит обновление значения price.min
 
     type.addEventListener('change', function () {
-      price.min = getMinPrice(type.value);
+      minPrice = getMinPrice(type.value);
+      price.min = minPrice;
+      price.placeholder = minPrice;
+
       var currentPriceValue = (price.value.length === 0) ? 0 : parseInt(price.value, 10);
       toggleErrorOutline(price, currentPriceValue < price.min);
     });
@@ -162,7 +169,7 @@
 
   // ФУНКЦИЯ - колбэк: вызывается при успешной отправке данных из формы подачи объявления.
   var onLoadCallback = function () {
-    NOTICE_FORM.reset();
+    noticeForm.reset();
     deactivateFrom();
     window.card.hideOfferCard();
     window.pin.removeActivePin();
@@ -194,21 +201,21 @@
     setCheckInAndOutValidity();
     setRoomsAndCapacityValidity();
 
-    NOTICE_FORM.classList.remove('notice__form--disabled');
+    noticeForm.classList.remove('notice__form--disabled');
 
-    var formChildren = NOTICE_FORM.children;
+    var formChildren = noticeForm.children;
 
     for (var i = 0; i < formChildren.length; i++) {
       formChildren[i].disabled = false;
     }
-    ADDRESS.readOnly = true;
+    address.readOnly = true;
 
     var submit = document.querySelector('.form__submit');
     submit.addEventListener('click', function (evt) {
 
-      if (NOTICE_FORM.checkValidity()) {
+      if (noticeForm.checkValidity()) {
         evt.preventDefault();
-        var formData = new FormData(NOTICE_FORM);
+        var formData = new FormData(noticeForm);
         window.backend.sendData(formData, onLoadCallback, onErrorCallback);
       }
     });
@@ -216,23 +223,23 @@
 
   // public ФУНКЦИЯ: Деактивирует форму - устанавливает атрибут disabled на все fieldset в форме.
   var deactivateFrom = function () {
-    var formChildren = NOTICE_FORM.children;
+    var formChildren = noticeForm.children;
 
     for (var i = 0; i < formChildren.length; i++) {
       formChildren[i].disabled = true;
     }
-    NOTICE_FORM.classList.add('notice__form--disabled');
+    noticeForm.classList.add('notice__form--disabled');
   };
 
-  // public ФУНКЦИЯ: устанавливает значение в поле формы ADDRESS в соответствии с текущим положением начального маркера.
+  // public ФУНКЦИЯ: устанавливает значение в поле формы address в соответствии с текущим положением начального маркера.
   var setFormAddress = function (newAddress) {
 
-    ADDRESS.value = newAddress;
+    address.value = newAddress;
   };
 
   // УСТАНОВКА обработчика нажатия на кнопку reset в форме
-  NOTICE_FORM.querySelector('.form__reset').addEventListener('click', function () {
-    NOTICE_FORM.reset();
+  noticeForm.querySelector('.form__reset').addEventListener('click', function () {
+    noticeForm.reset();
     deactivateFrom();
     window.pin.removeActivePin();
     window.map.deactivateMap();

@@ -9,7 +9,7 @@
 
   var isFormActivated = false;
   var isMapActivated = false;
-  var arePinsCreated = false;
+  var pinsCreated = false;
 
   var pinsContainer = document.querySelector('.map__pins');
   var filtersContainer = document.querySelector('.map__filters-container');
@@ -17,9 +17,9 @@
 
   var dragStatus = {
     MIN_X: 0,
-    MIN_Y: 100,
+    MIN_Y: 150,
     maxX: pinsContainer.clientWidth,
-    maxY: pinsContainer.clientHeight - filtersContainer.clientHeight,
+    maxY: 500,
     currentMouseX: null,
     currentMouseY: null,
     markerXdisplacement: null,
@@ -77,7 +77,7 @@
     isFormActivated = false;
 
     toggleFilters(false);
-    window.card.hideOfferCard();
+    window.card.hide();
     window.pin.removeAllPins();
   };
 
@@ -126,7 +126,7 @@
     if (!isMapActivated) {
       activateMap();
     }
-    if (!arePinsCreated) {
+    if (!pinsCreated) {
       window.pin.createAllPins();
     }
 
@@ -178,7 +178,7 @@
   filtersContainer.querySelector('form').addEventListener('change', filtersChangeHandler);
 
   var setPinsCreated = function (areCreated) {
-    arePinsCreated = areCreated;
+    pinsCreated = areCreated;
   };
 
   // Экспорты

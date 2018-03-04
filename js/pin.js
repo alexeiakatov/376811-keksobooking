@@ -16,8 +16,9 @@
     var actualYPosition = offerData.location.y - pinButtonHeight;
 
     var button = PIN_TEMPLATE.cloneNode(true);
-    var buttonStyleString = 'left:' + actualXPosition + 'px; top:' + actualYPosition + 'px;';
-    button.setAttribute('style', buttonStyleString);
+
+    button.style.left = actualXPosition + 'px';
+    button.style.top = actualYPosition + 'px';
 
     var image = button.querySelector('img');
     image.src = offerData.author.avatar;
