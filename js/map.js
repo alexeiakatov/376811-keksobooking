@@ -4,8 +4,6 @@
   var MAP = document.querySelector('.map');
 
   var startMarker = document.body.querySelector('.map__pin--main');
-  var startMarkerWidth = startMarker.clientWidth;
-  var startMarkerHeight = startMarker.clientHeight;
 
   var startMarkerInitialX = startMarker.offsetLeft;
   var startMarkerInitialY = startMarker.offsetTop;
@@ -19,9 +17,9 @@
   var filtersForm = filtersContainer.querySelector('form');
 
   var dragStatus = {
-    MIN_X: startMarkerWidth / 2,
+    MIN_X: startMarker.clientWidth / 2,
     MIN_Y: 150,
-    maxX: pinsContainer.clientWidth - (startMarkerWidth / 2),
+    maxX: pinsContainer.clientWidth - (startMarker.clientWidth / 2),
     maxY: 500,
     currentMouseX: null,
     currentMouseY: null,
@@ -112,7 +110,7 @@
       activateMap();
     }
 
-    window.form.setAddressInForm(dragStatus.markerXdisplacement + ', ' + (dragStatus.markerYdisplacement + (startMarker.clientHeight / 2)));
+    window.form.setAddressInForm(dragStatus.markerXdisplacement + ', ' + (dragStatus.markerYdisplacement + startMarker.clientHeight / 2));
 
     redrawStartMarker(evt.clientX, evt.clientY);
   };
