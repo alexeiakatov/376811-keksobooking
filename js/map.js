@@ -6,7 +6,7 @@
   var startMarker = document.body.querySelector('.map__pin--main');
   var startMarkerWidth = startMarker.clientWidth;
   var startMarkerHeight = startMarker.clientHeight;
-  
+
   var startMarkerInitialX = startMarker.offsetLeft;
   var startMarkerInitialY = startMarker.offsetTop;
 
@@ -19,7 +19,7 @@
   var filtersForm = filtersContainer.querySelector('form');
 
   var dragStatus = {
-    MIN_X: 0 + (startMarkerWidth / 2),
+    MIN_X: startMarkerWidth / 2,
     MIN_Y: 150,
     maxX: pinsContainer.clientWidth - (startMarkerWidth / 2),
     maxY: 500,
@@ -45,7 +45,7 @@
   };
 
   window.form.deactivateForm();
-  window.form.setAddressInForm(startMarkerInitialX + (startMarkerWidth / 2) + ', ' + (startMarkerInitialY + startMarker.clientHeight));
+  window.form.setAddressInForm(startMarkerInitialX + ', ' + (startMarkerInitialY + startMarker.clientHeight / 2));
 
   // ФУНКЦИЯ: делает доступными/недоступными фильтры объявлений
   // { boolean } isEnabled - true - делает фильтры доступными, false - недоступными
@@ -112,8 +112,7 @@
       activateMap();
     }
 
-    window.form.setAddressInForm((dragStatus.markerXdisplacement + (startMarkerWidth / 2)) + ', '
-      + (dragStatus.markerYdisplacement + startMarker.clientHeight));
+    window.form.setAddressInForm(dragStatus.markerXdisplacement + ', ' + (dragStatus.markerYdisplacement + (startMarker.clientHeight / 2)));
 
     redrawStartMarker(evt.clientX, evt.clientY);
   };
