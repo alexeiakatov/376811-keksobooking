@@ -62,6 +62,7 @@
 
     // вставка меток-пинов на карту
     pinsContainer.appendChild(fragmentForPins);
+    window.map.setPinsCreated(true);
     window.map.toggleFilters(true);
   };
 

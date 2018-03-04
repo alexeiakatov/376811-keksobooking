@@ -9,6 +9,7 @@
 
   var isFormActivated = false;
   var isMapActivated = false;
+  var arePinsCreated = false;
 
   var pinsContainer = document.querySelector('.map__pins');
   var filtersContainer = document.querySelector('.map__filters-container');
@@ -59,6 +60,7 @@
   var activateMap = function () {
     if (MAP.classList.contains('map--faded')) {
       MAP.classList.remove('map--faded');
+      isMapActivated = true;
     }
   };
 
@@ -99,6 +101,11 @@
 
   // ОБРАБОТЧИК: на событие MOUSE_MOVE
   var documentMouseMoveHandler = function (evt) {
+    if (!isMapActivated) {
+      activateMap();
+    }
+    window.form.setAddressInForm(dragStatus.markerXdisplacement + ', ' + dragStatus.markerYdisplacement);
+
     redrawStartMarker(evt.clientX, evt.clientY);
   };
 
@@ -113,23 +120,26 @@
 
   // ОБРАБОТЧИК: на событие MOUSE_UP на элементе document
   var documentMouseUpHandler = function () {
+    if (!isMapActivated) {
+      activateMap();
+    }
+    if (!arePinsCreated) {
+      window.pin.createAllPins();
+    }
+
     document.removeEventListener('mousemove', documentMouseMoveHandler);
     document.removeEventListener('mouseup', documentMouseUpHandler);
 
     if (!isFormActivated) {
       window.form.activateForm();
+      isFormActivated = true;
     }
-    window.form.setAddressInForm(dragStatus.markerXdisplacement + ' ' + dragStatus.markerYdisplacement);
-    window.pin.createAllPins();
 
   };
 
   // ОБРАБОТЧИК: на событие MOUSE_DOWN на начальном маркере
   var startMarkerMouseDownHandler = function (evt) {
     resetDragStatusObject(evt.clientX, evt.clientY);
-    if (!isMapActivated) {
-      activateMap();
-    }
 
     document.addEventListener('mousemove', documentMouseMoveHandler);
     document.addEventListener('mouseup', documentMouseUpHandler);
@@ -164,9 +174,14 @@
   // УСТАНОВКА ОБРАБОТЧИКА на форму с фильтрами
   filtersContainer.querySelector('form').addEventListener('change', filtersChangeHandler);
 
-  // Экспорты
-  window.map = {};
-  window.map.deactivateMap = deactivateMap;
-  window.map.toggleFilters = toggleFilters;
+  var setPinsCreated = function (areCreated) {
+    arePinsCreated = areCreated;
+  };
 
+  // Экспорты
+  window.map = {
+    deactivateMap: deactivateMap,
+    toggleFilters: toggleFilters,
+    setPinsCreated: setPinsCreated
+  };
 })();
