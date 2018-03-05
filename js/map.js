@@ -43,7 +43,7 @@
   };
 
   window.form.deactivateForm();
-  window.form.setAddressInForm(startMarkerInitialX + ', ' + (startMarkerInitialY - startMarker.clientHeight / 2));
+  window.form.setAddressInForm(startMarkerInitialX + ', ' + (startMarkerInitialY - startMarker.offsetHeight));
 
   // ФУНКЦИЯ: делает доступными/недоступными фильтры объявлений
   // { boolean } isEnabled - true - делает фильтры доступными, false - недоступными
@@ -110,7 +110,7 @@
       activateMap();
     }
 
-    window.form.setAddressInForm(dragStatus.markerXdisplacement + ', ' + (dragStatus.markerYdisplacement - startMarker.clientHeight / 2));
+    window.form.setAddressInForm(dragStatus.markerXdisplacement + ', ' + (dragStatus.markerYdisplacement - startMarker.offsetHeight));
 
     redrawStartMarker(evt.clientX, evt.clientY);
   };
