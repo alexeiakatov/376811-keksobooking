@@ -7,6 +7,7 @@
   var HOUSING_PHOTO_WIDTH = 100;
   var HOUSING_PHOTO_HEIGHT = 100;
   var templateContent = document.querySelector('template').content;
+  var listItemTemplate = templateContent.querySelector('.popup__pictures > li');
 
   var title;
   var address;
@@ -55,7 +56,7 @@
   var setPictures = function (photosInDataObject) {
     var picturesCount = photosInDataObject.length;
     var fragment = document.createDocumentFragment();
-    var listItemTemplate = templateContent.querySelector('.popup__pictures > li');
+
     var newListItem;
     var nestedImage;
     for (var i = 0; i < picturesCount; i++) {
