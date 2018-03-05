@@ -1,12 +1,12 @@
 'use strict';
 
 (function () {
-  var map = document.querySelector('.map');
+  var MAP = document.querySelector('.map');
 
   var startMarker = document.body.querySelector('.map__pin--main');
 
   var startMarkerInitialX = startMarker.offsetLeft;
-  var startMarkerInitialY = startMarker.offsetTop + Math.floor(startMarker.offsetHeight / 2);
+  var startMarkerInitialY = startMarker.offsetTop;
 
   var isFormActivated = false;
   var isMapActivated = false;
@@ -17,10 +17,10 @@
   var filtersForm = filtersContainer.querySelector('form');
 
   var dragStatus = {
-    minX: startMarker.clientWidth / 2,
-    minY: 150 - Math.floor(startMarker.offsetHeight / 2),
-    maxX: pinsContainer.clientWidth - (startMarker.clientWidth / 2),
-    maxY: 500 - Math.floor(startMarker.offsetHeight / 2),
+    MIN_X: startMarker.offsetWidth / 2,
+    MIN_Y: 150,
+    maxX: pinsContainer.offsetWidth - (startMarker.offsetWidth / 2),
+    maxY: 500,
     currentMouseX: null,
     currentMouseY: null,
     markerXdisplacement: null,
@@ -59,8 +59,8 @@
 
   // ФУНКЦИЯ: делает карту активной.
   var activateMap = function () {
-    if (map.classList.contains('map--faded')) {
-      map.classList.remove('map--faded');
+    if (MAP.classList.contains('map--faded')) {
+      MAP.classList.remove('map--faded');
       isMapActivated = true;
     }
 
@@ -70,10 +70,10 @@
   // адрес в поле формы address, делает недоступными фильтры объявлений, вызывает удаление всех пинов объявлений.
   var deactivateMap = function () {
     startMarker.style.left = startMarkerInitialX + 'px';
-    startMarker.style.top = startMarkerInitialY + Math.floor(startMarker.offsetHeight / 2) + 'px';
+    startMarker.style.top = startMarkerInitialY + 'px';
     window.form.setAddressInForm(startMarkerInitialX + ', ' + startMarkerInitialY);
 
-    map.classList.add('map--faded');
+    MAP.classList.add('map--faded');
 
     isMapActivated = false;
     isFormActivated = false;
@@ -90,14 +90,14 @@
     var deltaY = evtY - dragStatus.currentMouseY;
 
     var newXposition = dragStatus.markerXdisplacement + deltaX;
-    if (newXposition >= dragStatus.minX && newXposition <= dragStatus.maxX) {
+    if (newXposition >= dragStatus.MIN_X && newXposition <= dragStatus.maxX) {
       dragStatus.markerXdisplacement = newXposition;
       startMarker.style.left = dragStatus.markerXdisplacement + 'px';
       dragStatus.currentMouseX = evtX;
     }
 
     var newYposition = dragStatus.markerYdisplacement + deltaY;
-    if (newYposition >= dragStatus.minY && newYposition <= dragStatus.maxY) {
+    if (newYposition >= dragStatus.MIN_Y && newYposition <= dragStatus.maxY) {
       dragStatus.markerYdisplacement = newYposition;
       startMarker.style.top = dragStatus.markerYdisplacement + 'px';
       dragStatus.currentMouseY = evtY;
@@ -110,7 +110,7 @@
       activateMap();
     }
 
-    window.form.setAddressInForm(dragStatus.markerXdisplacement + ', ' + (dragStatus.markerYdisplacement + Math.floor(startMarker.offsetHeight / 2)));
+    window.form.setAddressInForm(dragStatus.markerXdisplacement + ', ' + dragStatus.markerYdisplacement);
 
     redrawStartMarker(evt.clientX, evt.clientY);
   };
@@ -178,7 +178,7 @@
   };
 
   // УСТАНОВКА ОБРАБОТЧИКА на форму с фильтрами
-  filtersForm.addEventListener('change', filtersChangeHandler);
+  filtersContainer.querySelector('form').addEventListener('change', filtersChangeHandler);
 
   var setPinsCreated = function (areCreated) {
     pinsCreated = areCreated;
