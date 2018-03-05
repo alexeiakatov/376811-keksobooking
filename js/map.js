@@ -17,10 +17,10 @@
   var filtersForm = filtersContainer.querySelector('form');
 
   var dragStatus = {
-    minX: startMarker.clientWidth / 2,
-    minY: 150 - Math.floor(startMarker.offsetHeight / 2),
-    maxX: pinsContainer.clientWidth - (startMarker.clientWidth / 2),
-    maxY: 500 - Math.floor(startMarker.offsetHeight / 2),
+    MIN_X: startMarker.clientWidth / 2,
+    MIN_Y: 150 - Math.floor(startMarker.offsetHeight / 2),
+    MAX_X: pinsContainer.clientWidth - (startMarker.clientWidth / 2),
+    MAX_Y: 500 - Math.floor(startMarker.offsetHeight / 2),
     currentMouseX: null,
     currentMouseY: null,
     markerXdisplacement: null,
@@ -90,14 +90,14 @@
     var deltaY = evtY - dragStatus.currentMouseY;
 
     var newXposition = dragStatus.markerXdisplacement + deltaX;
-    if (newXposition >= dragStatus.minX && newXposition <= dragStatus.maxX) {
+    if (newXposition >= dragStatus.MIN_X && newXposition <= dragStatus.MAX_X) {
       dragStatus.markerXdisplacement = newXposition;
       startMarker.style.left = dragStatus.markerXdisplacement + 'px';
       dragStatus.currentMouseX = evtX;
     }
 
     var newYposition = dragStatus.markerYdisplacement + deltaY;
-    if (newYposition >= dragStatus.minY && newYposition <= dragStatus.maxY) {
+    if (newYposition >= dragStatus.MIN_Y && newYposition <= dragStatus.MAX_Y) {
       dragStatus.markerYdisplacement = newYposition;
       startMarker.style.top = dragStatus.markerYdisplacement + 'px';
       dragStatus.currentMouseY = evtY;
