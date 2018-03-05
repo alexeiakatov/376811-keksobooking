@@ -43,7 +43,7 @@
   };
 
   window.form.deactivateForm();
-  window.form.setAddressInForm(startMarkerInitialX + ', ' + (startMarkerInitialY + startMarker.clientHeight / 2));
+  window.form.setAddressInForm(startMarkerInitialX + ', ' + (startMarkerInitialY - startMarker.clientHeight / 2));
 
   // ФУНКЦИЯ: делает доступными/недоступными фильтры объявлений
   // { boolean } isEnabled - true - делает фильтры доступными, false - недоступными
@@ -71,7 +71,7 @@
   var deactivateMap = function () {
     startMarker.style.left = startMarkerInitialX + 'px';
     startMarker.style.top = startMarkerInitialY + 'px';
-    window.form.setAddressInForm(startMarkerInitialX + ' ' + startMarkerInitialY);
+    window.form.setAddressInForm(startMarkerInitialX + ', ' + startMarkerInitialY);
 
     MAP.classList.add('map--faded');
 
@@ -110,7 +110,7 @@
       activateMap();
     }
 
-    window.form.setAddressInForm(dragStatus.markerXdisplacement + ', ' + (dragStatus.markerYdisplacement + startMarker.clientHeight / 2));
+    window.form.setAddressInForm(dragStatus.markerXdisplacement + ', ' + (dragStatus.markerYdisplacement - startMarker.clientHeight / 2));
 
     redrawStartMarker(evt.clientX, evt.clientY);
   };
