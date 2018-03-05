@@ -1,8 +1,8 @@
 'use strict';
 
 (function () {
-  var currentActivePin = null;
-  var PIN_TEMPLATE = document.querySelector('template').content.querySelector('.map__pin');
+  var currentActivePin;
+  var pinTemplate = document.querySelector('template').content.querySelector('.map__pin');
   var PIN_BUTTON_WIDTH = 50;
   var PIN_BUTTON_HEIGHT = 70;
   var pinsContainer = document.querySelector('.map__pins');
@@ -15,7 +15,7 @@
     var actualXPosition = offerData.location.x - pinButtonWidth / 2;
     var actualYPosition = offerData.location.y - pinButtonHeight;
 
-    var button = PIN_TEMPLATE.cloneNode(true);
+    var button = pinTemplate.cloneNode(true);
 
     button.style.left = actualXPosition + 'px';
     button.style.top = actualYPosition + 'px';
@@ -39,7 +39,7 @@
 
   // public ФУНКЦИЯ: Удаляет у активного пина класс 'map__pin--active' и удаляет ссылку на него из переменной currentActivePin.
   var removeActivePin = function () {
-    if (currentActivePin !== null) {
+    if (currentActivePin) {
       currentActivePin.classList.remove('map__pin--active');
       currentActivePin = null;
     }

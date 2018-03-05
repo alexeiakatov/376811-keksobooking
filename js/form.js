@@ -203,7 +203,7 @@
   var onLoadCallback = function () {
     noticeForm.reset();
     deactivateForm();
-    window.card.hideOfferCard();
+    window.card.hide();
     window.pin.removeActivePin();
     window.map.deactivateMap();
   };
