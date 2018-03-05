@@ -17,9 +17,9 @@
   var filtersForm = filtersContainer.querySelector('form');
 
   var dragStatus = {
-    MIN_X: startMarker.clientWidth / 2,
+    MIN_X: startMarker.offsetWidth / 2,
     MIN_Y: 150,
-    maxX: pinsContainer.clientWidth - (startMarker.clientWidth / 2),
+    maxX: pinsContainer.offsetWidth - (startMarker.offsetWidth / 2),
     maxY: 500,
     currentMouseX: null,
     currentMouseY: null,
