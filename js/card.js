@@ -4,6 +4,9 @@
   var ESC_KEY_CODE = 27;
   var activeOfferCard = null;
   var documentEscPressedHandler = null;
+  var HOUSING_PHOTO_WIDTH = 100;
+  var HOUSING_PHOTO_HEIGHT = 100;
+  var templateContent = document.querySelector('template').content;
 
   var title;
   var address;
@@ -52,15 +55,15 @@
   var setPictures = function (photosInDataObject) {
     var picturesCount = photosInDataObject.length;
     var fragment = document.createDocumentFragment();
-    var listItemTemplate = document.querySelector('template').content.querySelector('.popup__pictures > li');
+    var listItemTemplate = templateContent.querySelector('.popup__pictures > li');
     var newListItem;
     var nestedImage;
     for (var i = 0; i < picturesCount; i++) {
       newListItem = listItemTemplate.cloneNode(true);
       nestedImage = newListItem.querySelector('img');
       nestedImage.src = photosInDataObject[i];
-      nestedImage.width = 100;
-      nestedImage.height = 100;
+      nestedImage.width = HOUSING_PHOTO_WIDTH;
+      nestedImage.height = HOUSING_PHOTO_HEIGHT;
       fragment.appendChild(newListItem);
     }
     photos.innerHTML = '';
@@ -131,7 +134,6 @@
   // на страницу.
   var createDomOfferCard = function () {
     // создать из <template> dom-элемент для карточки предложения и добавить ему классы offerCard и hidden.
-    var templateContent = document.querySelector('template').content;
     activeOfferCard = templateContent.querySelector('.map__card').cloneNode(true);
     activeOfferCard.classList.add('hidden');
 
