@@ -61,11 +61,12 @@
   };
 
   // Экспорты:
-  window.filters = {};
-  window.filters.matchType = matchType;
-  window.filters.matchPrice = matchPrice;
-  window.filters.matchRoomsNumber = matchRoomsNumber;
-  window.filters.matchGuestsNumber = matchGuestsNumber;
-  window.filters.matchFeatures = matchFeatures;
+  window.filters = {
+    matchType: matchType,
+    matchPrice: matchPrice,
+    matchRoomsNumber: matchRoomsNumber,
+    matchGuestsNumber: matchGuestsNumber,
+    matchFeatures: matchFeatures
+  };
 
 })();

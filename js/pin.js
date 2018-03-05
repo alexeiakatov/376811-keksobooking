@@ -133,9 +133,10 @@
   };
 
   // Экспорты:
-  window.pin = {};
-  window.pin.createAllPins = createAllPins;
-  window.pin.removeActivePin = removeActivePin;
-  window.pin.redrawPinsWithFilter = redrawPinsWithFilter;
-  window.pin.removeAllPins = removeAllPins;
+  window.pin = {
+    createAllPins: createAllPins,
+    removeActivePin: removeActivePin,
+    redrawPinsWithFilter: redrawPinsWithFilter,
+    removeAllPins: removeAllPins
+  };
 })();

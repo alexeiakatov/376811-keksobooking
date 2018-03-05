@@ -89,8 +89,9 @@
   };
 
   // Экспорты
-  window.backend = {};
-  window.backend.getData = getData;
-  window.backend.sendData = sendData;
+  window.backend = {
+    getData: getData,
+    sendData: sendData
+  };
 
 })();

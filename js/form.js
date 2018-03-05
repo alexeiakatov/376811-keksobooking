@@ -246,8 +246,10 @@
   });
 
   // Экспорты:
-  window.form = {};
-  window.form.activateForm = activateForm;
-  window.form.setAddressInForm = setFormAddress;
-  window.form.deactivateForm = deactivateFrom;
+  window.form = {
+    activateForm: activateForm,
+    setAddressInForm: setFormAddress,
+    deactivateForm: deactivateFrom
+  };
+
 })();

@@ -48,11 +48,11 @@
 
 
   // Экспорты:
-  window.utils = {};
-
-  window.utils.getRandomValue = getRandomValue;
-  window.utils.getMaxValueInArray = getMaxValueInArray;
-  window.utils.arrayContains = arrayContains;
-  window.utils.debounce = debounce;
+  window.utils = {
+    getRandomValue: getRandomValue,
+    getMaxValueInArray: getMaxValueInArray,
+    arrayContains: arrayContains,
+    debounce: debounce
+};
 
 })();
