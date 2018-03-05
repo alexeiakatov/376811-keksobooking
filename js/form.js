@@ -3,6 +3,17 @@
 (function () {
   var noticeForm = document.body.querySelector('.notice__form');
   var address = document.getElementById('address');
+  var submit = document.querySelector('.form__submit');
+  var resetButton = noticeForm.querySelector('.form__reset');
+
+  var TITLE_MIN_LENGTH = 30;
+  var TITLE_MAX_LENGTH = 100;
+  var MAX_PRICE = 1000000;
+
+  var MIN_FLAT_PRICE = 1000;
+  var MIN_BUNGALO_PRICE = 0;
+  var MIN_HOUSE_PRICE = 5000;
+  var MIN_PALACE_PRICE = 10000;
 
   // ФУНКЦИЯ: отображает рамку вокруг поля с невалидными данными
   var toggleErrorOutline = function (element, isInvalid) {
@@ -30,8 +41,8 @@
   // ФУНКЦИЯ: устанавливает правила валидации заголовка
   var setTitleValidity = function () {
     var title = document.getElementById('title');
-    title.minLength = 30;
-    title.maxLength = 100;
+    title.minLength = TITLE_MIN_LENGTH;
+    title.maxLength = TITLE_MAX_LENGTH;
     title.required = true;
 
     title.setCustomValidity('Нужно указать заголовок.');
@@ -52,19 +63,19 @@
     var result;
     switch (type) {
       case 'flat':
-        result = 1000;
+        result = MIN_FLAT_PRICE;
         break;
 
       case 'bungalo':
-        result = 0;
+        result = MIN_BUNGALO_PRICE;
         break;
 
       case 'house':
-        result = 5000;
+        result = MIN_HOUSE_PRICE;
         break;
 
       case 'palace':
-        result = 10000;
+        result = MIN_PALACE_PRICE;
         break;
     }
 
@@ -76,7 +87,7 @@
     var price = document.getElementById('price');
     var type = document.getElementById('type');
     price.required = true;
-    price.max = 1000000;
+    price.max = MAX_PRICE;
 
     var minPrice = getMinPrice(type.value);
     price.min = minPrice;
@@ -167,10 +178,31 @@
 
   };
 
+  // ОБРАБОТЧИК события click на кнопке submit в форме
+  var submitClickHandler = function (evt) {
+    if (noticeForm.checkValidity()) {
+      evt.preventDefault();
+      var formData = new FormData(noticeForm);
+      window.backend.sendData(formData, onLoadCallback, onErrorCallback);
+    }
+  };
+
+  // public ФУНКЦИЯ: Деактивирует форму - устанавливает атрибут disabled на все fieldset в форме.
+  var deactivateForm = function () {
+    var formChildren = noticeForm.children;
+
+    for (var i = 0; i < formChildren.length; i++) {
+      formChildren[i].disabled = true;
+    }
+    noticeForm.classList.add('notice__form--disabled');
+    submit.removeEventListener('click', submitClickHandler);
+
+  };
+
   // ФУНКЦИЯ - колбэк: вызывается при успешной отправке данных из формы подачи объявления.
   var onLoadCallback = function () {
     noticeForm.reset();
-    deactivateFrom();
+    deactivateForm();
     window.card.hideOfferCard();
     window.pin.removeActivePin();
     window.map.deactivateMap();
@@ -194,6 +226,7 @@
     }, 3000);
   };
 
+
   // public ФУНКЦИЯ: Убирает атрибут disabled у элементов формы, вызывает методы, устанавливающие правила валидации.
   var activateForm = function () {
     setTitleValidity();
@@ -210,26 +243,10 @@
     }
     address.readOnly = true;
 
-    var submit = document.querySelector('.form__submit');
-    submit.addEventListener('click', function (evt) {
-
-      if (noticeForm.checkValidity()) {
-        evt.preventDefault();
-        var formData = new FormData(noticeForm);
-        window.backend.sendData(formData, onLoadCallback, onErrorCallback);
-      }
-    });
+    // Установка обработчика на кнопку submit в форме
+    submit.addEventListener('click', submitClickHandler);
   };
 
-  // public ФУНКЦИЯ: Деактивирует форму - устанавливает атрибут disabled на все fieldset в форме.
-  var deactivateFrom = function () {
-    var formChildren = noticeForm.children;
-
-    for (var i = 0; i < formChildren.length; i++) {
-      formChildren[i].disabled = true;
-    }
-    noticeForm.classList.add('notice__form--disabled');
-  };
 
   // public ФУНКЦИЯ: устанавливает значение в поле формы address в соответствии с текущим положением начального маркера.
   var setFormAddress = function (newAddress) {
@@ -238,9 +255,9 @@
   };
 
   // УСТАНОВКА обработчика нажатия на кнопку reset в форме
-  noticeForm.querySelector('.form__reset').addEventListener('click', function () {
+  resetButton.addEventListener('click', function () {
     noticeForm.reset();
-    deactivateFrom();
+    deactivateForm();
     window.pin.removeActivePin();
     window.map.deactivateMap();
   });
@@ -249,7 +266,7 @@
   window.form = {
     activateForm: activateForm,
     setAddressInForm: setFormAddress,
-    deactivateForm: deactivateFrom
+    deactivateForm: deactivateForm
   };
 
 })();
