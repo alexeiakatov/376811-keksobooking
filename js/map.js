@@ -1,28 +1,25 @@
 'use strict';
 
 (function () {
-  var pinsContainer = document.querySelector('.map__pins');
+  var mapElement = document.querySelector('.map');
+  var pinsContainerElement = mapElement.querySelector('.map__pins');
+  var startMarkerElement = mapElement.querySelector('.map__pin--main');
+  var filtersFormElement = mapElement.querySelector('.map__filters');
+
   var DEBOUNCE_TIME = 500;
 
-  var MIN_X = startMarker.clientWidth / 2;
-  var MAX_X = pinsContainer.clientWidth - (startMarker.clientWidth / 2);
+  var MIN_X = startMarkerElement.clientWidth / 2;
+  var MAX_X = pinsContainerElement.clientWidth - (startMarkerElement.clientWidth / 2);
 
-  var MIN_Y = 150 - Math.floor(startMarker.offsetHeight / 2);
-  var MAX_Y = 500 - Math.floor(startMarker.offsetHeight / 2);
+  var MIN_Y = 150 - Math.floor(startMarkerElement.offsetHeight / 2);
+  var MAX_Y = 500 - Math.floor(startMarkerElement.offsetHeight / 2);
 
-  var map = document.querySelector('.map');
-
-  var startMarker = document.body.querySelector('.map__pin--main');
-
-  var startMarkerInitialX = startMarker.offsetLeft;
-  var startMarkerInitialY = startMarker.offsetTop + Math.floor(startMarker.offsetHeight / 2);
+  var startMarkerInitialX = startMarkerElement.offsetLeft;
+  var startMarkerInitialY = startMarkerElement.offsetTop + Math.floor(startMarkerElement.offsetHeight / 2);
 
   var isFormActivated = false;
   var isMapActivated = false;
   var pinsCreated = false;
-
-  var filtersContainer = document.querySelector('.map__filters-container');
-  var filtersForm = filtersContainer.querySelector('form');
 
   var dragStatus = {
     currentMouseX: null,
@@ -36,6 +33,13 @@
   var housingRoomsElement = document.getElementById('housing-rooms');
   var housingGuestsElement = document.getElementById('housing-guests');
 
+  var featureWiFiElement = document.getElementById('filter-wifi');
+  var featureDishwasherElement = document.getElementById('filter-dishwasher');
+  var featureWasherElement = document.getElementById('filter-washer');
+  var featureParkingElement = document.getElementById('filter-parking');
+  var featureElevatorElement = document.getElementById('filter-elevator');
+  var featureConditionerElement = document.getElementById('filter-conditioner');
+
   var filterState = {
     'type': housingTypeElement.value,
     'price': housingPriceElement.value,
@@ -43,12 +47,12 @@
     'guests': housingGuestsElement.value,
 
     'features': {
-      'wifi': document.getElementById('filter-wifi').checked,
-      'dishwasher': document.getElementById('filter-dishwasher').checked,
-      'washer': document.getElementById('filter-washer').checked,
-      'parking': document.getElementById('filter-parking').checked,
-      'elevator': document.getElementById('filter-elevator').checked,
-      'conditioner': document.getElementById('filter-conditioner').checked
+      'wifi': featureWiFiElement.checked,
+      'dishwasher': featureDishwasherElement.checked,
+      'washer': featureWasherElement.checked,
+      'parking': featureParkingElement.checked,
+      'elevator': featureElevatorElement.checked,
+      'conditioner': featureConditionerElement.checked
     }
   };
 
@@ -58,8 +62,8 @@
   // ФУНКЦИЯ: делает доступными/недоступными фильтры объявлений
   // { boolean } isEnabled - true - делает фильтры доступными, false - недоступными
   var toggleFilters = function (isEnabled) {
-    filtersForm.disabled = !isEnabled;
-    var formElements = filtersForm.children;
+    filtersFormElement.disabled = !isEnabled;
+    var formElements = filtersFormElement.children;
     for (var i = 0; i < formElements.length; i++) {
       formElements[i].disabled = !isEnabled;
     }
@@ -69,8 +73,8 @@
 
   // ФУНКЦИЯ: делает карту активной.
   var activateMap = function () {
-    if (map.classList.contains('map--faded')) {
-      map.classList.remove('map--faded');
+    if (mapElement.classList.contains('map--faded')) {
+      mapElement.classList.remove('map--faded');
       isMapActivated = true;
     }
 
@@ -79,11 +83,11 @@
   // ФУНКЦИЯ: делает карту неактивной. Устанавливает начальный маркер на начальную позицию, устанавливает соответствующий
   // адрес в поле формы address, делает недоступными фильтры объявлений, вызывает удаление всех пинов объявлений.
   var deactivate = function () {
-    startMarker.style.left = startMarkerInitialX + 'px';
-    startMarker.style.top = startMarkerInitialY + Math.floor(startMarker.offsetHeight / 2) + 'px';
+    startMarkerElement.style.left = startMarkerInitialX + 'px';
+    startMarkerElement.style.top = startMarkerInitialY + Math.floor(startMarkerElement.offsetHeight / 2) + 'px';
     window.form.setAddress(startMarkerInitialX + ', ' + startMarkerInitialY);
 
-    map.classList.add('map--faded');
+    mapElement.classList.add('map--faded');
 
     isMapActivated = false;
     isFormActivated = false;
@@ -102,14 +106,14 @@
     var newXposition = dragStatus.markerXdisplacement + deltaX;
     if (newXposition >= MIN_X && newXposition <= MAX_X) {
       dragStatus.markerXdisplacement = newXposition;
-      startMarker.style.left = dragStatus.markerXdisplacement + 'px';
+      startMarkerElement.style.left = dragStatus.markerXdisplacement + 'px';
       dragStatus.currentMouseX = evtX;
     }
 
     var newYposition = dragStatus.markerYdisplacement + deltaY;
     if (newYposition >= MIN_Y && newYposition <= MAX_Y) {
       dragStatus.markerYdisplacement = newYposition;
-      startMarker.style.top = dragStatus.markerYdisplacement + 'px';
+      startMarkerElement.style.top = dragStatus.markerYdisplacement + 'px';
       dragStatus.currentMouseY = evtY;
     }
   };
@@ -120,15 +124,15 @@
       activateMap();
     }
 
-    window.form.setAddress(dragStatus.markerXdisplacement + ', ' + (dragStatus.markerYdisplacement + Math.floor(startMarker.offsetHeight / 2)));
+    window.form.setAddress(dragStatus.markerXdisplacement + ', ' + (dragStatus.markerYdisplacement + Math.floor(startMarkerElement.offsetHeight / 2)));
 
     redrawStartMarker(evt.clientX, evt.clientY);
   };
 
   // ФУНКЦИЯ: сброс и начальная подготовка данных в объекте dragStatus
   var resetDragStatusObject = function (evtX, evtY) {
-    dragStatus.markerXdisplacement = startMarker.offsetLeft;
-    dragStatus.markerYdisplacement = startMarker.offsetTop;
+    dragStatus.markerXdisplacement = startMarkerElement.offsetLeft;
+    dragStatus.markerYdisplacement = startMarkerElement.offsetTop;
 
     dragStatus.currentMouseX = evtX;
     dragStatus.currentMouseY = evtY;
@@ -162,7 +166,7 @@
   };
 
   // УСТАНОВКА ОБРАБОТЧИКА события mousedown на начальный маркер
-  startMarker.addEventListener('mousedown', startMarkerMouseDownHandler);
+  startMarkerElement.addEventListener('mousedown', startMarkerMouseDownHandler);
 
   // ОБРАБОТЧИК на форму с фильтрами объявлений
   var filtersChangeHandler = function (evt) {
@@ -188,7 +192,7 @@
   };
 
   // УСТАНОВКА ОБРАБОТЧИКА на форму с фильтрами
-  filtersForm.addEventListener('change', filtersChangeHandler);
+  filtersFormElement.addEventListener('change', filtersChangeHandler);
 
   var setPinsCreated = function (areCreated) {
     pinsCreated = areCreated;
