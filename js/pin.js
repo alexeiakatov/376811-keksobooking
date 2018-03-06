@@ -27,18 +27,18 @@
 
     // добавить пину обработчик события click
     button.addEventListener('click', function (evt) {
-      removeActivePin();
+      removeActive();
       currentActivePin = evt.currentTarget;
       evt.currentTarget.classList.add('map__pin--active');
 
-      window.card.setDataInDomOfferCard(offerData);
+      window.card.setDataInDomOfferElement(offerData);
     });
 
     return button;
   };
 
   // public ФУНКЦИЯ: Удаляет у активного пина класс 'map__pin--active' и удаляет ссылку на него из переменной currentActivePin.
-  var removeActivePin = function () {
+  var removeActive = function () {
     if (currentActivePin) {
       currentActivePin.classList.remove('map__pin--active');
       currentActivePin = null;
@@ -85,12 +85,12 @@
   };
 
   // public ФУНКЦИЯ: создание documentFragment содержащий все метки-пины для карты и вставка их на страницу.
-  var createAllPins = function () {
+  var createAll = function () {
     window.backend.getData(onLoadCallback, onErrorCallback);
   };
 
   // public ФУНКЦИЯ: перерисовка всех пинов при изменении фильтра
-  var redrawPinsWithFilter = function (filterState) {
+  var redrawWithFilter = function (filterState) {
     var filteredObjects;
 
     filteredObjects = dataObjects.filter(function (element) {
@@ -124,7 +124,7 @@
   };
 
   // public ФУНКЦИЯ: удаляет из DOM все элементы пинов
-  var removeAllPins = function () {
+  var removeAll = function () {
 
     for (var i = 0; i < dataObjects.length; i++) {
       pinsContainer.removeChild(dataObjects[i].pin);
@@ -134,9 +134,9 @@
 
   // Экспорты:
   window.pin = {
-    createAllPins: createAllPins,
-    removeActivePin: removeActivePin,
-    redrawPinsWithFilter: redrawPinsWithFilter,
-    removeAllPins: removeAllPins
+    createAll: createAll,
+    removeActive: removeActive,
+    redrawWithFilter: redrawWithFilter,
+    removeAll: removeAll
   };
 })();

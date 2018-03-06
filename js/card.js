@@ -73,7 +73,7 @@
 
   // private ФУНКЦИЯ: Возвращает DOM-элемент объявления, созданный на основании шаблона <template> (который в конце index.html) и
   // заполненный данными из объекта offerData. Возвращаемый элемент готов для вставки на страницу.
-  var setDataInDomOfferCard = function (offerData) {
+  var setDataInDomOfferElement = function (offerData) {
     // title
     title.textContent = offerData.offer.title;
 
@@ -144,7 +144,7 @@
     // установить для dom-элемента offerCard обработчик события на клик по крестику
     offerCardCloseButton.addEventListener('click', function () {
       activeOfferCard.classList.add('hidden');
-      window.pin.removeActivePin();
+      window.pin.removeActive();
       removeDocumentEscListener();
     });
 
@@ -157,7 +157,7 @@
   var setDocumentEscListener = function () {
     documentEscPressedHandler = function (evt) {
       if (evt.keyCode === ESC_KEY_CODE) {
-        window.pin.removeActivePin();
+        window.pin.removeActive();
         activeOfferCard.classList.add('hidden');
         removeDocumentEscListener();
       }
@@ -174,14 +174,14 @@
 
   // ФУНКЦИЯ: скрывает карту предложения, убирает обработчик нажатия Esc у document
   var hide = function () {
-    window.pin.removeActivePin();
+    window.pin.removeActive();
     activeOfferCard.classList.add('hidden');
     removeDocumentEscListener();
   };
 
   // Экспорты:
   window.card = {
-    setDataInDomOfferCard: setDataInDomOfferCard,
+    setDataInDomOfferElement: setDataInDomOfferElement,
     hide: hide
   };
 

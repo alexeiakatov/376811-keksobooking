@@ -42,8 +42,8 @@
     }
   };
 
-  window.form.deactivateForm();
-  window.form.setAddressInForm(startMarkerInitialX + ', ' + startMarkerInitialY);
+  window.form.deactivate();
+  window.form.setAddress(startMarkerInitialX + ', ' + startMarkerInitialY);
 
   // ФУНКЦИЯ: делает доступными/недоступными фильтры объявлений
   // { boolean } isEnabled - true - делает фильтры доступными, false - недоступными
@@ -68,10 +68,10 @@
 
   // ФУНКЦИЯ: делает карту неактивной. Устанавливает начальный маркер на начальную позицию, устанавливает соответствующий
   // адрес в поле формы address, делает недоступными фильтры объявлений, вызывает удаление всех пинов объявлений.
-  var deactivateMap = function () {
+  var deactivate = function () {
     startMarker.style.left = startMarkerInitialX + 'px';
     startMarker.style.top = startMarkerInitialY + Math.floor(startMarker.offsetHeight / 2) + 'px';
-    window.form.setAddressInForm(startMarkerInitialX + ', ' + startMarkerInitialY);
+    window.form.setAddress(startMarkerInitialX + ', ' + startMarkerInitialY);
 
     map.classList.add('map--faded');
 
@@ -80,7 +80,7 @@
 
     toggleFilters(false);
     window.card.hide();
-    window.pin.removeAllPins();
+    window.pin.removeAll();
   };
 
   // ФУНКЦИЯ: перерисовывает положение начального маркера на карте в соответствии с перетаскиванием мышью.
@@ -110,7 +110,7 @@
       activateMap();
     }
 
-    window.form.setAddressInForm(dragStatus.markerXdisplacement + ', ' + (dragStatus.markerYdisplacement + Math.floor(startMarker.offsetHeight / 2)));
+    window.form.setAddress(dragStatus.markerXdisplacement + ', ' + (dragStatus.markerYdisplacement + Math.floor(startMarker.offsetHeight / 2)));
 
     redrawStartMarker(evt.clientX, evt.clientY);
   };
@@ -130,14 +130,14 @@
       activateMap();
     }
     if (!pinsCreated) {
-      window.pin.createAllPins();
+      window.pin.createAll();
     }
 
     document.removeEventListener('mousemove', documentMouseMoveHandler);
     document.removeEventListener('mouseup', documentMouseUpHandler);
 
     if (!isFormActivated) {
-      window.form.activateForm();
+      window.form.activate();
       isFormActivated = true;
     }
 
@@ -173,7 +173,7 @@
     }
 
     window.utils.debounce(function () {
-      window.pin.redrawPinsWithFilter(filterState);
+      window.pin.redrawWithFilter(filterState);
     }, 500);
   };
 
@@ -186,7 +186,7 @@
 
   // Экспорты
   window.map = {
-    deactivateMap: deactivateMap,
+    deactivate: deactivate,
     toggleFilters: toggleFilters,
     setPinsCreated: setPinsCreated
   };

@@ -188,7 +188,7 @@
   };
 
   // public ФУНКЦИЯ: Деактивирует форму - устанавливает атрибут disabled на все fieldset в форме.
-  var deactivateForm = function () {
+  var deactivate = function () {
     var formChildren = noticeForm.children;
 
     for (var i = 0; i < formChildren.length; i++) {
@@ -202,10 +202,10 @@
   // ФУНКЦИЯ - колбэк: вызывается при успешной отправке данных из формы подачи объявления.
   var onLoadCallback = function () {
     noticeForm.reset();
-    deactivateForm();
+    deactivate();
     window.card.hide();
-    window.pin.removeActivePin();
-    window.map.deactivateMap();
+    window.pin.removeActive();
+    window.map.deactivate();
   };
 
   // ФУНКЦИЯ - колбэк: действия при НЕуспешной отправке данных объявления на сервер.
@@ -228,7 +228,7 @@
 
 
   // public ФУНКЦИЯ: Убирает атрибут disabled у элементов формы, вызывает методы, устанавливающие правила валидации.
-  var activateForm = function () {
+  var activate = function () {
     setTitleValidity();
     setPriceValidity();
     setCheckInAndOutValidity();
@@ -249,7 +249,7 @@
 
 
   // public ФУНКЦИЯ: устанавливает значение в поле формы address в соответствии с текущим положением начального маркера.
-  var setFormAddress = function (newAddress) {
+  var setAddress = function (newAddress) {
 
     address.value = newAddress;
   };
@@ -257,16 +257,16 @@
   // УСТАНОВКА обработчика нажатия на кнопку reset в форме
   resetButton.addEventListener('click', function () {
     noticeForm.reset();
-    deactivateForm();
-    window.pin.removeActivePin();
-    window.map.deactivateMap();
+    deactivate();
+    window.pin.removeActive();
+    window.map.deactivate();
   });
 
   // Экспорты:
   window.form = {
-    activateForm: activateForm,
-    setAddressInForm: setFormAddress,
-    deactivateForm: deactivateForm
+    activate: activate,
+    setAddress: setAddress,
+    deactivate: deactivate
   };
 
 })();
