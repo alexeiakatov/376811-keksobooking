@@ -7,6 +7,7 @@
   var HOUSING_PHOTO_WIDTH = 100;
   var HOUSING_PHOTO_HEIGHT = 100;
   var templateContent = document.querySelector('template').content;
+  var rubleSymbol = templateContent.querySelector('.popup__price').textContent.split(' ')[1];
   var listItemTemplate = templateContent.querySelector('.popup__pictures > li');
 
   var title;
@@ -81,7 +82,7 @@
     address.textContent = offerData.offer.address;
 
     // price
-    price.innerHTML = offerData.offer.price + ' &#x20bd;/ночь';
+    price.textContent = offerData.offer.price + ' ' + '\u20BD' + '/ночь';
 
     // housing type
     type.textContent = getHousingTypeInRussian(offerData.offer.type);
