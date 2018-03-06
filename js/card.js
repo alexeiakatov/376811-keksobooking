@@ -7,7 +7,6 @@
   var HOUSING_PHOTO_WIDTH = 100;
   var HOUSING_PHOTO_HEIGHT = 100;
   var templateContent = document.querySelector('template').content;
-  var rubleSymbol = templateContent.querySelector('.popup__price').textContent.split(' ')[1];
   var listItemTemplate = templateContent.querySelector('.popup__pictures > li');
 
   var title;
