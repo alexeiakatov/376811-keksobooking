@@ -11,10 +11,12 @@
   var MIN_HOUSE_PRICE = 5000;
   var MIN_PALACE_PRICE = 10000;
 
-  var noticeForm = document.body.querySelector('.notice__form');
-  var address = document.getElementById('address');
-  var submit = document.querySelector('.form__submit');
-  var resetButton = noticeForm.querySelector('.form__reset');
+  var noticeFormElement = document.querySelector('.notice__form');
+  var addressElement = document.getElementById('address');
+  var submitFieldsetElement = noticeFormElement.querySelector('.form__element--submit');
+
+  var submitElement = submitFieldsetElement.querySelector('.form__submit');
+  var resetButton = submitFieldsetElement.querySelector('.form__reset');
 
   // ФУНКЦИЯ: отображает рамку вокруг поля с невалидными данными
   var toggleErrorOutline = function (element, isInvalid) {
@@ -41,20 +43,20 @@
 
   // ФУНКЦИЯ: устанавливает правила валидации заголовка
   var setTitleValidity = function () {
-    var title = document.getElementById('title');
-    title.minLength = TITLE_MIN_LENGTH;
-    title.maxLength = TITLE_MAX_LENGTH;
-    title.required = true;
+    var titleElement = document.getElementById('title');
+    titleElement.minLength = TITLE_MIN_LENGTH;
+    titleElement.maxLength = TITLE_MAX_LENGTH;
+    titleElement.required = true;
 
-    title.setCustomValidity('Нужно указать заголовок.');
+    titleElement.setCustomValidity('Нужно указать заголовок.');
 
-    title.addEventListener('input', function () {
-      title.setCustomValidity(getInvalidTitleMessage(title.validity));
-      toggleErrorOutline(title, !title.validity.valid);
+    titleElement.addEventListener('input', function () {
+      titleElement.setCustomValidity(getInvalidTitleMessage(titleElement.validity));
+      toggleErrorOutline(titleElement, !titleElement.validity.valid);
     });
 
-    title.addEventListener('invalid', function () {
-      toggleErrorOutline(title, true);
+    titleElement.addEventListener('invalid', function () {
+      toggleErrorOutline(titleElement, true);
     });
 
   };
@@ -82,41 +84,41 @@
 
   // ФУНКЦИЯ: устанавливает правила валидации цены
   var setPriceValidity = function () {
-    var price = document.getElementById('price');
-    var type = document.getElementById('type');
-    price.required = true;
-    price.max = MAX_PRICE;
+    var priceElement = document.getElementById('price');
+    var typeElement = document.getElementById('type');
+    priceElement.required = true;
+    priceElement.max = MAX_PRICE;
 
-    var minPrice = getMinPrice(type.value);
-    price.min = minPrice;
-    price.placeholder = minPrice;
+    var minPrice = getMinPrice(typeElement.value);
+    priceElement.min = minPrice;
+    priceElement.placeholder = minPrice;
 
-    // при событии 'change' на элементе type происходит обновление значения price.min
+    // при событии 'change' на элементе typeElement происходит обновление значения priceElement.min
 
-    type.addEventListener('change', function () {
-      minPrice = getMinPrice(type.value);
-      price.min = minPrice;
-      price.placeholder = minPrice;
+    typeElement.addEventListener('change', function () {
+      minPrice = getMinPrice(typeElement.value);
+      priceElement.min = minPrice;
+      priceElement.placeholder = minPrice;
 
-      var currentPriceValue = (price.value.length === 0) ? 0 : parseInt(price.value, 10);
-      toggleErrorOutline(price, currentPriceValue < price.min);
+      var currentPriceValue = (priceElement.value.length === 0) ? 0 : parseInt(priceElement.value, 10);
+      toggleErrorOutline(priceElement, currentPriceValue < priceElement.min);
     });
 
-    price.addEventListener('input', function () {
-      var currentPriceValue = (price.value.length === 0) ? 0 : parseInt(price.value, 10);
-      toggleErrorOutline(price, currentPriceValue < price.min);
+    priceElement.addEventListener('input', function () {
+      var currentPriceValue = (priceElement.value.length === 0) ? 0 : parseInt(priceElement.value, 10);
+      toggleErrorOutline(priceElement, currentPriceValue < priceElement.min);
     });
 
   };
 
   // ФУНКЦИЯ: устанавливает правила валидации для полей check in и check out.
   var setCheckInAndOutValidity = function () {
-    var checkin = document.getElementById('timein');
-    var checkout = document.getElementById('timeout');
+    var checkinElement = document.getElementById('timein');
+    var checkoutElement = document.getElementById('timeout');
 
     var timeChange = function (evt) {
       var currentTime = evt.currentTarget.value;
-      var target = (evt.currentTarget === checkin) ? checkout : checkin;
+      var target = (evt.currentTarget === checkinElement) ? checkoutElement : checkinElement;
 
       var selectOptions = target.children;
       for (var i = 0; i < selectOptions.length; i++) {
@@ -129,22 +131,22 @@
 
     };
 
-    checkin.addEventListener('change', timeChange);
-    checkout.addEventListener('change', timeChange);
+    checkinElement.addEventListener('change', timeChange);
+    checkoutElement.addEventListener('change', timeChange);
 
   };
 
   // ФУНКЦИЯ: устанавливает правила валидации полей количество комнат и количество гостей
   var setRoomsAndCapacityValidity = function () {
-    var rooms = document.getElementById('room_number');
-    var guests = document.getElementById('capacity');
+    var roomsElement = document.getElementById('room_number');
+    var guestsElement = document.getElementById('capacity');
 
-    var guestsSelectOptions = guests.children;
+    var guestsSelectOptions = guestsElement.children;
 
     // ФУНКЦИЯ: устанавливает нужное состояние у поля количество гостей в зависимости от установленного
     // значения количества комнат.
     var setCapacityRestrictions = function () {
-      var currentRooms = rooms.value;
+      var currentRooms = roomsElement.value;
       if (currentRooms === '100') {
         // цикл - если количество комнат установлено = 100
         for (var i = 0; i < guestsSelectOptions.length; i++) {
@@ -172,34 +174,34 @@
     // этот вызов для того, чтоб установиться правильное изначальное состояние поля количество гостей.
     setCapacityRestrictions();
 
-    rooms.addEventListener('change', setCapacityRestrictions);
+    roomsElement.addEventListener('change', setCapacityRestrictions);
 
   };
 
   // ОБРАБОТЧИК события click на кнопке submit в форме
   var submitClickHandler = function (evt) {
-    if (noticeForm.checkValidity()) {
+    if (noticeFormElement.checkValidity()) {
       evt.preventDefault();
-      var formData = new FormData(noticeForm);
+      var formData = new FormData(noticeFormElement);
       window.backend.sendData(formData, onLoadCallback, onErrorCallback);
     }
   };
 
   // public ФУНКЦИЯ: Деактивирует форму - устанавливает атрибут disabled на все fieldset в форме.
   var deactivate = function () {
-    var formChildren = noticeForm.children;
+    var formChildren = noticeFormElement.children;
 
     for (var i = 0; i < formChildren.length; i++) {
       formChildren[i].disabled = true;
     }
-    noticeForm.classList.add('notice__form--disabled');
-    submit.removeEventListener('click', submitClickHandler);
+    noticeFormElement.classList.add('notice__form--disabled');
+    submitElement.removeEventListener('click', submitClickHandler);
 
   };
 
   // ФУНКЦИЯ - колбэк: вызывается при успешной отправке данных из формы подачи объявления.
   var onLoadCallback = function () {
-    noticeForm.reset();
+    noticeFormElement.reset();
     deactivate();
     window.card.hide();
     window.pin.removeActive();
@@ -216,11 +218,10 @@
     errorMessageElement.textContent = errorMessage;
 
     errorContainer.appendChild(errorMessageElement);
-    var submitFieldset = document.querySelector('.form__element--submit');
-    submitFieldset.appendChild(errorContainer);
+    submitFieldsetElement.appendChild(errorContainer);
 
     window.setTimeout(function () {
-      submitFieldset.removeChild(errorContainer);
+      submitFieldsetElement.removeChild(errorContainer);
     }, 3000);
   };
 
@@ -232,29 +233,29 @@
     setCheckInAndOutValidity();
     setRoomsAndCapacityValidity();
 
-    noticeForm.classList.remove('notice__form--disabled');
+    noticeFormElement.classList.remove('notice__form--disabled');
 
-    var formChildren = noticeForm.children;
+    var formChildren = noticeFormElement.children;
 
     for (var i = 0; i < formChildren.length; i++) {
       formChildren[i].disabled = false;
     }
-    address.readOnly = true;
+    addressElement.readOnly = true;
 
     // Установка обработчика на кнопку submit в форме
-    submit.addEventListener('click', submitClickHandler);
+    submitElement.addEventListener('click', submitClickHandler);
   };
 
 
   // public ФУНКЦИЯ: устанавливает значение в поле формы address в соответствии с текущим положением начального маркера.
   var setAddress = function (newAddress) {
 
-    address.value = newAddress;
+    addressElement.value = newAddress;
   };
 
   // УСТАНОВКА обработчика нажатия на кнопку reset в форме
   resetButton.addEventListener('click', function () {
-    noticeForm.reset();
+    noticeFormElement.reset();
     deactivate();
     window.pin.removeActive();
     window.map.deactivate();

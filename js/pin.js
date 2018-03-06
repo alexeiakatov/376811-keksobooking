@@ -21,8 +21,8 @@
     button.style.left = actualXPosition + 'px';
     button.style.top = actualYPosition + 'px';
 
-    var image = button.querySelector('img');
-    image.src = offerData.author.avatar;
+    var imageElement = button.querySelector('img');
+    imageElement.src = offerData.author.avatar;
 
     offerData.pin = button;
 
