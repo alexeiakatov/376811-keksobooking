@@ -1,19 +1,20 @@
 'use strict';
 
 (function () {
-  var noticeForm = document.body.querySelector('.notice__form');
-  var address = document.getElementById('address');
-  var submit = document.querySelector('.form__submit');
-  var resetButton = noticeForm.querySelector('.form__reset');
-
   var TITLE_MIN_LENGTH = 30;
   var TITLE_MAX_LENGTH = 100;
+
   var MAX_PRICE = 1000000;
 
   var MIN_FLAT_PRICE = 1000;
   var MIN_BUNGALO_PRICE = 0;
   var MIN_HOUSE_PRICE = 5000;
   var MIN_PALACE_PRICE = 10000;
+
+  var noticeForm = document.body.querySelector('.notice__form');
+  var address = document.getElementById('address');
+  var submit = document.querySelector('.form__submit');
+  var resetButton = noticeForm.querySelector('.form__reset');
 
   // ФУНКЦИЯ: отображает рамку вокруг поля с невалидными данными
   var toggleErrorOutline = function (element, isInvalid) {
@@ -65,15 +66,12 @@
       case 'flat':
         result = MIN_FLAT_PRICE;
         break;
-
       case 'bungalo':
         result = MIN_BUNGALO_PRICE;
         break;
-
       case 'house':
         result = MIN_HOUSE_PRICE;
         break;
-
       case 'palace':
         result = MIN_PALACE_PRICE;
         break;
@@ -215,7 +213,7 @@
 
     var errorMessageElement = document.createElement('p');
     errorMessageElement.classList.add('errorMessage');
-    errorMessageElement.innerText = errorMessage;
+    errorMessageElement.textContent = errorMessage;
 
     errorContainer.appendChild(errorMessageElement);
     var submitFieldset = document.querySelector('.form__element--submit');

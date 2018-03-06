@@ -1,10 +1,11 @@
 'use strict';
 
 (function () {
-  var currentActivePin;
-  var pinTemplate = document.querySelector('template').content.querySelector('.map__pin');
   var PIN_BUTTON_WIDTH = 50;
   var PIN_BUTTON_HEIGHT = 70;
+
+  var currentActivePin;
+  var pinTemplate = document.querySelector('template').content.querySelector('.map__pin');
   var pinsContainer = document.querySelector('.map__pins');
 
   var dataObjects = [];
@@ -74,7 +75,7 @@
 
     var errorMessageElement = document.createElement('p');
     errorMessageElement.classList.add('errorMessage');
-    errorMessageElement.innerText = errorMessage;
+    errorMessageElement.textContent = errorMessage;
 
     errorContainer.appendChild(errorMessageElement);
     pinsContainer.appendChild(errorContainer);

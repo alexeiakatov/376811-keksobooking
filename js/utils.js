@@ -53,6 +53,6 @@
     getMaxValueInArray: getMaxValueInArray,
     arrayContains: arrayContains,
     debounce: debounce
-};
+  };
 
 })();

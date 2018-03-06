@@ -1,6 +1,15 @@
 'use strict';
 
 (function () {
+  var pinsContainer = document.querySelector('.map__pins');
+  var DEBOUNCE_TIME = 500;
+
+  var MIN_X = startMarker.clientWidth / 2;
+  var MAX_X = pinsContainer.clientWidth - (startMarker.clientWidth / 2);
+
+  var MIN_Y = 150 - Math.floor(startMarker.offsetHeight / 2);
+  var MAX_Y = 500 - Math.floor(startMarker.offsetHeight / 2);
+
   var map = document.querySelector('.map');
 
   var startMarker = document.body.querySelector('.map__pin--main');
@@ -12,33 +21,34 @@
   var isMapActivated = false;
   var pinsCreated = false;
 
-  var pinsContainer = document.querySelector('.map__pins');
   var filtersContainer = document.querySelector('.map__filters-container');
   var filtersForm = filtersContainer.querySelector('form');
 
   var dragStatus = {
-    MIN_X: startMarker.clientWidth / 2,
-    MIN_Y: 150 - Math.floor(startMarker.offsetHeight / 2),
-    MAX_X: pinsContainer.clientWidth - (startMarker.clientWidth / 2),
-    MAX_Y: 500 - Math.floor(startMarker.offsetHeight / 2),
     currentMouseX: null,
     currentMouseY: null,
     markerXdisplacement: null,
     markerYdisplacement: null
   };
 
+  var housingTypeElement = document.getElementById('housing-type');
+  var housingPriceElement = document.getElementById('housing-price');
+  var housingRoomsElement = document.getElementById('housing-rooms');
+  var housingGuestsElement = document.getElementById('housing-guests');
+
   var filterState = {
-    'housing-type': document.getElementById('housing-type').value,
-    'housing-price': document.getElementById('housing-price').value,
-    'housing-rooms': document.getElementById('housing-rooms').value,
-    'housing-guests': document.getElementById('housing-guests').value,
+    'type': housingTypeElement.value,
+    'price': housingPriceElement.value,
+    'rooms': housingRoomsElement.value,
+    'guests': housingGuestsElement.value,
+
     'features': {
-      'filter-wifi': document.getElementById('filter-wifi').checked,
-      'filter-dishwasher': document.getElementById('filter-dishwasher').checked,
-      'filter-washer': document.getElementById('filter-washer').checked,
-      'filter-parking': document.getElementById('filter-parking').checked,
-      'filter-elevator': document.getElementById('filter-elevator').checked,
-      'filter-conditioner': document.getElementById('filter-conditioner').checked
+      'wifi': document.getElementById('filter-wifi').checked,
+      'dishwasher': document.getElementById('filter-dishwasher').checked,
+      'washer': document.getElementById('filter-washer').checked,
+      'parking': document.getElementById('filter-parking').checked,
+      'elevator': document.getElementById('filter-elevator').checked,
+      'conditioner': document.getElementById('filter-conditioner').checked
     }
   };
 
@@ -90,14 +100,14 @@
     var deltaY = evtY - dragStatus.currentMouseY;
 
     var newXposition = dragStatus.markerXdisplacement + deltaX;
-    if (newXposition >= dragStatus.MIN_X && newXposition <= dragStatus.MAX_X) {
+    if (newXposition >= MIN_X && newXposition <= MAX_X) {
       dragStatus.markerXdisplacement = newXposition;
       startMarker.style.left = dragStatus.markerXdisplacement + 'px';
       dragStatus.currentMouseX = evtX;
     }
 
     var newYposition = dragStatus.markerYdisplacement + deltaY;
-    if (newYposition >= dragStatus.MIN_Y && newYposition <= dragStatus.MAX_Y) {
+    if (newYposition >= MIN_Y && newYposition <= MAX_Y) {
       dragStatus.markerYdisplacement = newYposition;
       startMarker.style.top = dragStatus.markerYdisplacement + 'px';
       dragStatus.currentMouseY = evtY;
@@ -157,24 +167,24 @@
   // ОБРАБОТЧИК на форму с фильтрами объявлений
   var filtersChangeHandler = function (evt) {
     var targetId = evt.target.id;
-
-    window.card.hideOfferCard();
+    var featureName = targetId.split('-')[1];
+    window.card.hide();
 
     switch (targetId) {
       case 'housing-type':
       case 'housing-price':
       case 'housing-rooms':
       case 'housing-guests':
-        filterState[targetId] = evt.target.value;
+        filterState[featureName] = evt.target.value;
         break;
       default :
-        filterState.features[targetId] = evt.target.checked;
+        filterState.features[featureName] = evt.target.checked;
         break;
     }
 
     window.utils.debounce(function () {
       window.pin.redrawWithFilter(filterState);
-    }, 500);
+    }, DEBOUNCE_TIME);
   };
 
   // УСТАНОВКА ОБРАБОТЧИКА на форму с фильтрами

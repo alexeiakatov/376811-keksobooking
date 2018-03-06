@@ -2,10 +2,17 @@
 
 (function () {
   var ESC_KEY_CODE = 27;
-  var activeOfferCard = null;
-  var documentEscPressedHandler = null;
   var HOUSING_PHOTO_WIDTH = 100;
   var HOUSING_PHOTO_HEIGHT = 100;
+
+  var TYPE_FLAT_RUS = 'Квартира';
+  var TYPE_HOUSE_RUS = 'Дом';
+  var TYPE_BUNGALO_RUS = 'Бунгало';
+  var TYPE_PALACE_RUS = 'Дворец';
+
+  var activeOfferCard = null;
+  var documentEscPressedHandler = null;
+
   var templateContent = document.querySelector('template').content;
   var listItemTemplate = templateContent.querySelector('.popup__pictures > li');
 
@@ -26,13 +33,17 @@
     var housingTypeInRussian;
     switch (offerTypeInEnglish) {
       case 'flat':
-        housingTypeInRussian = 'Квартира'; break;
+        housingTypeInRussian = TYPE_FLAT_RUS;
+        break;
       case 'house':
-        housingTypeInRussian = 'Дом'; break;
+        housingTypeInRussian = TYPE_HOUSE_RUS;
+        break;
       case 'bungalo':
-        housingTypeInRussian = 'Бунгало'; break;
+        housingTypeInRussian = TYPE_BUNGALO_RUS;
+        break;
       case 'palace':
-        housingTypeInRussian = 'Дворец'; break;
+        housingTypeInRussian = TYPE_PALACE_RUS;
+        break;
       default :
         housingTypeInRussian = offerTypeInEnglish;
         break;
@@ -81,7 +92,7 @@
     address.textContent = offerData.offer.address;
 
     // price
-    price.textContent = offerData.offer.price + ' ' + '\u20BD' + '/ночь';
+    price.textContent = offerData.offer.price + ' ' + '\u20BD/ночь';
 
     // housing type
     type.textContent = getHousingTypeInRussian(offerData.offer.type);
