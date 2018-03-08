@@ -108,7 +108,6 @@
     priceElement.placeholder = minPrice;
 
     // при событии 'change' на элементе typeElement происходит обновление значения priceElement.min
-
     typeElement.addEventListener('change', function () {
       minPrice = getMinPrice(typeElement.value);
       priceElement.min = minPrice;
@@ -135,18 +134,17 @@
       var target = (evt.currentTarget === checkinElement) ? checkoutElement : checkinElement;
 
       var selectOptions = target.children;
-      selectOptions.forEach(function (element) {
-        if (element.value === currentTime) {
-          element.selected = true;
+      for (var i = 0; i < selectOptions.length; i++) {
+        if (selectOptions[i].value === currentTime) {
+          selectOptions[i].selected = true;
         } else {
-          element.selected = false;
+          selectOptions[i].selected = false;
         }
-      });
+      }
     };
 
     checkinElement.addEventListener('change', timeChange);
     checkoutElement.addEventListener('change', timeChange);
-
   };
 
   // ФУНКЦИЯ: устанавливает правила валидации полей количество комнат и количество гостей
@@ -158,7 +156,7 @@
 
     // ФУНКЦИЯ: устанавливает нужное состояние у поля количество гостей в зависимости от установленного
     // значения количества комнат.
-    var setCapacityRestrictions = function () {
+    var roomsElementChangeHandler = function () {
       var currentRooms = roomsElement.value;
       if (currentRooms === '100') {
         // цикл - если количество комнат установлено = 100
@@ -171,6 +169,7 @@
             guestsSelectOptions[i].selected = false;
           }
         }
+
       } else {
         // цикл - если количество команат установлено != 100
         for (i = 0; i < guestsSelectOptions.length; i++) {
@@ -185,9 +184,9 @@
     };
 
     // этот вызов для того, чтоб установиться правильное изначальное состояние поля количество гостей.
-    setCapacityRestrictions();
+    roomsElementChangeHandler();
 
-    roomsElement.addEventListener('change', setCapacityRestrictions);
+    roomsElement.addEventListener('change', roomsElementChangeHandler);
 
   };
 
@@ -204,13 +203,12 @@
   var deactivate = function () {
     var formChildren = noticeFormElement.children;
 
-    formChildren.forEach(function (element) {
-      element.disabled = true;
-    });
+    for (var i = 0; i < formChildren.length; i++) {
+      formChildren[i].disabled = true;
+    }
 
     noticeFormElement.classList.add('notice__form--disabled');
     submitElement.removeEventListener('click', submitClickHandler);
-
   };
 
   // ФУНКЦИЯ - колбэк: вызывается при успешной отправке данных из формы подачи объявления.
@@ -244,10 +242,9 @@
 
     var formChildren = noticeFormElement.children;
 
-    formChildren.forEach(function (element) {
-      element.disabled = false;
-    });
-
+    for (var i = 0; i < formChildren.length; i++) {
+      formChildren[i].disabled = false;
+    }
     addressElement.readOnly = true;
 
     // Установка обработчика на кнопку submit в форме
@@ -261,13 +258,16 @@
     addressElement.value = newAddress;
   };
 
-  // УСТАНОВКА обработчика нажатия на кнопку reset в форме
-  resetButtonElement.addEventListener('click', function () {
+  var resetButtonClickHandler = function () {
     noticeFormElement.reset();
     deactivate();
+    window.card.hide();
     window.pin.removeActive();
     window.map.deactivate();
-  });
+  }
+
+  // УСТАНОВКА обработчика нажатия на кнопку reset в форме
+  resetButtonElement.addEventListener('click', resetButtonClickHandler);
 
   // Экспорты:
   window.form = {

@@ -1,8 +1,8 @@
 'use strict';
 
 (function () {
-  var RESPONSE_201 = 200;
-  var RESPONSE_200 = 201;
+  var RESPONSE_200 = 200;
+  var RESPONSE_201 = 201;
   var RESPONSE_400 = 400;
   var RESPONSE_500 = 500;
 
@@ -16,16 +16,15 @@
 
     // ОБРАБОТЧИК события load при получении данных
     var xhrLoadHandler = function () {
-      var statusCode = xhr.status;
-      switch (statusCode) {
+      switch (xhr.status) {
         case RESPONSE_200 :
           onLoad(JSON.parse(xhr.responseText));
           break;
         case RESPONSE_400 :
-          onError(xhr.status + xhr.statusText);
+          onError(xhr.status + ': ' + xhr.statusText);
           break;
         case RESPONSE_500 :
-          onError(xhr.status + xhr.statusText);
+          onError(xhr.status + ': ' + xhr.statusText);
           break;
       }
       xhr.removeEventListener('load', xhrLoadHandler);
@@ -58,7 +57,6 @@
   // { function } onError - колбэк, которая вызывается при неуспешном выполнении отправки данных.
   var sendData = function (data, onLoad, onError) {
     xhr = new XMLHttpRequest();
-
     // ОБРАБОТЧИК события load при отправке данных
     var xhrLoadHandler = function () {
       if (xhr.status === RESPONSE_201 || xhr.status === RESPONSE_200) {

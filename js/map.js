@@ -65,9 +65,10 @@
     filtersFormElement.disabled = !isEnabled;
     var formElements = filtersFormElement.children;
 
-    formElements.forEach(function (element) {
-      element.disabled = !isEnabled;
-    });
+    for (var i = 0; i < formElements; i++) {
+      formElements[i].disabled = !isEnabled;
+    }
+
   };
 
   toggleFilters(false);
@@ -92,6 +93,7 @@
 
     isMapActivated = false;
     isFormActivated = false;
+    pinsCreated = false;
 
     toggleFilters(false);
     window.card.hide();

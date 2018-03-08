@@ -62,10 +62,10 @@
     var featuresInDom = featuresElement.children;
     var identifier;
 
-    featuresInDom.forEach(function (element) {
-      identifier = element.classList[1].split('--')[1];
-      element.classList.toggle('hidden', !featuresInDataObject.includes(identifier));
-    });
+    for (var i = 0; i < featuresInDom.length; i++){
+      identifier = featuresInDom[i].classList[1].split('--')[1];
+      featuresInDom[i].classList.toggle('hidden', !featuresInDataObject.includes(identifier));
+    }
   };
 
   // private ФУНКЦИЯ: устанавливает изображения в DOM-элементе объявления, которые берет из js-объекта объявления
