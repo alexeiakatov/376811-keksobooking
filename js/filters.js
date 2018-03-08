@@ -37,9 +37,8 @@
     if (filterGuestsNumber === 'any') {
       return true;
     }
-    var filterGuests = parseInt(filterGuestsNumber, 10);
 
-    return currentGuestsNumber === filterGuests;
+    return currentGuestsNumber === parseInt(filterGuestsNumber, 10);
   };
 
 
@@ -47,11 +46,9 @@
   var matchFeatures = function (currentFeatures, filterFeatures) {
     var isMatch = true;
 
-    var identifier;
     for (var element in filterFeatures) {
       if (filterFeatures[element]) {
-        identifier = element.split('-')[1];
-        if (!window.utils.arrayContains(identifier, currentFeatures)) {
+        if (!currentFeatures.includes(element)) {
           isMatch = false;
           break;
         }
@@ -60,13 +57,28 @@
     return isMatch;
   };
 
+  var checkAll = function (element, filterState) {
+    if (!matchType(element.offer.type, filterState.type)) {
+      return false;
+    }
+    if (!matchPrice(element.offer.price, filterState.price)) {
+      return false;
+    }
+    if (!matchRoomsNumber(element.offer.rooms, filterState.rooms)) {
+      return false;
+    }
+    if (!matchGuestsNumber(element.offer.guests, filterState.guests)) {
+      return false;
+    }
+    if (!matchFeatures(element.offer.features, filterState.features)) {
+      return false;
+    }
+
+    return true;
+  };
   // Экспорты:
   window.filters = {
-    matchType: matchType,
-    matchPrice: matchPrice,
-    matchRoomsNumber: matchRoomsNumber,
-    matchGuestsNumber: matchGuestsNumber,
-    matchFeatures: matchFeatures
+    checkAll: checkAll
   };
 
 })();

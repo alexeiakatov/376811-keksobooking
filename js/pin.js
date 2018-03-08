@@ -92,23 +92,9 @@
 
   // public ФУНКЦИЯ: перерисовка всех пинов при изменении фильтра
   var redrawWithFilter = function (filterState) {
-    var filteredObjects;
-
-    filteredObjects = dataObjects.filter(function (element) {
-      return window.filters.matchType(element.offer.type, filterState['housing-type']);
-    })
-        .filter(function (element) {
-          return window.filters.matchPrice(element.offer.price, filterState['housing-price']);
-        })
-        .filter(function (element) {
-          return window.filters.matchRoomsNumber(element.offer.rooms, filterState['housing-rooms']);
-        })
-        .filter(function (element) {
-          return window.filters.matchGuestsNumber(element.offer.guests, filterState['housing-guests']);
-        })
-        .filter(function (element) {
-          return window.filters.matchFeatures(element.offer.features, filterState.features);
-        });
+    var filteredObjects = dataObjects.filter(function (element) {
+      return window.filters.checkAll(element, filterState);
+    });
 
     // т.к. отрисовывать нужно только 5 пинов - обрежем до 5 длинну массива отфильтрованных объектов
     if (filteredObjects.length > 5) {

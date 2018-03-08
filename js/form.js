@@ -16,7 +16,7 @@
   var submitFieldsetElement = noticeFormElement.querySelector('.form__element--submit');
 
   var submitElement = submitFieldsetElement.querySelector('.form__submit');
-  var resetButton = submitFieldsetElement.querySelector('.form__reset');
+  var resetButtonElement = submitFieldsetElement.querySelector('.form__reset');
 
   // ФУНКЦИЯ: отображает рамку вокруг поля с невалидными данными
   var toggleErrorOutline = function (element, isInvalid) {
@@ -254,7 +254,7 @@
   };
 
   // УСТАНОВКА обработчика нажатия на кнопку reset в форме
-  resetButton.addEventListener('click', function () {
+  resetButtonElement.addEventListener('click', function () {
     noticeFormElement.reset();
     deactivate();
     window.pin.removeActive();
