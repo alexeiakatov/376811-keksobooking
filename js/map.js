@@ -8,11 +8,11 @@
 
   var DEBOUNCE_TIME = 500;
 
-  var MIN_X = startMarkerElement.clientWidth / 2;
-  var MAX_X = pinsContainerElement.clientWidth - (startMarkerElement.clientWidth / 2);
+  var minX = startMarkerElement.clientWidth / 2;
+  var maxX = pinsContainerElement.clientWidth - (startMarkerElement.clientWidth / 2);
 
-  var MIN_Y = 150 - Math.floor(startMarkerElement.offsetHeight / 2);
-  var MAX_Y = 500 - Math.floor(startMarkerElement.offsetHeight / 2);
+  var minY = 150 - Math.floor(startMarkerElement.offsetHeight / 2);
+  var maxY = 500 - Math.floor(startMarkerElement.offsetHeight / 2);
 
   var startMarkerInitialX = startMarkerElement.offsetLeft;
   var startMarkerInitialY = startMarkerElement.offsetTop + Math.floor(startMarkerElement.offsetHeight / 2);
@@ -104,14 +104,14 @@
     var deltaY = evtY - dragStatus.currentMouseY;
 
     var newXposition = dragStatus.markerXdisplacement + deltaX;
-    if (newXposition >= MIN_X && newXposition <= MAX_X) {
+    if (newXposition >= minX && newXposition <= maxX) {
       dragStatus.markerXdisplacement = newXposition;
       startMarkerElement.style.left = dragStatus.markerXdisplacement + 'px';
       dragStatus.currentMouseX = evtX;
     }
 
     var newYposition = dragStatus.markerYdisplacement + deltaY;
-    if (newYposition >= MIN_Y && newYposition <= MAX_Y) {
+    if (newYposition >= minY && newYposition <= maxY) {
       dragStatus.markerYdisplacement = newYposition;
       startMarkerElement.style.top = dragStatus.markerYdisplacement + 'px';
       dragStatus.currentMouseY = evtY;
