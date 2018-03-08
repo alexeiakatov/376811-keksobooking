@@ -1,6 +1,11 @@
 'use strict';
 
 (function () {
+  var RESPONSE_201 = 200;
+  var RESPONSE_200 = 201;
+  var RESPONSE_400 = 400;
+  var RESPONSE_500 = 500;
+
   var xhr;
 
   // ФУНКЦИЯ: получает данные с сервера.
@@ -13,13 +18,13 @@
     var xhrLoadHandler = function () {
       var statusCode = xhr.status;
       switch (statusCode) {
-        case 200 :
+        case RESPONSE_200 :
           onLoad(JSON.parse(xhr.responseText));
           break;
-        case 500 :
+        case RESPONSE_400 :
           onError(xhr.status + xhr.statusText);
           break;
-        case 400 :
+        case RESPONSE_500 :
           onError(xhr.status + xhr.statusText);
           break;
       }
@@ -56,7 +61,7 @@
 
     // ОБРАБОТЧИК события load при отправке данных
     var xhrLoadHandler = function () {
-      if (xhr.status === 201 || xhr.status === 200) {
+      if (xhr.status === RESPONSE_201 || xhr.status === RESPONSE_200) {
         onLoad();
       }
       xhr.removeEventListener('load', xhrLoadHandler);

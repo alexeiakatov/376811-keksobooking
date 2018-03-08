@@ -58,12 +58,11 @@
   };
 
   var checkAll = function (element, filterState) {
-    return !(!matchType(element.offer.type, filterState.type)) ||
-      (!matchPrice(element.offer.price, filterState.price)) ||
-      (!matchRoomsNumber(element.offer.rooms, filterState.rooms)) ||
-      (!matchGuestsNumber(element.offer.guests, filterState.guests)) ||
-      (!matchFeatures(element.offer.features, filterState.features));
-
+    return (matchType(element.offer.type, filterState.type) &&
+      matchPrice(element.offer.price, filterState.price) &&
+      matchRoomsNumber(element.offer.rooms, filterState.rooms) &&
+      matchGuestsNumber(element.offer.guests, filterState.guests) &&
+      matchFeatures(element.offer.features, filterState.features));
   };
   // Экспорты:
   window.filters = {
