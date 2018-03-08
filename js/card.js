@@ -10,8 +10,8 @@
   var TYPE_BUNGALO_RUS = 'Бунгало';
   var TYPE_PALACE_RUS = 'Дворец';
 
-  var offerCardElement = null;
-  var documentEscPressedHandler = null;
+  var offerCardElement;
+  var documentEscPressedHandler;
 
   var templateContent = document.querySelector('template').content;
   var listItemTemplate = templateContent.querySelector('.popup__pictures > li');
@@ -120,14 +120,14 @@
     // если нет установленного обработчика нажатия Esc на document - устанавливает его
     // это нужно для того, чтоб если было сделано переключение на следующий пин без предварительного закрытия
     // карты предложения
-    if (documentEscPressedHandler === null) {
+    if (!documentEscPressedHandler) {
       setDocumentEscListener();
     }
   };
 
   // ФУНКЦИЯ: вычисяет все ссылки на dom-элементы внутри карточки предложения
   var findElementsInOfferCard = function () {
-    if (offerCardElement !== null) {
+    if (offerCardElement) {
       titleElement = offerCardElement.querySelector('h3');
       addressElement = offerCardElement.querySelector('p > small');
       priceElement = offerCardElement.querySelector('.popup__price');

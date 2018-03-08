@@ -1,12 +1,12 @@
 'use strict';
 
 (function () {
+  var DEBOUNCE_TIME = 500;
+
   var mapElement = document.querySelector('.map');
   var pinsContainerElement = mapElement.querySelector('.map__pins');
   var startMarkerElement = mapElement.querySelector('.map__pin--main');
   var filtersFormElement = mapElement.querySelector('.map__filters');
-
-  var DEBOUNCE_TIME = 500;
 
   var minX = startMarkerElement.clientWidth / 2;
   var maxX = pinsContainerElement.clientWidth - (startMarkerElement.clientWidth / 2);

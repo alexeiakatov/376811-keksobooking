@@ -23,21 +23,6 @@
     return Math.round(Math.max.apply(null, array));
   };
 
-  // public ФУНКЦИЯ: проверка наличия в массиве вхождения с переданным значением
-  // { String } element - строка, наличие которой проверяем в массиве
-  // { String[] } array - массив в котором нужно проверить наличие переданной строки
-  var arrayContains = function (element, array) {
-    var hasElement = false;
-
-    for (var i = 0; i < array.length; i++) {
-      if (array[i] === element) {
-        hasElement = true;
-        break;
-      }
-    }
-    return hasElement;
-  };
-
   // public ФУНКЦИЯ: debounce
   var debounce = function (callBack, timeLimit) {
     if (previousTimerId) {
@@ -46,12 +31,10 @@
     previousTimerId = setTimeout(callBack, timeLimit);
   };
 
-
   // Экспорты:
   window.utils = {
     getRandomValue: getRandomValue,
     getMaxValueInArray: getMaxValueInArray,
-    arrayContains: arrayContains,
     debounce: debounce
   };
 
