@@ -3,10 +3,18 @@
 (function () {
   var PIN_BUTTON_WIDTH = 50;
   var PIN_BUTTON_HEIGHT = 70;
+  var ERROR_SHOW_TIMEOUT = 3000;
 
   var currentActivePin;
   var pinTemplate = document.querySelector('template').content.querySelector('.map__pin');
-  var pinsContainer = document.querySelector('.map__pins');
+  var pinsContainerElement = document.querySelector('.map__pins');
+
+  var errorContainerElement = document.createElement('div');
+  var errorMessageElement = document.createElement('p');
+
+  errorContainerElement.classList.add('error_container');
+  errorMessageElement.classList.add('error_message');
+  errorContainerElement.appendChild(errorMessageElement);
 
   var dataObjects = [];
 
@@ -63,26 +71,19 @@
     }
 
     // вставка меток-пинов на карту
-    pinsContainer.appendChild(fragmentForPins);
+    pinsContainerElement.appendChild(fragmentForPins);
     window.map.setPinsCreated(true);
     window.map.toggleFilters(true);
   };
 
   // ФУНКЦИЯ - колбэк: действия при НЕуспешном получении данных объявлений с сервера.
   var xhrErrorHandler = function (errorMessage) {
-    var errorContainer = document.createElement('div');
-    errorContainer.classList.add('errorContainer');
-
-    var errorMessageElement = document.createElement('p');
-    errorMessageElement.classList.add('errorMessage');
     errorMessageElement.textContent = errorMessage;
-
-    errorContainer.appendChild(errorMessageElement);
-    pinsContainer.appendChild(errorContainer);
+    pinsContainerElement.appendChild(errorContainerElement);
 
     window.setTimeout(function () {
-      pinsContainer.removeChild(errorContainer);
-    }, 3000);
+      pinsContainerElement.removeChild(errorContainerElement);
+    }, ERROR_SHOW_TIMEOUT);
   };
 
   // public ФУНКЦИЯ: создание documentFragment содержащий все метки-пины для карты и вставка их на страницу.
@@ -101,7 +102,7 @@
       filteredObjects.length = 5;
     }
 
-    var allPins = pinsContainer.querySelectorAll('.map__pin:not(.map__pin--main)');
+    var allPins = pinsContainerElement.querySelectorAll('.map__pin:not(.map__pin--main)');
     for (var i = 0; i < allPins.length; i++) {
       allPins[i].classList.add('hidden');
     }
@@ -114,7 +115,7 @@
   var removeAll = function () {
 
     for (var i = 0; i < dataObjects.length; i++) {
-      pinsContainer.removeChild(dataObjects[i].pin);
+      pinsContainerElement.removeChild(dataObjects[i].pin);
     }
     window.map.setPinsCreated(false);
   };

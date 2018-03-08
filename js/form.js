@@ -11,12 +11,21 @@
   var MIN_HOUSE_PRICE = 5000;
   var MIN_PALACE_PRICE = 10000;
 
+  var ERROR_SHOW_TIMEOUT = 3000;
+
   var noticeFormElement = document.querySelector('.notice__form');
   var addressElement = document.getElementById('address');
   var submitFieldsetElement = noticeFormElement.querySelector('.form__element--submit');
 
   var submitElement = submitFieldsetElement.querySelector('.form__submit');
   var resetButtonElement = submitFieldsetElement.querySelector('.form__reset');
+
+  var errorContainerElement = document.createElement('div');
+  var errorMessageElement = document.createElement('p');
+
+  errorContainerElement.classList.add('error_container');
+  errorMessageElement.classList.add('error_message');
+  errorContainerElement.appendChild(errorMessageElement);
 
   // ФУНКЦИЯ: отображает рамку вокруг поля с невалидными данными
   var toggleErrorOutline = function (element, isInvalid) {
@@ -210,19 +219,12 @@
 
   // ФУНКЦИЯ - колбэк: действия при НЕуспешной отправке данных объявления на сервер.
   var xhrErrorHandler = function (errorMessage) {
-    var errorContainer = document.createElement('div');
-    errorContainer.classList.add('errorContainer');
-
-    var errorMessageElement = document.createElement('p');
-    errorMessageElement.classList.add('errorMessage');
     errorMessageElement.textContent = errorMessage;
-
-    errorContainer.appendChild(errorMessageElement);
-    submitFieldsetElement.appendChild(errorContainer);
+    submitFieldsetElement.appendChild(errorContainerElement);
 
     window.setTimeout(function () {
-      submitFieldsetElement.removeChild(errorContainer);
-    }, 3000);
+      submitFieldsetElement.removeChild(errorContainerElement);
+    }, ERROR_SHOW_TIMEOUT);
   };
 
 
