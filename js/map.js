@@ -96,6 +96,7 @@
     pinsCreated = false;
 
     toggleFilters(false);
+    filtersFormElement.reset();
     window.card.hide();
     window.pin.removeAll();
   };
