@@ -10,6 +10,11 @@
   var TYPE_BUNGALO_RUS = 'Бунгало';
   var TYPE_PALACE_RUS = 'Дворец';
 
+  var TYPE_FLAT_ENG = 'flat';
+  var TYPE_HOUSE_ENG = 'house';
+  var TYPE_BUNGALO_ENG = 'bungalo';
+  var TYPE_PALACE_ENG = 'palace';
+
   var offerCardElement;
   var documentEscPressedHandler;
 
@@ -32,16 +37,16 @@
   var getHousingTypeInRussian = function (offerTypeInEnglish) {
     var housingTypeInRussian;
     switch (offerTypeInEnglish) {
-      case 'flat':
+      case TYPE_FLAT_ENG:
         housingTypeInRussian = TYPE_FLAT_RUS;
         break;
-      case 'house':
+      case TYPE_HOUSE_ENG:
         housingTypeInRussian = TYPE_HOUSE_RUS;
         break;
-      case 'bungalo':
+      case TYPE_BUNGALO_ENG:
         housingTypeInRussian = TYPE_BUNGALO_RUS;
         break;
-      case 'palace':
+      case TYPE_PALACE_ENG:
         housingTypeInRussian = TYPE_PALACE_RUS;
         break;
       default :
@@ -57,27 +62,28 @@
     var featuresInDom = featuresElement.children;
     var identifier;
 
-    for (var i = 0; i < featuresInDom.length; i++) {
-      identifier = featuresInDom[i].classList[1].split('--')[1];
-      featuresInDom[i].classList.toggle('hidden', !featuresInDataObject.includes(identifier));
-    }
+    featuresInDom.forEach(function (element) {
+      identifier = element.classList[1].split('--')[1];
+      element.classList.toggle('hidden', !featuresInDataObject.includes(identifier));
+    });
   };
 
   // private ФУНКЦИЯ: устанавливает изображения в DOM-элементе объявления, которые берет из js-объекта объявления
   var setPictures = function (photosInDataObject) {
-    var picturesCount = photosInDataObject.length;
     var fragment = document.createDocumentFragment();
 
     var newListItemElement;
     var nestedImageElement;
-    for (var i = 0; i < picturesCount; i++) {
+
+    photosInDataObject.forEach(function (element) {
       newListItemElement = listItemTemplate.cloneNode(true);
       nestedImageElement = newListItemElement.querySelector('img');
-      nestedImageElement.src = photosInDataObject[i];
+      nestedImageElement.src = element;
       nestedImageElement.width = HOUSING_PHOTO_WIDTH;
       nestedImageElement.height = HOUSING_PHOTO_HEIGHT;
       fragment.appendChild(newListItemElement);
-    }
+    });
+
     photosElement.innerHTML = '';
     photosElement.appendChild(fragment);
   };

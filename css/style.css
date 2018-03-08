@@ -850,7 +850,7 @@ textarea:focus
     background-position: -10px -10px;
 }
 
-.errorContainer
+.error-container
 {
     margin: 0;
     padding: 0;
@@ -859,7 +859,7 @@ textarea:focus
     border: 1px solid red;
 }
 
-.errorMessage
+.error-message
 {
     margin: 0;
     padding: 10px;

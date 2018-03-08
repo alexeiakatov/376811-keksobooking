@@ -11,6 +11,11 @@
   var MIN_HOUSE_PRICE = 5000;
   var MIN_PALACE_PRICE = 10000;
 
+  var HOUSING_TYPE_FLAT = 'flat';
+  var HOUSING_TYPE_HOUSE = 'house';
+  var HOUSING_TYPE_BUNGALO = 'bungalo';
+  var HOUSING_TYPE_PALACE = 'palace';
+
   var ERROR_SHOW_TIMEOUT = 3000;
 
   var noticeFormElement = document.querySelector('.notice__form');
@@ -74,16 +79,16 @@
   var getMinPrice = function (type) {
     var result;
     switch (type) {
-      case 'flat':
+      case HOUSING_TYPE_FLAT:
         result = MIN_FLAT_PRICE;
         break;
-      case 'bungalo':
+      case HOUSING_TYPE_BUNGALO:
         result = MIN_BUNGALO_PRICE;
         break;
-      case 'house':
+      case HOUSING_TYPE_HOUSE:
         result = MIN_HOUSE_PRICE;
         break;
-      case 'palace':
+      case HOUSING_TYPE_PALACE:
         result = MIN_PALACE_PRICE;
         break;
     }
@@ -130,14 +135,13 @@
       var target = (evt.currentTarget === checkinElement) ? checkoutElement : checkinElement;
 
       var selectOptions = target.children;
-      for (var i = 0; i < selectOptions.length; i++) {
-        if (selectOptions[i].value === currentTime) {
-          selectOptions[i].selected = true;
+      selectOptions.forEach(function (element) {
+        if (element.value === currentTime) {
+          element.selected = true;
         } else {
-          selectOptions[i].selected = false;
+          element.selected = false;
         }
-      }
-
+      });
     };
 
     checkinElement.addEventListener('change', timeChange);
@@ -200,9 +204,10 @@
   var deactivate = function () {
     var formChildren = noticeFormElement.children;
 
-    for (var i = 0; i < formChildren.length; i++) {
-      formChildren[i].disabled = true;
-    }
+    formChildren.forEach(function (element) {
+      element.disabled = true;
+    });
+
     noticeFormElement.classList.add('notice__form--disabled');
     submitElement.removeEventListener('click', submitClickHandler);
 
@@ -239,9 +244,10 @@
 
     var formChildren = noticeFormElement.children;
 
-    for (var i = 0; i < formChildren.length; i++) {
-      formChildren[i].disabled = false;
-    }
+    formChildren.forEach(function (element) {
+      element.disabled = false;
+    });
+
     addressElement.readOnly = true;
 
     // Установка обработчика на кнопку submit в форме

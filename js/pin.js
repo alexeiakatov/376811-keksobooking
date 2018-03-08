@@ -60,15 +60,16 @@
     dataObjects = receivedData;
     var fragmentForPins = document.createDocumentFragment();
     var newPin;
-    for (var i = 0; i < dataObjects.length; i++) {
-      newPin = createDomPinForAnnouncement(dataObjects[i], PIN_BUTTON_WIDTH, PIN_BUTTON_HEIGHT);
+
+    dataObjects.forEach(function (element, index) {
+      newPin = createDomPinForAnnouncement(element, PIN_BUTTON_WIDTH, PIN_BUTTON_HEIGHT);
 
       // ограничение количества отображаемых пинов (по ТЗ - не больше 5)
-      if (i > 4) {
+      if (index > 4) {
         newPin.classList.add('hidden');
       }
       fragmentForPins.appendChild(newPin);
-    }
+    });
 
     // вставка меток-пинов на карту
     pinsContainerElement.appendChild(fragmentForPins);
@@ -103,20 +104,20 @@
     }
 
     var allPins = pinsContainerElement.querySelectorAll('.map__pin:not(.map__pin--main)');
-    for (var i = 0; i < allPins.length; i++) {
-      allPins[i].classList.add('hidden');
-    }
-    for (i = 0; i < filteredObjects.length; i++) {
-      filteredObjects[i].pin.classList.remove('hidden');
-    }
+    allPins.forEach(function (element) {
+      element.classList.add('hidden');
+    });
+
+    filteredObjects.forEach(function (element) {
+      element.pin.classList.remove('hidden');
+    });
   };
 
   // public ФУНКЦИЯ: удаляет из DOM все элементы пинов
   var removeAll = function () {
-
-    for (var i = 0; i < dataObjects.length; i++) {
-      pinsContainerElement.removeChild(dataObjects[i].pin);
-    }
+    dataObjects.forEach(function (element) {
+      pinsContainerElement.removeChild(element.pin);
+    });
     window.map.setPinsCreated(false);
   };
 

@@ -1,6 +1,10 @@
 'use strict';
 
 (function () {
+  var FILTER_PRICE_ANY = 'any';
+  var FILTER_PRICE_MIDDLE = 'middle';
+  var FILTER_PRICE_LOW = 'low';
+  var FILTER_PRICE_HIGH = 'high';
 
   // ФУНКЦИЯ: проверка соответствия фильтру типа жилья
   var matchType = function (currentType, filterType) {
@@ -11,16 +15,16 @@
   var matchPrice = function (currentPrice, filterPrice) {
     var isMatch;
     switch (filterPrice) {
-      case 'any' :
+      case FILTER_PRICE_ANY :
         isMatch = true;
         break;
-      case 'middle':
+      case FILTER_PRICE_MIDDLE:
         isMatch = (currentPrice >= 10000 && currentPrice <= 50000);
         break;
-      case 'low':
+      case FILTER_PRICE_LOW:
         isMatch = (currentPrice >= 0 && currentPrice < 10000);
         break;
-      case 'high':
+      case FILTER_PRICE_HIGH:
         isMatch = (currentPrice > 50000);
         break;
     }

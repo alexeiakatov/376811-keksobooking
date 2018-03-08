@@ -64,9 +64,10 @@
   var toggleFilters = function (isEnabled) {
     filtersFormElement.disabled = !isEnabled;
     var formElements = filtersFormElement.children;
-    for (var i = 0; i < formElements.length; i++) {
-      formElements[i].disabled = !isEnabled;
-    }
+
+    formElements.forEach(function (element) {
+      element.disabled = !isEnabled;
+    });
   };
 
   toggleFilters(false);
