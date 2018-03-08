@@ -264,7 +264,7 @@
     window.card.hide();
     window.pin.removeActive();
     window.map.deactivate();
-  }
+  };
 
   // УСТАНОВКА обработчика нажатия на кнопку reset в форме
   resetButtonElement.addEventListener('click', resetButtonClickHandler);

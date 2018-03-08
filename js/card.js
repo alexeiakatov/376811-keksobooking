@@ -62,7 +62,7 @@
     var featuresInDom = featuresElement.children;
     var identifier;
 
-    for (var i = 0; i < featuresInDom.length; i++){
+    for (var i = 0; i < featuresInDom.length; i++) {
       identifier = featuresInDom[i].classList[1].split('--')[1];
       featuresInDom[i].classList.toggle('hidden', !featuresInDataObject.includes(identifier));
     }
