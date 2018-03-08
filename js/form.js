@@ -183,7 +183,7 @@
     if (noticeFormElement.checkValidity()) {
       evt.preventDefault();
       var formData = new FormData(noticeFormElement);
-      window.backend.sendData(formData, onLoadCallback, onErrorCallback);
+      window.backend.sendData(formData, xhrLoadHandler, xhrErrorHandler);
     }
   };
 
@@ -200,7 +200,7 @@
   };
 
   // ФУНКЦИЯ - колбэк: вызывается при успешной отправке данных из формы подачи объявления.
-  var onLoadCallback = function () {
+  var xhrLoadHandler = function () {
     noticeFormElement.reset();
     deactivate();
     window.card.hide();
@@ -209,7 +209,7 @@
   };
 
   // ФУНКЦИЯ - колбэк: действия при НЕуспешной отправке данных объявления на сервер.
-  var onErrorCallback = function (errorMessage) {
+  var xhrErrorHandler = function (errorMessage) {
     var errorContainer = document.createElement('div');
     errorContainer.classList.add('errorContainer');
 

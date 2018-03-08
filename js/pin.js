@@ -48,7 +48,7 @@
 
   // ФУНКЦИЯ - колбэк: Отрисовывает все пины на карте при успешном получении данных объявлений с сервера.
   // { [] } receivedData - данные, полученные от сервера
-  var onLoadCallback = function (receivedData) {
+  var xhrLoadHandler = function (receivedData) {
     dataObjects = receivedData;
     var fragmentForPins = document.createDocumentFragment();
     var newPin;
@@ -69,7 +69,7 @@
   };
 
   // ФУНКЦИЯ - колбэк: действия при НЕуспешном получении данных объявлений с сервера.
-  var onErrorCallback = function (errorMessage) {
+  var xhrErrorHandler = function (errorMessage) {
     var errorContainer = document.createElement('div');
     errorContainer.classList.add('errorContainer');
 
@@ -87,7 +87,7 @@
 
   // public ФУНКЦИЯ: создание documentFragment содержащий все метки-пины для карты и вставка их на страницу.
   var createAll = function () {
-    window.backend.getData(onLoadCallback, onErrorCallback);
+    window.backend.getData(xhrLoadHandler, xhrErrorHandler);
   };
 
   // public ФУНКЦИЯ: перерисовка всех пинов при изменении фильтра
